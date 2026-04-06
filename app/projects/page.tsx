@@ -14,12 +14,12 @@ export default function ProjectsArchive() {
             {/* Header */}
             <section className="pt-40 pb-20 px-8 md:px-16 max-w-360 mx-auto">
                 <Link href="/" className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-neutral-400 hover:text-white transition-colors duration-300 mb-16 group">
-                    <span className="text-lg transition-transform duration-300 group-hover:-translate-x-2">←</span> 
+                    <span className="text-lg transition-transform duration-300 group-hover:-translate-x-2">←</span>
                     <span>Back to Home</span>
                 </Link>
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
                     <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-black uppercase tracking-tighter leading-[0.85] bg-clip-text text-transparent bg-linear-to-b from-white to-white/40">
-                        Project<br/>Archive.
+                        Project<br />Archive.
                     </h1>
                     <p className="text-lg md:text-xl text-neutral-400 max-w-sm font-light leading-relaxed mb-4 md:mb-8">
                         A comprehensive breakdown of the mobile apps, complex platforms, and scalable infrastructure I've architected.
@@ -35,12 +35,12 @@ export default function ProjectsArchive() {
                         <div className="absolute top-0 left-8 right-8 md:left-16 md:right-16 h-px bg-neutral-800" />
 
                         <div className="flex flex-col lg:flex-row gap-20">
-                            
+
                             {/* Left Col - Info */}
                             <div className="w-full lg:w-[45%] space-y-16">
                                 <div>
                                     <p className="text-xs font-mono tracking-widest text-neutral-500 mb-6 flex items-center gap-4">
-                                        <span className="text-[#00ff9d]">{(idx + 1).toString().padStart(2, '0')}</span> 
+                                        <span className="text-[#00ff9d]">{(idx + 1).toString().padStart(2, '0')}</span>
                                         <span className="w-8 h-px bg-neutral-800" />
                                         <span className="uppercase">{project.category}</span>
                                     </p>
@@ -57,7 +57,7 @@ export default function ProjectsArchive() {
                                     {/* Overview Cards */}
                                     <div className="group relative bg-[#0a0a0a] p-8 md:p-10 rounded-4xl border border-neutral-900 overflow-hidden">
                                         <div className="absolute inset-0 bg-linear-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                                        
+
                                         <div className="space-y-10 relative z-10">
                                             <div>
                                                 <h3 className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-3">The Problem</h3>
@@ -107,23 +107,23 @@ export default function ProjectsArchive() {
 
                                     {/* Links */}
                                     <div className="flex flex-wrap items-center gap-6 pt-6">
-                                        
+
                                         {project.links && project.links.appstore && project.links.appstore !== '#' && (
                                             <a href={project.links.appstore} target="_blank" rel="noreferrer" className="hover:scale-105 transition active:scale-95">
-                                                <Image width={140} height={44} src="/assets/appstore.png" alt="Download on the App Store" className="h-14 w-auto object-contain drop-shadow-md" />
+                                                <Image width={140} height={44} src="/assets/appstore.webp" alt="Download on the App Store" className="h-14 w-auto object-contain drop-shadow-md" />
                                             </a>
                                         )}
 
                                         {project.links && project.links.playstore && project.links.playstore !== '#' && (
                                             <a href={project.links.playstore} target="_blank" rel="noreferrer" className="hover:scale-105 transition active:scale-95">
-                                                <Image width={140} height={44} src="/assets/playstore.png" alt="Get it on Google Play" className="h-14 w-auto object-contain drop-shadow-md" />
+                                                <Image width={140} height={44} src="/assets/playstore.webp" alt="Get it on Google Play" className="h-14 w-auto object-contain drop-shadow-md" />
                                             </a>
                                         )}
 
                                         {project.links && project.links.webapp && project.links.webapp !== '#' && (
-                                            <a 
-                                                href={project.links.webapp} 
-                                                target="_blank" 
+                                            <a
+                                                href={project.links.webapp}
+                                                target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="px-8 py-4 bg-white text-black rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-3"
                                             >
@@ -133,9 +133,9 @@ export default function ProjectsArchive() {
                                         )}
 
                                         {project.links && project.links.website && project.links.website !== '#' && (
-                                            <a 
-                                                href={project.links.website} 
-                                                target="_blank" 
+                                            <a
+                                                href={project.links.website}
+                                                target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="px-8 py-4 bg-white text-black rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-3"
                                             >
@@ -145,9 +145,9 @@ export default function ProjectsArchive() {
                                         )}
 
                                         {project.links && project.links.live && project.links.live !== '#' && (!project.links.webapp && !project.links.website) && (
-                                            <a 
-                                                href={project.links.live} 
-                                                target="_blank" 
+                                            <a
+                                                href={project.links.live}
+                                                target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="px-8 py-4 bg-white text-black rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-3"
                                             >
@@ -155,11 +155,11 @@ export default function ProjectsArchive() {
                                                 <span className="text-xl leading-none">↗</span>
                                             </a>
                                         )}
-                                        
+
                                         {project.links && project.links.github && project.links.github !== '#' && (
-                                            <a 
-                                                href={project.links.github} 
-                                                target="_blank" 
+                                            <a
+                                                href={project.links.github}
+                                                target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="px-8 py-4 bg-neutral-900 text-white border border-neutral-800 rounded-full text-sm font-semibold uppercase tracking-widest hover:bg-neutral-800 hover:scale-105 transition active:scale-95 flex items-center gap-3"
                                             >
@@ -177,8 +177,8 @@ export default function ProjectsArchive() {
                                 <div className="sticky top-12 pb-12">
                                     <div className="columns-1 sm:columns-2 gap-4 space-y-4">
                                         {project.gallery.map((media, i) => (
-                                            <div 
-                                                key={i} 
+                                            <div
+                                                key={i}
                                                 className="break-inside-avoid relative rounded-4xl overflow-hidden bg-neutral-900 border border-neutral-800 group"
                                             >
                                                 {media.type === 'image' ? (

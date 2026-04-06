@@ -74,7 +74,7 @@ export default function CSSection() {
                             key={i}
                             className="min-w-[240px] border p-6 cs-reveal hover:bg-black hover:text-white transition "
                         >
-                            <h4 className="mb-2">{title}</h4>
+                            <h4 className="mb-2 text-base font-medium">{title}</h4>
                             <p className="text-sm opacity-70">{desc}</p>
                         </div>
                     ))}

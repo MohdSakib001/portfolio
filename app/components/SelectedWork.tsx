@@ -105,7 +105,7 @@ export default function SelectedWork() {
                                 className={`work-content-${i} absolute inset-0 flex flex-col justify-center ${i > 0 ? "opacity-0 pointer-events-none" : ""}`}
                             >
                                 {/* Category pill */}
-                                <p className="text-xs uppercase tracking-[0.2em] opacity-40 mb-6 font-semibold">
+                                <p className="text-xs uppercase tracking-[0.2em] opacity-60 mb-6 font-semibold">
                                     {project.category}
                                 </p>
 
@@ -146,7 +146,7 @@ export default function SelectedWork() {
                                     {project.links && project.links.appstore && project.links.appstore !== '#' && (
                                         <a href={project.links.appstore} target="_blank" rel="noreferrer" className="hover:scale-105 transition active:scale-95">
                                             <Image
-                                                src="/assets/appstore.png"
+                                                src="/assets/appstore.webp"
                                                 alt="Download on the App Store"
                                                 width={140}
                                                 height={44}
@@ -158,7 +158,7 @@ export default function SelectedWork() {
                                     {project.links && project.links.playstore && project.links.playstore !== '#' && (
                                         <a href={project.links.playstore} target="_blank" rel="noreferrer" className="hover:scale-105 transition active:scale-95">
                                             <Image
-                                                src="/assets/playstore.png"
+                                                src="/assets/playstore.webp"
                                                 alt="Get it on Google Play"
                                                 width={140}
                                                 height={44}
@@ -186,7 +186,7 @@ export default function SelectedWork() {
 
                         {/* CTA FRAME VIEW ALL CONTENT */}
                         <div className={`work-content-3 absolute inset-0 flex flex-col justify-center opacity-0 pointer-events-none`}>
-                            <p className="text-xs uppercase tracking-[0.2em] opacity-40 mb-6 font-semibold text-neutral-500">
+                            <p className="text-xs uppercase tracking-[0.2em] opacity-60 mb-6 font-semibold text-neutral-500">
                                 Archive & More
                             </p>
                             <h2 className="text-4xl md:text-5xl lg:text-7xl leading-[0.9] tracking-tight mb-6 max-w-sm font-medium">
@@ -252,7 +252,7 @@ export default function SelectedWork() {
                         }}
                     >
                         {/* Interactive huge text background or pattern */}
-                        <div className="absolute inset-0 opacity-[0.03] flex flex-wrap gap-4 overflow-hidden pointer-events-none p-4 select-none">
+                        <div aria-hidden="true" className="absolute inset-0 opacity-[0.03] flex flex-wrap gap-4 overflow-hidden pointer-events-none p-4 select-none">
                             {Array.from({ length: 100 }).map((_, i) => (
                                 <span key={i} className="text-5xl font-black italic whitespace-nowrap">FULL-STACK ENGINEER</span>
                             ))}

@@ -78,9 +78,6 @@ export default function Header() {
                             <span className="text-lg font-bold tracking-[0.08em] uppercase">
                                 Sakib
                             </span>
-                            <span className="hidden sm:block text-[10px] tracking-[0.2em] uppercase opacity-40">
-                                — Developer
-                            </span>
                         </button>
                     </Magnetic>
 

@@ -51,7 +51,7 @@ export default function Footer() {
         <footer ref={footerRef} id="contact" className="bg-black text-white relative overflow-hidden">
 
             {/* CTA MARQUEE — massive repeating text */}
-            <div ref={marqueeRef} className="py-16 md:py-24 overflow-hidden border-b border-white/10">
+            <div ref={marqueeRef} aria-hidden="true" className="py-16 md:py-24 overflow-hidden border-b border-white/10">
                 <div className="marquee-track flex whitespace-nowrap w-max">
                     {Array.from({ length: 6 }).map((_, i) => (
                         <span

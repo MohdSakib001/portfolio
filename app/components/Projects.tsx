@@ -80,10 +80,10 @@ function ProjectCard({ project }: { project: any }) {
               <Image src="/assets/icons/web.png" width={28} height={28} alt="web" />
             )}
             {project.links.play && (
-              <Image src="/assets/playstore.png" width={120} height={60} alt="play" />
+              <Image src="/assets/playstore.webp" width={120} height={60} alt="play" />
             )}
             {project.links.app && (
-              <Image src="/assets/appstore.png" width={120} height={60} alt="app" />
+              <Image src="/assets/appstore.webp" width={120} height={60} alt="app" />
             )}
           </div>
         </div>

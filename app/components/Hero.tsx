@@ -8,38 +8,93 @@ import KineticBackground from "./KineticBackground";
 export default function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
 
+    // useEffect(() => {
+    //     const ctx = gsap.context(() => {
+    //         // TEXT REVEAL
+    //         gsap.from(".hero-line", {
+    //             y: 120,
+    //             opacity: 0,
+    //             stagger: 0.08,
+    //             duration: 1.2,
+    //             ease: "power4.out",
+    //             delay: 0.1
+    //         });
+
+    //         // IMAGE FLOAT
+    //         gsap.from(".hero-img", {
+    //             scale: 1.2,
+    //             opacity: 0,
+    //             duration: 1.5,
+    //             ease: "power3.out",
+    //             delay: 0.1
+    //         });
+    //     }, containerRef);
+
+    //     // PARALLAX
+    //     const move = (e: MouseEvent) => {
+    //         const x = (e.clientX / window.innerWidth - 0.5) * 40;
+    //         const y = (e.clientY / window.innerHeight - 0.5) * 40;
+
+    //         gsap.to(".parallax", {
+    //             x,
+    //             y,
+    //             duration: 1,
+    //             ease: "power3.out",
+    //         });
+    //     };
+
+    //     window.addEventListener("mousemove", move);
+
+    //     return () => {
+    //         ctx.revert();
+    //         window.removeEventListener("mousemove", move);
+    //     };
+    // }, []);
+
+
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // TEXT REVEAL
             gsap.from(".hero-line", {
                 y: 120,
                 opacity: 0,
                 stagger: 0.08,
                 duration: 1.2,
                 ease: "power4.out",
-                delay: 2.2
+                delay: 0.1
             });
 
-            // IMAGE FLOAT
             gsap.from(".hero-img", {
                 scale: 1.2,
                 opacity: 0,
                 duration: 1.5,
                 ease: "power3.out",
-                delay: 2.3
+                delay: 0.1
             });
         }, containerRef);
 
-        // PARALLAX
-        const move = (e: MouseEvent) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 40;
-            const y = (e.clientY / window.innerHeight - 0.5) * 40;
+        // ✅ RAF THROTTLE
+        let rafId: number | null = null;
+        let mouseX = 0;
+        let mouseY = 0;
 
-            gsap.to(".parallax", {
-                x,
-                y,
-                duration: 1,
-                ease: "power3.out",
+        const move = (e: MouseEvent) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            if (rafId) return;
+
+            rafId = requestAnimationFrame(() => {
+                const x = (mouseX / window.innerWidth - 0.5) * 40;
+                const y = (mouseY / window.innerHeight - 0.5) * 40;
+
+                gsap.to(".parallax", {
+                    x,
+                    y,
+                    duration: 0.6,
+                    ease: "power3.out",
+                });
+
+                rafId = null;
             });
         };
 
@@ -68,6 +123,7 @@ export default function Hero() {
                         fill
                         className="object-cover grayscale contrast-125"
                         priority
+                        fetchPriority="high"
                     />
                 </div>
             </div>
@@ -83,9 +139,6 @@ export default function Hero() {
                     Builds products that scale, perform and actually convert.
                 </p>
             </div>
-
-            {/* NOISE */}
-            <div className="pointer-events-none absolute inset-0 z-50 opacity-[0.03] mix-blend-overlay bg-[url('/assets/noise.png')]" />
         </section>
     );
 }
