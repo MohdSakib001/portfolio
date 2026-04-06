@@ -1,28 +1,49 @@
-import AISection from "../components/AiSection";
+import { Suspense } from "react";
+
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import ProofStrip from "../components/ProofStrip";
+import Performance from "../components/Performance";
 import Capabilities from "../components/Capabilities";
 import CSSection from "../components/CsSection";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 import Hero from "../components/Hero";
-import Performance from "../components/Performance";
-import ProofStrip from "../components/ProofStrip";
 import SelectedWork from "../components/SelectedWork";
+import AISection from "../components/AiSection";
 
 export default function Home() {
-
     return (
         <>
             <Header />
+
             <main className="bg-white text-black overflow-x-hidden">
                 <Hero />
-                <ProofStrip />
-                <SelectedWork />
-                <Performance />
-                <Capabilities />
-                <AISection />
-                <CSSection />
-                <Footer />
+
+                <Suspense fallback={null}>
+                    <ProofStrip />
+                </Suspense>
+
+                <Suspense fallback={<div className="h-screen" />}>
+                    <SelectedWork />
+                </Suspense>
+
+                <Suspense fallback={<div className="h-screen bg-black" />}>
+                    <Performance />
+                </Suspense>
+
+                <Suspense fallback={<div className="h-screen" />}>
+                    <Capabilities />
+                </Suspense>
+
+                <Suspense fallback={<div className="h-screen" />}>
+                    <AISection />
+                </Suspense>
+
+                <Suspense fallback={null}>
+                    <CSSection />
+                </Suspense>
             </main>
+
+            <Footer />
         </>
     );
 }
