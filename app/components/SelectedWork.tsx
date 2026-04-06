@@ -59,13 +59,6 @@ export default function SelectedWork() {
                 { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" },
                 i
             );
-
-            // Counter morphs
-            tl.to(
-                `.work-counter`,
-                { innerText: String(i + 1).padStart(2, "0"), duration: 0.01, snap: { innerText: 1 } },
-                i - 0.3
-            );
         });
 
         // The View All frame transition (index = 3)
@@ -89,12 +82,6 @@ export default function SelectedWork() {
             { y: 60, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" },
             ctaIndex
-        );
-
-        tl.to(
-            `.work-counter`,
-            { innerText: String(ctaIndex + 1).padStart(2, "0"), duration: 0.01, snap: { innerText: 1 } },
-            ctaIndex - 0.3
         );
 
     }, { scope: containerRef });

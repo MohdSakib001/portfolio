@@ -17,6 +17,7 @@ export default function Capabilities() {
                                 width={80}
                                 height={80}
                                 loading="lazy"
+                                title={t.name}
                                 sizes="80px"
                                 className="object-contain"
                             />
@@ -33,6 +34,7 @@ export default function Capabilities() {
                                 width={80}
                                 height={80}
                                 loading="lazy"
+                                title={t.name}
                                 sizes="80px"
                                 className="object-contain"
                             />

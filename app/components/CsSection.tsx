@@ -1,172 +1,3 @@
-// "use client";
-
-// import { useRef } from "react";
-// import gsap from "gsap";
-// import { ScrollTrigger } from "gsap/ScrollTrigger";
-// import { useGSAP } from "@gsap/react";
-// import Image from "next/image";
-
-// if (typeof window !== "undefined") {
-//     gsap.registerPlugin(ScrollTrigger, useGSAP);
-// }
-
-// export default function CSSection() {
-//     const ref = useRef<HTMLDivElement>(null);
-
-//     useGSAP(() => {
-//         gsap.set(".cs-reveal", { y: 80, opacity: 0 });
-
-//         ScrollTrigger.batch(".cs-reveal", {
-//             start: "top 90%",
-//             onEnter: (batch) => {
-//                 gsap.to(batch, {
-//                     y: 0,
-//                     opacity: 1,
-//                     stagger: 0.06,
-//                     duration: 1,
-//                     ease: "power4.out",
-//                 });
-//             },
-//             once: true,
-//         });
-//     }, { scope: ref });
-
-//     return (
-//         <section ref={ref} className="px-6 md:px-16 py-32 border-t">
-
-//             {/* HEADER */}
-//             <div className="max-w-3xl mb-20">
-//                 <h2 className="text-5xl mb-6 cs-reveal">Computer Science</h2>
-//                 <p className="text-lg opacity-70 cs-reveal">
-//                     Strong fundamentals drive better software — from optimal algorithms
-//                     to distributed architectures applied in production systems.
-//                 </p>
-//             </div>
-
-//             {/* LEETCODE STATS */}
-//             <div className="grid md:grid-cols-4 gap-10 mb-32">
-//                 {[
-//                     ["Solved", "450+"],
-//                     ["Day Streak", "320+"],
-//                     ["Acceptance", "82%"],
-//                     ["Contest Rating", "1890"],
-//                 ].map(([label, value], i) => (
-//                     <div key={i} className="cs-reveal">
-//                         <h3 className="text-4xl font-semibold">{value}</h3>
-//                         <p className="text-sm opacity-60">{label}</p>
-//                     </div>
-//                 ))}
-//             </div>
-
-//             {/* DSA VISUAL */}
-//             <div className="mb-20 cs-reveal">
-//                 <div className="relative w-full h-[300px]">
-//                     <Image
-//                         src="/assets/cs/algorithms.png"
-//                         alt="algorithms"
-//                         fill
-//                         className="object-contain"
-//                     />
-//                 </div>
-//             </div>
-
-//             {/* DSA SKILLS */}
-//             <div className="mb-32">
-//                 <h3 className="text-4xl mb-12 cs-reveal">Data Structures</h3>
-
-//                 <div className="grid md:grid-cols-3 gap-8">
-//                     {[
-//                         ["Arrays & Strings", "Expert"],
-//                         ["Trees & Graphs", "Advanced"],
-//                         ["Dynamic Programming", "Advanced"],
-//                         ["Hash Maps & Sets", "Expert"],
-//                         ["Heaps & Priority Queues", "Proficient"],
-//                         ["Tries & Segment Trees", "Proficient"],
-//                     ].map(([name, level], i) => (
-//                         <div
-//                             key={i}
-//                             className="border p-6 cs-reveal hover:bg-black hover:text-white transition duration-500"
-//                         >
-//                             <p className="text-sm opacity-60 mb-2">{name}</p>
-//                             <h4 className="text-xl">{level}</h4>
-//                         </div>
-//                     ))}
-//                 </div>
-//             </div>
-
-//             {/* SYSTEM DESIGN VISUAL */}
-//             <div className="mb-20 cs-reveal">
-//                 <div className="relative w-full h-[300px]">
-//                     <Image
-//                         src="/assets/cs/system-design.png"
-//                         alt="system design"
-//                         fill
-//                         className="object-contain"
-//                     />
-//                 </div>
-//             </div>
-
-//             {/* SYSTEM DESIGN */}
-//             <div className="mb-32">
-//                 <h3 className="text-4xl mb-12 cs-reveal">System Design</h3>
-
-//                 <div className="grid md:grid-cols-2 gap-10">
-//                     {[
-//                         ["Scalability", "Sharding, CQRS, consistent hashing"],
-//                         ["Caching", "Redis, CDN, write strategies"],
-//                         ["Messaging", "Kafka, queues, API patterns"],
-//                         ["Reliability", "Retries, circuit breakers"],
-//                     ].map(([title, desc], i) => (
-//                         <div
-//                             key={i}
-//                             className="border p-6 cs-reveal hover:bg-black hover:text-white transition duration-500"
-//                         >
-//                             <h4 className="mb-2">{title}</h4>
-//                             <p className="text-sm opacity-70">{desc}</p>
-//                         </div>
-//                     ))}
-//                 </div>
-//             </div>
-
-//             {/* REAL SYSTEMS VISUAL */}
-//             <div className="mb-20 cs-reveal">
-//                 <div className="relative w-full h-[300px]">
-//                     <Image
-//                         src="/assets/cs/systems.png"
-//                         alt="systems"
-//                         fill
-//                         className="object-contain"
-//                     />
-//                 </div>
-//             </div>
-
-//             {/* SYSTEMS */}
-//             <div>
-//                 <h3 className="text-4xl mb-12 cs-reveal">Systems I Can Design</h3>
-
-//                 <div className="grid md:grid-cols-2 gap-8">
-//                     {[
-//                         "Twitter / X — timeline, fanout, CDN",
-//                         "YouTube — video pipeline, streaming",
-//                         "E-commerce — inventory, payments",
-//                         "Realtime Chat — WebSockets, delivery",
-//                         "URL Shortener — high QPS reads",
-//                         "Search Engine — indexing, ranking",
-//                     ].map((sys, i) => (
-//                         <div
-//                             key={i}
-//                             className="border p-6 cs-reveal hover:bg-black hover:text-white transition duration-500"
-//                         >
-//                             {sys}
-//                         </div>
-//                     ))}
-//                 </div>
-//             </div>
-
-//         </section>
-//     );
-// }
-
 "use client";
 
 import { useRef } from "react";
@@ -241,7 +72,7 @@ export default function CSSection() {
                     ].map(([title, desc], i) => (
                         <div
                             key={i}
-                            className="min-w-[240px] border p-6 cs-reveal hover:bg-black hover:text-white transition"
+                            className="min-w-[240px] border p-6 cs-reveal hover:bg-black hover:text-white transition "
                         >
                             <h4 className="mb-2">{title}</h4>
                             <p className="text-sm opacity-70">{desc}</p>
@@ -252,11 +83,12 @@ export default function CSSection() {
             </div>
 
             {/* 🔥 VISUAL + OVERLAY (NO SEPARATE BLOCK) */}
-            <div className="relative h-[400px] mb-40 cs-reveal">
+            {/* <div className="relative h-[200px] mb-40 cs-reveal">
 
                 <Image
                     src="/assets/cs/algorithms.png"
                     alt="algorithms"
+                    title="algorithms"
                     fill
                     className="object-contain opacity-40"
                 />
@@ -267,7 +99,7 @@ export default function CSSection() {
                         optimized, and applied under constraints.
                     </p>
                 </div>
-            </div>
+            </div> */}
 
             {/* 🔥 SYSTEM DESIGN (STACK + VISUAL MERGE) */}
             <div className="grid md:grid-cols-2 gap-16 items-center mb-40">
@@ -323,6 +155,6 @@ export default function CSSection() {
                 </div>
             </div>
 
-        </section>
+        </section >
     );
 }
