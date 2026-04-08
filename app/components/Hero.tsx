@@ -8,50 +8,6 @@ import KineticBackground from "./KineticBackground";
 export default function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // useEffect(() => {
-    //     const ctx = gsap.context(() => {
-    //         // TEXT REVEAL
-    //         gsap.from(".hero-line", {
-    //             y: 120,
-    //             opacity: 0,
-    //             stagger: 0.08,
-    //             duration: 1.2,
-    //             ease: "power4.out",
-    //             delay: 0.1
-    //         });
-
-    //         // IMAGE FLOAT
-    //         gsap.from(".hero-img", {
-    //             scale: 1.2,
-    //             opacity: 0,
-    //             duration: 1.5,
-    //             ease: "power3.out",
-    //             delay: 0.1
-    //         });
-    //     }, containerRef);
-
-    //     // PARALLAX
-    //     const move = (e: MouseEvent) => {
-    //         const x = (e.clientX / window.innerWidth - 0.5) * 40;
-    //         const y = (e.clientY / window.innerHeight - 0.5) * 40;
-
-    //         gsap.to(".parallax", {
-    //             x,
-    //             y,
-    //             duration: 1,
-    //             ease: "power3.out",
-    //         });
-    //     };
-
-    //     window.addEventListener("mousemove", move);
-
-    //     return () => {
-    //         ctx.revert();
-    //         window.removeEventListener("mousemove", move);
-    //     };
-    // }, []);
-
-
     useEffect(() => {
         const ctx = gsap.context(() => {
             gsap.from(".hero-line", {

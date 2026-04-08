@@ -45,15 +45,14 @@ export default function CSSection() {
             {/* 🔥 DATA WALL (DENSE, NOT GRID) */}
             <div className="mb-40 space-y-6 cs-reveal">
                 <div className="flex flex-wrap gap-10 text-2xl">
-                    <span>450+ Solved</span>
-                    <span>320+ Streak</span>
-                    <span>82% Accuracy</span>
-                    <span>Top 5%</span>
-                    <span>Rating 1890</span>
+                    <span>50+ Solved</span>
+                    <span>20+ Streak</span>
+                    <span>80% Accuracy</span>
+                    <span>Top 10%</span>
                 </div>
 
                 <div className="text-sm opacity-60">
-                    Easy: 180 / Medium: 210 / Hard: 60
+                    Easy: 35+ / Medium: 20+ / Hard: 10+
                 </div>
             </div>
 
@@ -78,7 +77,6 @@ export default function CSSection() {
                             <p className="text-sm opacity-70">{desc}</p>
                         </div>
                     ))}
-
                 </div>
             </div>
 

@@ -1,0 +1,17 @@
+export const homeKeyword = [
+    "Mohd Sakib developer",
+    "Full Stack Developer India",
+    "MERN stack developer",
+    "React.js developer",
+    "React Native developer",
+    "Next.js developer",
+    "JavaScript developer",
+    "Frontend developer",
+    "Freelance MERN developer",
+    "Hire React developer India",
+    "Mobile app developer",
+    "Firebase developer",
+    "Redux developer",
+    "Web application developer",
+    "Startup MVP developer",
+];

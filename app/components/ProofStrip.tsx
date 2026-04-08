@@ -4,10 +4,10 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
 const stats = [
-    { label: "MAU", value: 18000, suffix: "+" },
-    { label: "Revenue", value: 6000, prefix: "$", suffix: "/mo" },
+    { label: "MAU", value: 1000, suffix: "+" },
+    { label: "Systems Built Value", value: 6000, prefix: "$", suffix: "+" },
     { label: "Performance", value: 98, suffix: " Lighthouse" },
-    { label: "Concurrent Users", value: 5000, suffix: "+" },
+    { label: "Concurrent Users", value: 100, suffix: "+" },
 ];
 
 export default function ProofStrip() {
