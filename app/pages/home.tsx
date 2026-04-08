@@ -9,6 +9,7 @@ import CSSection from "../components/CsSection";
 import Hero from "../components/Hero";
 import SelectedWork from "../components/SelectedWork";
 import AISection from "../components/AiSection";
+import Faq from "../components/Faq";
 
 export default function Home() {
     return (
@@ -40,6 +41,10 @@ export default function Home() {
 
                 <Suspense fallback={null}>
                     <CSSection />
+                </Suspense>
+
+                <Suspense fallback={<div className="h-screen bg-black" />}>
+                    <Faq />
                 </Suspense>
             </main>
 

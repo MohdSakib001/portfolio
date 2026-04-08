@@ -14,6 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://mohdsakib.vercel.app"),
   title: "Mohd Sakib | Portfolio | Full Stack Developer | React Native Developer",
   description: "Portfolio of Mohd Sakib, a Full Stack Developer and React Native Developer",
   keywords: ["Mohd Sakib", "Portfolio", "Full Stack Developer", "React Native Developer"],
@@ -26,6 +27,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Mohd Sakib | Portfolio | Full Stack Developer | React Native Developer",
+    url: "https://mohdsakib.vercel.app",
   },
   twitter: {
     title: "Mohd Sakib | Portfolio | Full Stack Developer | React Native Developer",
@@ -33,6 +35,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     creator: "@mohdsakib",
     site: "@mohdsakib",
+  },
+  alternates: {
+    canonical: "https://mohdsakib.vercel.app",
   },
 };
 
@@ -58,11 +63,13 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Person",
               "name": "Mohd Sakib",
-              "url": "https://mohdsakib.com", // Replace with production URL when ready
+              "url": "https://mohdsakib.vercel.app",
               "jobTitle": "Full Stack Developer",
               "description": "Portfolio of Mohd Sakib, a Full Stack Developer and React Native Developer specializing in high-performance web and mobile applications.",
               "sameAs": [
-                "https://github.com/MohdSakib001" // Feel free to inject actual linkedin/twitter links here later
+                "https://github.com/mohdsakib-Krapton",
+                "https://www.linkedin.com/in/mohdsakib001",
+                "https://twitter.com/mohdsakib001"
               ]
             })
           }}
