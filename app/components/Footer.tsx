@@ -122,7 +122,7 @@ export default function Footer() {
                         <div className="flex flex-col gap-3">
                             {[
                                 { label: "GitHub", url: "https://github.com/mohdsakib-Krapton" },
-                                { label: "LinkedIn", url: "https://linkedin.com/in/mohdsakib001" },
+                                { label: "LinkedIn", url: "https://www.linkedin.com/in/mohdsakib001" },
                                 { label: "Twitter", url: "https://twitter.com/mohdsakib001" },
                             ].map((s) => (
                                 <Magnetic key={s.label}>
@@ -145,10 +145,10 @@ export default function Footer() {
                             Services
                         </p>
                         <div className="flex flex-col gap-3 text-sm opacity-60">
-                            <span>Full-Stack Dev</span>
-                            <span>React Native</span>
-                            <span>System Design</span>
-                            <span>AI Integration</span>
+                            <a href="/#work" className="hover:opacity-100 transition-opacity duration-300">Full-Stack Dev</a>
+                            <a href="/#work" className="hover:opacity-100 transition-opacity duration-300">React Native</a>
+                            <a href="/#work" className="hover:opacity-100 transition-opacity duration-300">System Design</a>
+                            <a href="/#work" className="hover:opacity-100 transition-opacity duration-300">AI Integration</a>
                         </div>
                     </div>
 

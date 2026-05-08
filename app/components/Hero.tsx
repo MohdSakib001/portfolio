@@ -1,100 +1,53 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import Image from "next/image";
-import gsap from "gsap";
 import KineticBackground from "./KineticBackground";
 
 export default function Hero() {
-    const containerRef = useRef<HTMLDivElement>(null);
+  return (
+    <section className="relative h-screen w-full overflow-hidden bg-white text-black flex flex-col items-center justify-center">
+      {/* KINETIC BACKGROUND — priority, no touch */}
+      {/* <KineticBackground opacity={0.04} strokeWidth="2px" color="black" /> */}
 
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.from(".hero-line", {
-                y: 120,
-                opacity: 0,
-                stagger: 0.08,
-                duration: 1.2,
-                ease: "power4.out",
-                delay: 0.1
-            });
+      {/* CENTER CONTENT */}
+      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-5xl mx-auto w-full">
+        {/* EYEBROW */}
+        {/* <p className="text-[10px] uppercase tracking-[0.3em] opacity-25 mb-7 font-medium">
+          Full Stack Engineer &nbsp;·&nbsp; React Native &nbsp;·&nbsp; AI
+          Systems
+        </p> */}
 
-            gsap.from(".hero-img", {
-                scale: 1.2,
-                opacity: 0,
-                duration: 1.5,
-                ease: "power3.out",
-                delay: 0.1
-            });
-        }, containerRef);
+        <p className="text-[11px] tracking-[0.08em] opacity-25 mb-7 uppercase">
+          8 products &nbsp;·&nbsp; 25K+ users &nbsp;·&nbsp; $100K+ GMV
+          &nbsp;·&nbsp; 98 Lighthouse
+        </p>
 
-        // ✅ RAF THROTTLE
-        let rafId: number | null = null;
-        let mouseX = 0;
-        let mouseY = 0;
+        {/* H1 — VALUE PROPOSITION, NOT NAME */}
+        <h1 className="text-[clamp(2.8rem,7vw,6rem)] leading-none tracking-[-0.04em] font-semibold mb-10">
+          I build software that
+          <br />
+          <span className="opacity-30">ships, scales, and earns.</span>
+        </h1>
 
-        const move = (e: MouseEvent) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+        {/* PROOF LINE */}
+        {/* <p className="text-[11px] tracking-[0.08em] opacity-25 mb-14 uppercase">
+          8 products &nbsp;·&nbsp; 25K+ users &nbsp;·&nbsp; $100K+ GMV
+          &nbsp;·&nbsp; 98 Lighthouse
+        </p> */}
 
-            if (rafId) return;
-
-            rafId = requestAnimationFrame(() => {
-                const x = (mouseX / window.innerWidth - 0.5) * 40;
-                const y = (mouseY / window.innerHeight - 0.5) * 40;
-
-                gsap.to(".parallax", {
-                    x,
-                    y,
-                    duration: 0.6,
-                    ease: "power3.out",
-                });
-
-                rafId = null;
-            });
-        };
-
-        window.addEventListener("mousemove", move);
-
-        return () => {
-            ctx.revert();
-            window.removeEventListener("mousemove", move);
-        };
-    }, []);
-
-    return (
-        <section
-            ref={containerRef}
-            className="relative h-screen w-full overflow-hidden bg-white text-black"
-        >
-            {/* KINETIC TYPOGRAPHY BACKGROUND */}
-            <KineticBackground opacity={0.04} strokeWidth="2px" color="black" />
-
-            {/* IMAGE LAYER */}
-            <div className="absolute inset-0 flex items-center justify-end pointer-events-none">
-                <div className="relative w-[280px] md:w-[420px] aspect-3/4 hero-img parallax pointer-events-auto">
-                    <Image
-                        src="/assets/me/1.png"
-                        alt="me"
-                        fill
-                        className="object-cover grayscale contrast-125"
-                        priority
-                        fetchPriority="high"
-                    />
-                </div>
-            </div>
-
-            {/* TEXT */}
-            <div className="relative z-10 h-full flex flex-col justify-center px-6 md:px-16 pointer-events-none">
-                <h1 className="text-[14vw] leading-none tracking-[-0.06em] font-semibold">
-                    <span className="block hero-line">MOHD</span>
-                    <span className="block hero-line">SAKIB</span>
-                </h1>
-
-                <p className="mt-6 text-sm md:text-base max-w-xs opacity-70 hero-line">
-                    Builds products that scale, perform and actually convert.
-                </p>
-            </div>
-        </section>
-    );
+        {/* CTA ROW */}
+        <div className="flex items-center gap-8">
+          <a
+            href="#work"
+            className="text-[11px] uppercase tracking-[0.2em] font-semibold px-8 py-3.5 bg-black text-white hover:bg-neutral-800 transition-colors duration-300"
+          >
+            View Case Studies →
+          </a>
+          <a
+            href="mailto:mohdsakib.work@gmail.com"
+            className="text-[11px] uppercase tracking-[0.2em] font-medium opacity-40 hover:opacity-100 transition-opacity duration-300"
+          >
+            Let&apos;s Talk →
+          </a>
+        </div>
+      </div>
+    </section>
+  );
 }

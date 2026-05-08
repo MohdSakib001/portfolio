@@ -4,8 +4,22 @@ import { projects } from '../data/projects';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-    title: 'Archive. | Mohd Sakib - Full Stack & Mobile App Developer',
-    description: 'In-depth overview of all my enterprise, startup, and full-stack side projects including Mobile Apps, FinTech, EdTech, and SaaS platforms.',
+    title: 'Projects — Full Stack & AI Products | Mohd Sakib',
+    description: '8 live production systems spanning FinTech, EdTech, LegalTech, Gaming, and AI. Architected and shipped by Mohd Sakib, Senior Full Stack & React Native Developer. 25K+ users. $100K+ GMV. 98 Lighthouse.',
+    alternates: {
+        canonical: 'https://mohdsakib.vercel.app/projects',
+    },
+    openGraph: {
+        title: 'Projects — 8 Live Products | Mohd Sakib',
+        description: 'FinTech · EdTech · LegalTech · Gaming · AI. Every system shipped, scaled, and measured. StakeClash, Artificial Mufti, Pademi, Sendora, CoLaw, Tekish, Teppe.',
+        type: 'website',
+        url: 'https://mohdsakib.vercel.app/projects',
+    },
+    twitter: {
+        title: 'Projects — 8 Live Products | Mohd Sakib',
+        description: 'FinTech · EdTech · LegalTech · Gaming · AI. Every system shipped, scaled, and measured.',
+        card: 'summary_large_image',
+    },
 };
 
 export default function ProjectsArchive() {

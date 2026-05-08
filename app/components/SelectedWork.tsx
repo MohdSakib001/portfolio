@@ -118,7 +118,7 @@ export default function SelectedWork() {
                                 <div className="text-reveal flex flex-col items-start gap-8">
                                     <Magnetic>
                                         <button
-                                            onClick={() => router.push(`/projects#${project.id}`)}
+                                            onClick={() => router.push(`/projects/${project.id}`)}
                                             className="group flex items-center justify-center gap-4 px-8 py-4 bg-black text-white rounded-full text-sm font-semibold uppercase tracking-widest hover:scale-105 transition active:scale-95 shadow-xl hover:shadow-black/40"
                                         >
                                             <span>Explore Details</span>

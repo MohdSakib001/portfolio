@@ -1,63 +1,25 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-
 const stats = [
-    { label: "MAU", value: 1000, suffix: "+" },
-    { label: "Systems Built Value", value: 6000, prefix: "$", suffix: "+" },
-    { label: "Performance", value: 98, suffix: " Lighthouse" },
-    { label: "Concurrent Users", value: 100, suffix: "+" },
+  { label: "Users Served", value: "25K+" },
+  { label: "GMV Shipped", value: "$100K+" },
+  { label: "Lighthouse Score", value: "98" },
+  { label: "Production Systems", value: "8" },
 ];
 
 export default function ProofStrip() {
-    const ref = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const numbers = ref.current?.querySelectorAll(".count");
-
-        numbers?.forEach((el: any) => {
-            const target = +el.getAttribute("data-target");
-
-            gsap.fromTo(
-                el,
-                { innerText: 0 },
-                {
-                    innerText: target,
-                    duration: 2,
-                    ease: "power2.out",
-                    snap: { innerText: 1 },
-                    scrollTrigger: {
-                        trigger: ref.current,
-                        start: "top 80%",
-                    },
-                    onUpdate: function () {
-                        el.innerText = Math.floor(el.innerText);
-                    },
-                }
-            );
-        });
-    }, []);
-
-    return (
-        <section
-            ref={ref}
-            className="border-y border-neutral-200 py-16 px-6 md:px-16"
-        >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
-                {stats.map((s, i) => (
-                    <div key={i} className="flex flex-col gap-2">
-                        <div className="text-3xl md:text-4xl font-semibold tracking-tight">
-                            {s.prefix || ""}
-                            <span className="count" data-target={s.value}>
-                                0
-                            </span>
-                            {s.suffix || ""}
-                        </div>
-                        <p className="text-sm opacity-60">{s.label}</p>
-                    </div>
-                ))}
-            </div>
-        </section>
-    );
+  return (
+    <section className="border-y border-neutral-200 py-12 sm:py-16 px-6 sm:px-10 md:px-16">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 sm:gap-x-10 max-w-7xl mx-auto">
+        {stats.map((s, i) => (
+          <div key={i} className="flex flex-col gap-2 items-center">
+            <span className="text-3xl sm:text-4xl xl:text-5xl font-semibold tracking-tight leading-none">
+              {s.value}
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.2em] opacity-35 font-medium">
+              {s.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 }

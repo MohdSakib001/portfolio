@@ -1,0 +1,267 @@
+{
+  "name": "Daily Instagram Post for Krapton Agency",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "id": "f001e1f2-fb3e-438c-8360-f0e9bff3642e",
+      "name": "Daily at 10 AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ 'Create an Instagram caption for day ' + ($now.format('D') % 14 + 1) + ' of our content rotation. Make it unique and engaging.' }}",
+        "options": {
+          "systemMessage": "You are a social media content creator for Krapton.com, an offshore development agency. Create engaging Instagram captions based on rotating themes. Use the current day number (1-14) to select a theme, but generate completely unique content each time - vary the angle, examples, statistics, and storytelling approach. Themes: Day 1: Pain Point (Why offshore dev agencies fail US/UK startups), Day 2: Social Proof (Client cut ops costs 60% in 10 weeks), Day 3: Education (What RAG is and why AI hallucinating costs $10k/mo), Day 4: Myth Bust (Offshore = slow? We ship MVPs in 8 weeks), Day 5: How We Work (NDA day 1, dedicated PM, zero freelancers), Day 6: Tech Tips (5 Lighthouse wins to go from 60 → 99), Day 7: Value Prop (60-70% cheaper than US/UK. Here's the proof), Day 8: Industry Insight (Why startups waste their first $50k), Day 9: AI Education (Custom LLM vs ChatGPT — what actually saves money), Day 10: Behind the Build (Full portal in 10 weeks — exact stack), Day 11: Pain Point (Your MVP is 6 months late — here's why), Day 12: Offer (Free tech consultation — no sales pitch), Day 13: Culture (Delhi team, US/UK/UAE clients — how we work), Day 14: Tech Deep Dive (Next.js vs React — when to pick which). Keep captions concise (150-200 words), include 3-5 relevant hashtags, and maintain a professional yet approachable tone."
+        }
+      },
+      "id": "9654eaaa-eb0d-4881-95d9-e23a5d8f54c7",
+      "name": "Generate Caption",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        480,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "imagen-3.0-generate-001"
+        },
+        "prompt": "={{ $json.output }}",
+        "options": {}
+      },
+      "id": "cf0a9298-cc22-49a2-9eb7-e746a5ca7070",
+      "name": "Generate Image",
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        832,
+        304
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "WmU9yxOzvAW3ZJLY",
+          "name": "Google Gemini(PaLM) Api account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "caption",
+              "value": "={{ $('Generate Caption').item.json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "imageUrl",
+              "value": "={{ $json.url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2f7d06d0-5962-4bcd-9b38-7ae925ebb67b",
+      "name": "Prepare Instagram Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1056,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v18.0/<__PLACEHOLDER_VALUE__instagram_account_id__>/media",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "image_url",
+              "value": "={{ $json.imageUrl }}"
+            },
+            {
+              "name": "caption",
+              "value": "={{ $json.caption }}"
+            },
+            {
+              "name": "access_token",
+              "value": "={{ $json.access_token }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "572b664e-5136-43da-9edc-0886fde2f217",
+      "name": "Upload Image to Instagram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1280,
+        304
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v18.0/<__PLACEHOLDER_VALUE__instagram_account_id__>/media_publish",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "creation_id",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "name": "access_token",
+              "value": "={{ $json.access_token }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "6703b062-8147-44c2-9afd-4bae705ac54a",
+      "name": "Publish Instagram Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1504,
+        304
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        552,
+        528
+      ],
+      "id": "9d3f0f64-7964-4191-b16b-1e87d5fdd7d6",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "WmU9yxOzvAW3ZJLY",
+          "name": "Google Gemini(PaLM) Api account 4"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily at 10 AM": {
+      "main": [
+        [
+          {
+            "node": "Generate Caption",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Caption": {
+      "main": [
+        [
+          {
+            "node": "Generate Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Image": {
+      "main": [
+        [
+          {
+            "node": "Prepare Instagram Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Instagram Data": {
+      "main": [
+        [
+          {
+            "node": "Upload Image to Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Image to Instagram": {
+      "main": [
+        [
+          {
+            "node": "Publish Instagram Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate Caption",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

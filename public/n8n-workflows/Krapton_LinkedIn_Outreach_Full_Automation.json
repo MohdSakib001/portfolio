@@ -1,0 +1,1429 @@
+{
+  "name": "Krapton — LinkedIn Outreach Full Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "3c31c8f1-8d64-447c-bc62-7cc1a883afc6",
+      "name": "Daily 8AM Trigger (Weekdays)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1328,
+        208
+      ],
+      "notes": "Fires every weekday at 8AM. Change cron to '0 8 * * *' for 7 days."
+    },
+    {
+      "parameters": {
+        "jsCode": "// ── CONFIG ─────────────────────────────────────────\n// Change LEADS_PER_DAY to scale up later (50, 100, etc)\nconst LEADS_PER_DAY = 10;\nconst TARGET_REGIONS = ['United States', 'United Kingdom', 'United Arab Emirates', 'Saudi Arabia', 'Qatar'];\nconst TARGET_KEYWORDS = [\n  'looking for development team',\n  'need software developers',\n  'hiring dev agency',\n  'ai automation',\n  'workflow automation',\n  'digital transformation',\n  'mvp development',\n  'outsource development',\n  'tech team augmentation'\n];\n// ────────────────────────────────────────────────────\n\nreturn [\n  {\n    json: {\n      leadsPerDay: LEADS_PER_DAY,\n      targetRegions: TARGET_REGIONS,\n      targetKeywords: TARGET_KEYWORDS,\n      searchQuery: TARGET_KEYWORDS.slice(0, 3).join(' OR '),\n      runDate: new Date().toISOString().split('T')[0]\n    }\n  }\n];"
+      },
+      "id": "9f04796d-076e-4784-a2c2-70a47e237fcf",
+      "name": "Config & Constants",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1104,
+        208
+      ],
+      "notes": "Single place to change all config. Increase leadsPerDay here."
+    },
+    {
+      "parameters": {
+        "url": "https://api.linkedin.com/v2/search/people",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "linkedInApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "keywords",
+              "value": "={{ $json.searchQuery }}"
+            },
+            {
+              "name": "count",
+              "value": "={{ $json.leadsPerDay }}"
+            },
+            {
+              "name": "facetGeoRegion",
+              "value": "US,GB,AE,SA,QA"
+            },
+            {
+              "name": "facetCurrentTitle",
+              "value": "CEO,CTO,Founder,Co-Founder,Director,VP Engineering,Head of Technology,Product Manager"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "ef12fdcd-ed3c-4f77-ae02-f264df52d780",
+      "name": "LinkedIn Navigator Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -880,
+        208
+      ],
+      "continueOnFail": true,
+      "notes": "Uses LinkedIn API. For Sales Navigator scraping use Phantombuster or Apify LinkedIn scraper node instead. See setup guide."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Handle LinkedIn API response OR Phantombuster/Apify response\n// This normalizer works with both sources\n\nconst raw = $input.first().json;\n\n// Check for HTTP errors\nif (raw.error || raw.statusCode >= 400) {\n  throw new Error(`LinkedIn API error: ${JSON.stringify(raw.error || raw.message || raw)}`);\n}\n\n// Normalize — handles both LinkedIn API and Phantombuster formats\nconst elements = raw.elements || raw.leads || raw.profiles || raw.results || [];\n\nif (!elements.length) {\n  // Return empty so downstream handles gracefully\n  return [{ json: { __empty: true, message: 'No leads returned', runDate: new Date().toISOString() } }];\n}\n\nconst normalized = elements.map((p, idx) => {\n  const firstName = p.firstName || p.first_name || p.name?.split(' ')[0] || 'there';\n  const lastName = p.lastName || p.last_name || p.name?.split(' ').slice(1).join(' ') || '';\n  const company = p.company || p.currentCompany || p.positions?.[0]?.companyName || '';\n  const role = p.title || p.currentTitle || p.positions?.[0]?.title || '';\n  const location = p.location || p.geo || '';\n  const profileUrl = p.publicProfileUrl || p.linkedinUrl || p.profileUrl || p.url || '';\n  const urn = p.entityUrn || p.id || p.profileId || `lead_${Date.now()}_${idx}`;\n\n  // Detect region\n  let region = 'unknown';\n  const loc = location.toLowerCase();\n  if (loc.includes('united states') || loc.includes('usa') || loc.includes(', us')) region = 'US';\n  else if (loc.includes('united kingdom') || loc.includes('uk') || loc.includes('england') || loc.includes('london')) region = 'UK';\n  else if (loc.includes('dubai') || loc.includes('uae') || loc.includes('emirates') || loc.includes('saudi') || loc.includes('qatar') || loc.includes('riyadh')) region = 'ARAB';\n\n  return {\n    json: {\n      id: urn,\n      firstName,\n      lastName,\n      fullName: `${firstName} ${lastName}`.trim(),\n      company,\n      role,\n      location,\n      region,\n      profileUrl,\n      email: p.email || p.emailAddress || '',\n      about: p.summary || p.about || '',\n      connections: p.connectionsCount || 0,\n      runDate: new Date().toISOString().split('T')[0]\n    }\n  };\n});\n\n// Filter only target regions\nreturn normalized.filter(item => ['US','UK','ARAB'].includes(item.json.region));"
+      },
+      "id": "dea41227-b1c7-48ca-a9d8-b4c35b7f8a34",
+      "name": "Normalize Lead Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -656,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false
+          },
+          "conditions": [
+            {
+              "id": "not-empty",
+              "leftValue": "={{ $json.__empty }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "643898bc-f518-4582-8ecd-63e5c07cadfc",
+      "name": "Has Leads?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -432,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $env.GSHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "options": {
+          "returnAllMatches": true
+        }
+      },
+      "id": "ee78238e-27c4-4a2d-bf3f-cfeedd5f2fcd",
+      "name": "Read Existing Leads",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        -208,
+        208
+      ],
+      "continueOnFail": true,
+      "notes": "Read all existing rows to deduplicate. Set GSHEET_ID env var."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Deduplicate: skip leads already in GSheet\nconst newLeads = $('Normalize Lead Data').all();\nconst existingRows = $('Read Existing Leads').all();\n\n// Build set of known identifiers\nconst knownIds = new Set();\nconst knownEmails = new Set();\nconst knownUrls = new Set();\n\nexistingRows.forEach(row => {\n  if (row.json.id) knownIds.add(String(row.json.id));\n  if (row.json.email) knownEmails.add(row.json.email.toLowerCase().trim());\n  if (row.json.profileUrl) knownUrls.add(row.json.profileUrl.toLowerCase().trim());\n});\n\nconst fresh = newLeads.filter(lead => {\n  const id = String(lead.json.id || '');\n  const email = (lead.json.email || '').toLowerCase().trim();\n  const url = (lead.json.profileUrl || '').toLowerCase().trim();\n  \n  // Skip if DO_NOT_CONTACT status found\n  const existing = existingRows.find(r => r.json.profileUrl === url || r.json.id === id);\n  if (existing && existing.json.status === 'do_not_contact') return false;\n  \n  return !knownIds.has(id) && !knownUrls.has(url) && (email === '' || !knownEmails.has(email));\n});\n\nconsole.log(`Dedup: ${newLeads.length} new → ${fresh.length} unique`);\nreturn fresh;"
+      },
+      "id": "67f87fa3-e7ff-4032-a763-cc8397a494d4",
+      "name": "Deduplicate Leads",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "583ae182-6cd9-4dad-ad50-cf170110b99c",
+      "name": "Process One by One",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        240,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.hunter.io/v2/email-finder",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "domain",
+              "value": "={{ $json.company?.toLowerCase().replace(/[^a-z0-9]/g, '') + '.com' }}"
+            },
+            {
+              "name": "first_name",
+              "value": "={{ $json.firstName }}"
+            },
+            {
+              "name": "last_name",
+              "value": "={{ $json.lastName }}"
+            },
+            {
+              "name": "api_key",
+              "value": "={{ $env.HUNTER_API_KEY }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "ad2b305b-b6b1-4f51-88b4-a94f42aa67c1",
+      "name": "Enrich Email (Hunter.io)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        464,
+        304
+      ],
+      "continueOnFail": true,
+      "notes": "Hunter.io finds professional emails. 25 free/month. Set HUNTER_API_KEY env var. Falls back to empty string if fails."
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $('Process One by One').item.json;\nconst hunterResp = $input.first().json;\n\n// Merge email from Hunter if not already present\nlet email = lead.email || '';\nif (!email && hunterResp?.data?.email) {\n  email = hunterResp.data.email;\n}\n\n// Skip if still no email\nif (!email) {\n  return [{ json: { ...lead, email: '', __skipNoEmail: true } }];\n}\n\nreturn [{ json: { ...lead, email } }];"
+      },
+      "id": "98afbe84-f441-44c6-a001-ae0cb7b655b4",
+      "name": "Merge Enriched Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "id": "has-email",
+              "leftValue": "={{ $json.__skipNoEmail }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "96f8b805-e147-4827-b850-94d7d2a1255d",
+      "name": "Has Email?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        912,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "e509285e-4480-4dbe-8847-e33c6422fc90",
+      "name": "Gemini — Draft Email",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1328,
+        0
+      ],
+      "continueOnFail": true,
+      "notes": "Uses Gemini 1.5 Pro. Set Google Gemini credentials in n8n."
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $('Check Email?').item.json;\nconst geminiRaw = $input.first()?.json?.text || $input.first()?.json?.content || '';\n\nlet emailData = { subject: '', body: '' };\n\ntry {\n  // Strip markdown code fences if present\n  const clean = geminiRaw.replace(/```json\\n?|```\\n?/g, '').trim();\n  emailData = JSON.parse(clean);\n} catch (e) {\n  // Fallback template if Gemini output is malformed\n  emailData = {\n    subject: `Quick question about ${lead.company || 'your tech stack'}`,\n    body: `Hi ${lead.firstName},\\n\\nI came across your profile and noticed you're leading tech initiatives at ${lead.company || 'your company'}.\\n\\nAt Krapton, we help companies like yours build and scale with custom development and AI automation. We've worked with teams across ${lead.region} and would love to explore if we can add value.\\n\\nWorth a quick chat?\\n\\nBest,\\n[Your Name] | Krapton.com`,\n    personalization_note: 'Fallback template used'\n  };\n}\n\n// Validate subject and body exist\nif (!emailData.subject || emailData.subject.length < 3) {\n  emailData.subject = `A quick note from Krapton for ${lead.firstName}`;\n}\nif (!emailData.body || emailData.body.length < 20) {\n  throw new Error('Email body too short, skipping lead: ' + lead.fullName);\n}\n\n// Add lead data for downstream nodes\nreturn [{\n  json: {\n    ...lead,\n    emailSubject: emailData.subject,\n    emailBody: emailData.body,\n    personalizationNote: emailData.personalization_note || '',\n    generatedAt: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "28736f41-c21e-4d49-aba2-03ccc32d9167",
+      "name": "Parse & Validate Email Draft",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "={{ $json.emailSubject }}",
+        "message": "={{ $json.emailBody }}",
+        "options": {
+          "appendAttribution": false,
+          "ccList": "",
+          "replyTo": "={{ $env.ADMIN_EMAIL }}"
+        }
+      },
+      "id": "1efef3cb-14e4-4610-b145-ab0e6e23a2e5",
+      "name": "Send Email via Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -656,
+        400
+      ],
+      "webhookId": "6c0a884e-0aaf-4af9-827d-406a7b96857c",
+      "continueOnFail": true,
+      "notes": "Set Gmail OAuth2 credentials. ADMIN_EMAIL env var = your sending email."
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $('Parse & Validate Email Draft').item.json;\nconst sendResult = $input.first().json;\n\n// Capture Gmail thread ID for reply tracking\nconst threadId = sendResult?.id || sendResult?.threadId || '';\n\nconst status = sendResult?.error ? 'send_error' : 'sent';\nconst errorNote = sendResult?.error ? String(sendResult.error).substring(0, 200) : '';\n\nreturn [{\n  json: {\n    ...lead,\n    status,\n    sentDate: new Date().toISOString().split('T')[0],\n    threadId,\n    errorNote,\n    fu1Date: '',\n    fu2Date: '',\n    replyDate: '',\n    category: '',\n    notes: lead.personalizationNote || ''\n  }\n}];"
+      },
+      "id": "f5a8f1e8-e1b5-45a1-8ad8-7beb3487c969",
+      "name": "Prepare GSheet Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -432,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $env.GSHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.id }}",
+            "Full Name": "={{ $json.fullName }}",
+            "First Name": "={{ $json.firstName }}",
+            "Company": "={{ $json.company }}",
+            "Role": "={{ $json.role }}",
+            "Region": "={{ $json.region }}",
+            "Location": "={{ $json.location }}",
+            "LinkedIn URL": "={{ $json.profileUrl }}",
+            "Email": "={{ $json.email }}",
+            "Email Subject": "={{ $json.emailSubject }}",
+            "Status": "={{ $json.status }}",
+            "Sent Date": "={{ $json.sentDate }}",
+            "Thread ID": "={{ $json.threadId }}",
+            "FU1 Date": "",
+            "FU2 Date": "",
+            "Reply Date": "",
+            "Category": "",
+            "Notes": "={{ $json.notes }}",
+            "Error Note": "={{ $json.errorNote }}",
+            "Do Not Contact": "FALSE"
+          }
+        },
+        "options": {}
+      },
+      "id": "331b6629-fac1-4a9e-a256-efb0272bf66c",
+      "name": "Add Lead to GSheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        -208,
+        400
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "id": "874c2bac-367e-4e6e-8fdd-e886bbfb9e62",
+      "name": "Rate Limit Delay",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        400
+      ],
+      "webhookId": "2b27ee49-5dbf-4230-a45d-3e9022fc243a",
+      "notes": "2 second delay between emails to respect Gmail sending limits."
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "867834d2-eedd-4eb8-a91e-dfd3f6ebf991",
+      "name": "Daily 9AM Follow-up Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1328,
+        1024
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $env.GSHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "options": {
+          "returnAllMatches": true
+        }
+      },
+      "id": "2ad67a74-b4f2-4512-a1ee-e741f35021a3",
+      "name": "Read All Leads for Follow-up",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        -1104,
+        1024
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all();\nconst today = new Date();\ntoday.setHours(0,0,0,0);\n\nconst toFollowUp = [];\n\nrows.forEach(row => {\n  const r = row.json;\n  if (!r.Email || !r['Sent Date']) return;\n  if (r['Do Not Contact'] === 'TRUE') return;\n  // Skip if already replied, queried, done, or error\n  if (['replied', 'queried', 'done', 'do_not_contact', 'send_error'].includes(r.Status)) return;\n\n  const sentDate = new Date(r['Sent Date']);\n  sentDate.setHours(0,0,0,0);\n  const daysSinceSent = Math.floor((today - sentDate) / (1000 * 60 * 60 * 24));\n\n  // Follow-up 1: 2 days after initial send, not yet sent\n  if (r.Status === 'sent' && daysSinceSent >= 2 && !r['FU1 Date']) {\n    toFollowUp.push({ json: { ...r, followUpNumber: 1, daysSinceSent } });\n    return;\n  }\n\n  // Follow-up 2: 5 days after initial send, FU1 done, not yet sent\n  if (r.Status === 'fu1_sent' && daysSinceSent >= 5 && !r['FU2 Date']) {\n    toFollowUp.push({ json: { ...r, followUpNumber: 2, daysSinceSent } });\n    return;\n  }\n});\n\nconsole.log(`Follow-ups due today: ${toFollowUp.length}`);\nreturn toFollowUp.length ? toFollowUp : [{ json: { __noFollowUps: true } }];"
+      },
+      "id": "081ee8ca-cd71-4d41-9056-e5e49cfd96e7",
+      "name": "Filter Leads Due for Follow-up",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        1024
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "leftValue": "={{ $json.__noFollowUps }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "da3082f3-de57-4cdc-9da1-11fc3fe4d7e4",
+      "name": "Any Follow-ups Due?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -656,
+        1024
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "0eab7048-76a6-4bf6-bba9-c80f77c50e92",
+      "name": "Process Follow-ups One by One",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -432,
+        928
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "0ade5da2-0dc5-464d-8553-280062b95e6b",
+      "name": "Gemini — Draft Follow-up",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1328,
+        624
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $('Process Follow-ups One by One').item.json;\nconst geminiRaw = $input.first()?.json?.text || $input.first()?.json?.content || '';\n\nlet emailData = { subject: '', body: '' };\ntry {\n  const clean = geminiRaw.replace(/```json\\n?|```\\n?/g, '').trim();\n  emailData = JSON.parse(clean);\n} catch(e) {\n  const isLast = lead.followUpNumber === 2;\n  emailData = {\n    subject: `Re: ${lead['Email Subject']}`,\n    body: isLast\n      ? `Hi ${lead['First Name']}, just dropping one last note. If now isn't the right time, no worries at all — I'll leave it here. Whenever you're exploring tech solutions, Krapton is happy to help. All the best!\\n\\n[Your Name] | Krapton.com`\n      : `Hi ${lead['First Name']}, just following up on my note from a couple of days ago. Did it reach you?\\n\\nHappy to answer any questions.\\n\\n[Your Name] | Krapton.com`\n  };\n}\n\nreturn [{\n  json: {\n    ...lead,\n    fuSubject: emailData.subject || `Re: ${lead['Email Subject']}`,\n    fuBody: emailData.body\n  }\n}];"
+      },
+      "id": "a0151041-fbd5-4181-898f-26b07749df15",
+      "name": "Parse Follow-up Draft",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1328,
+        832
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "={{ $json.fuSubject }}",
+        "message": "={{ $json.fuBody }}",
+        "options": {}
+      },
+      "id": "10b3a954-7714-4e84-9613-0d56ed021a88",
+      "name": "Send Follow-up Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1104,
+        832
+      ],
+      "webhookId": "b59c43be-93a0-4290-a5e0-05d653826246",
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $('Parse Follow-up Draft').item.json;\nconst sendResult = $input.first().json;\nconst today = new Date().toISOString().split('T')[0];\nconst fuNum = lead.followUpNumber;\n\nconst updates = {};\nif (fuNum === 1) {\n  updates['Status'] = 'fu1_sent';\n  updates['FU1 Date'] = today;\n} else if (fuNum === 2) {\n  updates['Status'] = 'fu2_sent';\n  updates['FU2 Date'] = today;\n}\n\nif (sendResult?.error) {\n  updates['Error Note'] = `FU${fuNum} error: ${String(sendResult.error).substring(0,200)}`;\n}\n\nreturn [{ json: { ...lead, updates, rowIdentifier: lead.Email } }];"
+      },
+      "id": "d23c930b-117b-4044-ab1d-8bc9a8162faf",
+      "name": "Prepare Follow-up GSheet Update",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        832
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $env.GSHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "={{ $json.updates.Status }}",
+            "FU1 Date": "={{ $json.updates['FU1 Date'] || $json['FU1 Date'] }}",
+            "FU2 Date": "={{ $json.updates['FU2 Date'] || $json['FU2 Date'] }}",
+            "Error Note": "={{ $json.updates['Error Note'] || $json['Error Note'] }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "e7a668cc-beec-4488-92f6-111a0036f690",
+      "name": "Update GSheet — Follow-up Status",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        -656,
+        832
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "labelIds": [
+            "INBOX"
+          ],
+          "q": "is:unread"
+        }
+      },
+      "id": "6d60625c-2881-42f9-affc-91b488e3dee3",
+      "name": "Gmail — Watch Inbox (Every Minute)",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1328,
+        2256
+      ],
+      "notes": "Polls inbox every minute for new unread emails."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pre-classify obvious spam before hitting Gemini (save API calls)\nconst email = $input.first().json;\nconst from = (email.from || '').toLowerCase();\nconst subject = (email.subject || '').toLowerCase();\nconst snippet = (email.snippet || email.text || '').toLowerCase();\n\n// Hard spam patterns\nconst spamPatterns = [\n  'unsubscribe', 'opt-out', 'noreply', 'no-reply', 'mailer-daemon',\n  'donotreply', 'newsletter', 'promotional', 'notification@', 'alerts@',\n  'linkedin.com/comm', 'twitter.com', 'facebook.com', 'instagram.com',\n  'automated message', 'do not reply'\n];\n\nconst isObviousSpam = spamPatterns.some(p => from.includes(p) || subject.includes(p));\n\nreturn [{\n  json: {\n    ...email,\n    fromEmail: (email.from || '').match(/<(.+?)>/)?.[1] || email.from || '',\n    subject: email.subject || '',\n    bodyText: email.text || email.snippet || '',\n    isObviousSpam,\n    receivedAt: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "f52afefa-98ff-487c-90ff-8700e5cde4b4",
+      "name": "Pre-classify Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1104,
+        2256
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "leftValue": "={{ $json.isObviousSpam }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b7425020-78e0-433c-be3c-ab5074885bc3",
+      "name": "Skip Obvious Spam?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        2256
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $env.GSHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "options": {
+          "returnAllMatches": true
+        }
+      },
+      "id": "1c584f61-4c4b-4feb-a48f-efed10a38613",
+      "name": "Read Leads for Email Match",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        -656,
+        2256
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const incomingEmail = $('Skip Obvious Spam?').item.json;\nconst rows = $('Read Leads for Email Match').all();\n\n// Try to match incoming email to a lead we contacted\nconst fromEmail = incomingEmail.fromEmail.toLowerCase().trim();\nlet matchedLead = null;\n\nfor (const row of rows) {\n  const leadEmail = (row.json.Email || '').toLowerCase().trim();\n  if (leadEmail && leadEmail === fromEmail) {\n    matchedLead = row.json;\n    break;\n  }\n}\n\nreturn [{\n  json: {\n    ...incomingEmail,\n    matchedLead: matchedLead || null,\n    isFromKnownLead: !!matchedLead\n  }\n}];"
+      },
+      "id": "d59664df-cf12-49f9-91cf-cef373a3f04c",
+      "name": "Match Email to Known Lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -432,
+        2256
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "6b1c66ce-1129-4c53-af57-5b1c870d3761",
+      "name": "Gemini — Classify Email",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1328,
+        1248
+      ],
+      "continueOnFail": true,
+      "notes": "Using gemini-1.5-flash (faster/cheaper for classification tasks)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const emailData = $('Match Email to Known Lead').item.json;\nconst geminiRaw = $input.first()?.json?.text || $input.first()?.json?.content || '';\n\nlet classification = { category: 'other', summary: 'Parse error', sentiment: 'unknown', urgency: 'low' };\ntry {\n  const clean = geminiRaw.replace(/```json\\n?|```\\n?/g, '').trim();\n  classification = JSON.parse(clean);\n} catch(e) {\n  console.log('Classification parse error, defaulting to other');\n}\n\nreturn [{\n  json: {\n    ...emailData,\n    category: classification.category || 'other',\n    summary: classification.summary || '',\n    sentiment: classification.sentiment || 'unknown',\n    urgency: classification.urgency || 'low',\n    classifiedAt: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "14f8da4e-ab61-4fe8-b821-b3f6be046839",
+      "name": "Parse Classification",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1328,
+        1648
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "spam",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "spam"
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "response",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "response"
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "query",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "query"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "35547355-6280-4596-9c99-9b7bbb7a28db",
+      "name": "Route by Category",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -1104,
+        1616
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Spam: just archive it silently, no notification\nconst email = $input.first().json;\nconsole.log(`Spam archived from: ${email.fromEmail}`);\nreturn [];"
+      },
+      "id": "0d089b0b-17c7-475f-a913-92ccbc4b13fa",
+      "name": "Archive Spam (Silent)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        1456
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const email = $input.first().json;\n\nconst urgencyEmoji = { high: '🔴', medium: '🟡', low: '🟢' }[email.urgency] || '⚪';\nconst sentimentEmoji = { positive: '✅', negative: '❌', neutral: '➡️' }[email.sentiment] || '';\n\nconst message = [\n  `${urgencyEmoji} RESPONSE RECEIVED — Krapton Outreach`,\n  ``,\n  `From: ${email.fromEmail}`,\n  `Subject: ${email.subject}`,\n  `Sentiment: ${sentimentEmoji} ${email.sentiment}`,\n  `Urgency: ${email.urgency}`,\n  `Summary: ${email.summary}`,\n  email.matchedLead ? `Lead: ${email.matchedLead['Full Name']} @ ${email.matchedLead.Company}` : `Lead: Unknown (cold inbound)`,\n  ``,\n  `Preview: ${(email.bodyText || '').substring(0, 300)}`,\n  ``,\n  `→ Check GSheet: https://docs.google.com/spreadsheets/d/${process.env.GSHEET_ID}`\n].join('\\n');\n\nreturn [{ json: { ...email, notificationMessage: message, notificationType: 'response' } }];"
+      },
+      "id": "00e70982-8be1-4195-80ad-8088168dea7c",
+      "name": "Build Response Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        1648
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const email = $input.first().json;\n\nconst message = [\n  `📩 NEW QUERY — Someone is interested in Krapton!`,\n  ``,\n  `From: ${email.fromEmail}`,\n  `Subject: ${email.subject}`,\n  `Summary: ${email.summary}`,\n  `Urgency: ${email.urgency}`,\n  email.isFromKnownLead ? `Known Lead: ${email.matchedLead?.['Full Name']} @ ${email.matchedLead?.Company}` : `Source: Cold inbound (not from our outreach)`,\n  ``,\n  `Preview: ${(email.bodyText || '').substring(0, 300)}`,\n  ``,\n  `→ Reply within 2 hours for best conversion rate!`\n].join('\\n');\n\nreturn [{ json: { ...email, notificationMessage: message, notificationType: 'query' } }];"
+      },
+      "id": "aed54f0e-f2db-434c-9f7c-e5b076b831e0",
+      "name": "Build Query Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        2032
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "={{ $json.notificationMessage }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "064c6881-1e0e-4573-ba35-11503f0cc4ac",
+      "name": "Telegram Admin Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -656,
+        1648
+      ],
+      "webhookId": "95483aef-2db9-4953-ac59-a6fb23f2725e",
+      "continueOnFail": true,
+      "notes": "Set TELEGRAM_CHAT_ID and Telegram Bot credentials. Most reliable instant notification."
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $env.ADMIN_EMAIL }}",
+        "subject": "={{ $json.notificationType === 'response' ? '🔴 RESPONSE: ' : '📩 QUERY: ' }}{{ $json.subject }}",
+        "message": "={{ $json.notificationMessage }}",
+        "options": {}
+      },
+      "id": "c224c47d-199f-4293-89bf-3935570fae05",
+      "name": "Email Admin Notification",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -432,
+        1648
+      ],
+      "webhookId": "195b8fe3-25f3-4826-9e03-80d721e5ed50",
+      "continueOnFail": true,
+      "notes": "Backup notification via email in case Telegram fails."
+    },
+    {
+      "parameters": {
+        "jsCode": "const email = $('Parse Classification').item.json;\nconst today = new Date().toISOString().split('T')[0];\n\nif (!email.isFromKnownLead || !email.matchedLead?.Email) {\n  // Log cold inbound separately\n  return [{ json: { ...email, __coldInbound: true } }];\n}\n\nconst statusMap = {\n  response: 'replied',\n  query: 'queried',\n  other: null\n};\nconst newStatus = statusMap[email.category];\n\nreturn [{\n  json: {\n    email: email.matchedLead.Email,\n    status: newStatus,\n    replyDate: today,\n    category: email.category,\n    summary: email.summary,\n    sentiment: email.sentiment,\n    shouldUpdate: !!newStatus\n  }\n}];"
+      },
+      "id": "1c932581-841c-4c33-9244-f20e83a4597b",
+      "name": "Prepare Lead Status Update",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        1840
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "leftValue": "={{ $json.shouldUpdate }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f7684f6d-0ad0-4dde-a340-7ee792a6a528",
+      "name": "Should Update Lead?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -656,
+        1840
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $env.GSHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "={{ $json.status }}",
+            "Reply Date": "={{ $json.replyDate }}",
+            "Category": "={{ $json.category }}",
+            "Notes": "={{ $json.summary }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "0c4aa87b-f491-4f23-8595-27e285474ac5",
+      "name": "Update Lead Status in GSheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        -432,
+        1840
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "f1dbe756-9251-4137-ac3e-d9c31b0828f9",
+      "name": "Weekly Report Trigger (Monday 7AM)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1328,
+        2480
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $env.GSHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "options": {
+          "returnAllMatches": true
+        }
+      },
+      "id": "44b34ca8-7e3e-487c-ad52-fb508ce46770",
+      "name": "Read All Leads for Report",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        -1104,
+        2480
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all();\n\nconst stats = {\n  total: rows.length,\n  sent: 0, fu1: 0, fu2: 0,\n  replied: 0, queried: 0,\n  errors: 0, done: 0,\n  regions: { US: 0, UK: 0, ARAB: 0 }\n};\n\nrows.forEach(r => {\n  const s = r.json.Status || '';\n  if (s === 'sent') stats.sent++;\n  if (s === 'fu1_sent') stats.fu1++;\n  if (s === 'fu2_sent' || s === 'done') { stats.fu2++; stats.done++; }\n  if (s === 'replied') stats.replied++;\n  if (s === 'queried') stats.queried++;\n  if (s === 'send_error') stats.errors++;\n  const region = r.json.Region || 'unknown';\n  if (stats.regions[region] !== undefined) stats.regions[region]++;\n});\n\nconst responseRate = stats.total > 0 ? ((stats.replied + stats.queried) / stats.total * 100).toFixed(1) : 0;\n\nconst report = [\n  '📊 KRAPTON OUTREACH — WEEKLY REPORT',\n  `Week ending: ${new Date().toLocaleDateString()}`,\n  '',\n  `Total leads in system: ${stats.total}`,\n  `In progress (sent): ${stats.sent}`,\n  `Follow-up 1 sent: ${stats.fu1}`,\n  `Follow-up 2 sent: ${stats.fu2}`,\n  `Replied: ${stats.replied}`,\n  `Queried (interested): ${stats.queried}`,\n  `Errors: ${stats.errors}`,\n  '',\n  `Response rate: ${responseRate}%`,\n  '',\n  `By region — US: ${stats.regions.US} | UK: ${stats.regions.UK} | Arab: ${stats.regions.ARAB}`,\n  '',\n  `→ Full data: https://docs.google.com/spreadsheets/d/${$env.GSHEET_ID}`\n].join('\\n');\n\nreturn [{ json: { report } }];"
+      },
+      "id": "61d87039-f747-4f42-85b8-a376392430b1",
+      "name": "Build Weekly Stats Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        2480
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "={{ $json.report }}",
+        "additionalFields": {}
+      },
+      "id": "b714b733-eac9-41dd-bc28-18c67e8847ab",
+      "name": "Send Weekly Report via Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -656,
+        2480
+      ],
+      "webhookId": "751c44e4-3662-458f-b61b-5f55e6f9f373",
+      "continueOnFail": true
+    }
+  ],
+  "connections": {
+    "Daily 8AM Trigger (Weekdays)": {
+      "main": [
+        [
+          {
+            "node": "Config & Constants",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config & Constants": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn Navigator Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIn Navigator Search": {
+      "main": [
+        [
+          {
+            "node": "Normalize Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Has Leads?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Leads?": {
+      "main": [
+        [
+          {
+            "node": "Read Existing Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Existing Leads": {
+      "main": [
+        [
+          {
+            "node": "Deduplicate Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deduplicate Leads": {
+      "main": [
+        [
+          {
+            "node": "Process One by One",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process One by One": {
+      "main": [
+        [
+          {
+            "node": "Enrich Email (Hunter.io)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich Email (Hunter.io)": {
+      "main": [
+        [
+          {
+            "node": "Merge Enriched Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Enriched Email": {
+      "main": [
+        [
+          {
+            "node": "Has Email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse & Validate Email Draft": {
+      "main": [
+        [
+          {
+            "node": "Send Email via Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email via Gmail": {
+      "main": [
+        [
+          {
+            "node": "Prepare GSheet Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare GSheet Row": {
+      "main": [
+        [
+          {
+            "node": "Add Lead to GSheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Lead to GSheet": {
+      "main": [
+        [
+          {
+            "node": "Rate Limit Delay",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rate Limit Delay": {
+      "main": [
+        [
+          {
+            "node": "Process One by One",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daily 9AM Follow-up Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read All Leads for Follow-up",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read All Leads for Follow-up": {
+      "main": [
+        [
+          {
+            "node": "Filter Leads Due for Follow-up",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Leads Due for Follow-up": {
+      "main": [
+        [
+          {
+            "node": "Any Follow-ups Due?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Any Follow-ups Due?": {
+      "main": [
+        [
+          {
+            "node": "Process Follow-ups One by One",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Follow-up Draft": {
+      "main": [
+        [
+          {
+            "node": "Send Follow-up Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Follow-up Email": {
+      "main": [
+        [
+          {
+            "node": "Prepare Follow-up GSheet Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Follow-up GSheet Update": {
+      "main": [
+        [
+          {
+            "node": "Update GSheet — Follow-up Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update GSheet — Follow-up Status": {
+      "main": [
+        [
+          {
+            "node": "Process Follow-ups One by One",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail — Watch Inbox (Every Minute)": {
+      "main": [
+        [
+          {
+            "node": "Pre-classify Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pre-classify Email": {
+      "main": [
+        [
+          {
+            "node": "Skip Obvious Spam?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Skip Obvious Spam?": {
+      "main": [
+        [
+          {
+            "node": "Read Leads for Email Match",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Leads for Email Match": {
+      "main": [
+        [
+          {
+            "node": "Match Email to Known Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Classification": {
+      "main": [
+        [
+          {
+            "node": "Route by Category",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Category": {
+      "main": [
+        [
+          {
+            "node": "Archive Spam (Silent)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Build Response Alert",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Build Query Alert",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Lead Status Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Response Alert": {
+      "main": [
+        [
+          {
+            "node": "Telegram Admin Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Query Alert": {
+      "main": [
+        [
+          {
+            "node": "Telegram Admin Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Admin Alert": {
+      "main": [
+        [
+          {
+            "node": "Email Admin Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Lead Status Update": {
+      "main": [
+        [
+          {
+            "node": "Should Update Lead?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Should Update Lead?": {
+      "main": [
+        [
+          {
+            "node": "Update Lead Status in GSheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Weekly Report Trigger (Monday 7AM)": {
+      "main": [
+        [
+          {
+            "node": "Read All Leads for Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read All Leads for Report": {
+      "main": [
+        [
+          {
+            "node": "Build Weekly Stats Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Weekly Stats Report": {
+      "main": [
+        [
+          {
+            "node": "Send Weekly Report via Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

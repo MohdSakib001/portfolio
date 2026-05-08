@@ -85,10 +85,10 @@ export default function Performance() {
     }, []);
 
     const vitals = [
-        { label: "LCP", value: "1.2s", target: "<2.5s", pct: "90%" },
-        { label: "CLS", value: "0.01", target: "<0.1", pct: "95%" },
-        { label: "INP", value: "38ms", target: "<200ms", pct: "85%" },
-        { label: "FCP", value: "0.6s", target: "<1.8s", pct: "92%" },
+        { label: "LCP", value: "1.2s", target: "<2.5s", pct: "90%", impact: "1s delay in page load = 7% drop in conversions. At 1.2s, checkout flows stay frictionless." },
+        { label: "CLS", value: "0.01", target: "<0.1", pct: "95%", impact: "Zero layout shift during load means users never misclick. Critical for e-commerce CTAs and form inputs." },
+        { label: "INP", value: "38ms", target: "<200ms", pct: "85%", impact: "Inputs feel instant. At 38ms users perceive zero lag — the threshold for 'feels native'." },
+        { label: "FCP", value: "0.6s", target: "<1.8s", pct: "92%", impact: "Content visible in 0.6s keeps bounce rate low. Users see something before they can even lift their finger." },
     ];
 
     const comparisons = [
@@ -184,6 +184,11 @@ export default function Performance() {
                                             style={{ width: metric.pct }}
                                         />
                                     </div>
+
+                                    {/* Business impact line */}
+                                    <p className="mt-2 text-xs opacity-30 leading-relaxed font-light">
+                                        {metric.impact}
+                                    </p>
                                 </div>
                             ))}
                         </div>

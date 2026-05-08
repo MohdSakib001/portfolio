@@ -180,8 +180,8 @@ export default function Header() {
                     <div>
                         <p className="text-xs uppercase tracking-[0.2em] text-white/40 mb-2">Socials</p>
                         <div className="flex gap-4 text-sm text-white/80">
-                            <a href="https://github.com/mohdsakib" target="_blank" rel="noopener" className="hover:text-white transition-colors">GitHub</a>
-                            <a href="https://linkedin.com/in/mohdsakib" target="_blank" rel="noopener" className="hover:text-white transition-colors">LinkedIn</a>
+                            <a href="https://github.com/mohdsakib-Krapton" target="_blank" rel="noopener" className="hover:text-white transition-colors">GitHub</a>
+                            <a href="https://www.linkedin.com/in/mohdsakib001" target="_blank" rel="noopener" className="hover:text-white transition-colors">LinkedIn</a>
                         </div>
                     </div>
                     <div>

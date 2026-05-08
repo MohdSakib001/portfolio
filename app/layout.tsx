@@ -15,38 +15,41 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://mohdsakib.vercel.app"),
-  title:
-    "Mohd Sakib | Portfolio | Full Stack Developer | React Native Developer",
+  title: {
+    default: "Mohd Sakib | Senior Full Stack & React Native Developer",
+    template: "%s | Mohd Sakib",
+  },
   description:
-    "Portfolio of Mohd Sakib, a Full Stack Developer and React Native Developer",
+    "Senior Full Stack Developer specializing in Next.js, Node.js, React Native, and AI systems. 8 live production products. 25K+ users served. Available for senior full-time roles and high-stakes freelance — Meerut, India.",
   keywords: [
     "Mohd Sakib",
-    "Portfolio",
-    "Full Stack Developer",
+    "Senior Full Stack Developer India",
     "React Native Developer",
+    "Next.js Developer",
+    "MERN Stack Developer",
+    "hire full stack developer India",
+    "AI systems developer",
+    "Node.js developer India",
   ],
-  authors: [{ name: "Mohd Sakib" }],
+  authors: [{ name: "Mohd Sakib", url: "https://mohdsakib.vercel.app" }],
   creator: "Mohd Sakib",
   publisher: "Mohd Sakib",
   openGraph: {
-    title:
-      "Mohd Sakib | Portfolio | Full Stack Developer | React Native Developer",
+    title: "Mohd Sakib | Senior Full Stack & React Native Developer",
     description:
-      "Portfolio of Mohd Sakib, a Full Stack Developer and React Native Developer",
-    type: "website",
+      "8 live production products. 25K+ users. 98 Lighthouse. Next.js · Node.js · React Native · AI Systems.",
+    type: "profile",
     locale: "en_US",
-    siteName:
-      "Mohd Sakib | Portfolio | Full Stack Developer | React Native Developer",
+    siteName: "Mohd Sakib — Portfolio",
     url: "https://mohdsakib.vercel.app",
   },
   twitter: {
-    title:
-      "Mohd Sakib | Portfolio | Full Stack Developer | React Native Developer",
+    title: "Mohd Sakib | Senior Full Stack & React Native Developer",
     description:
-      "Portfolio of Mohd Sakib, a Full Stack Developer and React Native Developer",
+      "8 live production products. 25K+ users. 98 Lighthouse. Next.js · Node.js · React Native · AI Systems.",
     card: "summary_large_image",
-    creator: "@mohdsakib",
-    site: "@mohdsakib",
+    creator: "@mohdsakib001",
+    site: "@mohdsakib001",
   },
   alternates: {
     canonical: "https://mohdsakib.vercel.app",
@@ -78,11 +81,20 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Person",
+              "@id": "https://mohdsakib.vercel.app/#person",
               name: "Mohd Sakib",
               url: "https://mohdsakib.vercel.app",
-              jobTitle: "Full Stack Developer",
+              image: "https://mohdsakib.vercel.app/assets/me/1.png",
+              jobTitle: "Senior Full Stack Developer",
               description:
-                "Portfolio of Mohd Sakib, a Full Stack Developer and React Native Developer specializing in high-performance web and mobile applications.",
+                "Senior Full Stack Developer and React Native specialist. Architected 8 production-grade products across FinTech, EdTech, LegalTech, Gaming, and AI — serving 25,000+ users and processing $100K+ in transactions. Core stack: Next.js, Node.js, React Native, TypeScript, PostgreSQL, Redis, AWS.",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Meerut",
+                addressRegion: "Uttar Pradesh",
+                addressCountry: "IN",
+              },
+              email: "mohdsakib.work@gmail.com",
               sameAs: [
                 "https://github.com/mohdsakib-Krapton",
                 "https://www.linkedin.com/in/mohdsakib001",
