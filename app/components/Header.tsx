@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Magnetic from "./Magnetic";
+import WorkDropdown from "./WorkDropdown";
+import ToolsDropdown from "./ToolsDropdown";
 
 const navLinks = [
     { label: "Work", href: "#work" },
@@ -83,7 +85,14 @@ export default function Header() {
 
                     {/* DESKTOP NAV */}
                     <nav className="hidden md:flex items-center gap-1">
-                        {navLinks.map((link) => (
+                        {/* Work — dropdown */}
+                        <WorkDropdown />
+
+                        {/* Tools — dropdown */}
+                        <ToolsDropdown />
+
+                        {/* Remaining links */}
+                        {navLinks.filter((l) => l.label !== "Work").map((link) => (
                             <Magnetic key={link.label}>
                                 <button
                                     onClick={() => handleNavClick(link.href)}
