@@ -7,7 +7,7 @@ import { ChevronDown, ArrowRight } from "lucide-react";
 import { projects } from "../data/projects";
 
 const CATEGORY_LABEL: Record<string, string> = {
-  client:  "Client Work",
+  client: "Client Work",
   startup: "Startup",
 };
 
@@ -24,20 +24,21 @@ export default function WorkDropdown() {
   };
 
   useEffect(() => {
-    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    const esc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
     document.addEventListener("keydown", esc);
     return () => document.removeEventListener("keydown", esc);
   }, []);
 
   return (
     <div className="relative" onMouseEnter={enter} onMouseLeave={leave}>
-
       {/* Trigger — same style as existing nav buttons */}
       <button
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="true"
-        className="flex items-center gap-1 text-[11px] uppercase tracking-[0.18em] font-medium px-5 py-2 opacity-70 hover:opacity-100 transition-opacity duration-300"
+        className="flex items-center gap-1 text-[11px] uppercase tracking-[0.18em] font-medium px-5 py-2 cursor-pointer"
       >
         Work
         <ChevronDown
@@ -53,14 +54,34 @@ export default function WorkDropdown() {
             : "opacity-0 -translate-y-2 pointer-events-none"
         }`}
       >
-        <div className="w-[740px] max-w-[calc(100vw-2rem)] rounded-2xl border border-neutral-200/70 bg-white shadow-2xl shadow-black/8 overflow-hidden">
-
+        <div
+          className="w-[740px] max-w-[calc(100vw-2rem)] rounded-2xl overflow-hidden"
+          style={{
+            background: "rgba(255,255,255,0.72)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            border: "1px solid rgba(255,255,255,0.60)",
+            boxShadow:
+              "inset 0 1px 0 rgba(255,255,255,0.80), 0 24px 48px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.06)",
+          }}
+        >
           {/* Header */}
-          <div className="px-6 pt-5 pb-3 border-b border-neutral-100 flex items-center justify-between">
-            <p className="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-medium">
+          <div
+            className="px-6 pt-5 pb-3 flex items-center justify-between"
+            style={{ borderBottom: "1px solid rgba(0,0,0,0.07)" }}
+          >
+            <p
+              className="text-[9px] uppercase tracking-[0.25em] font-medium"
+              style={{ color: "rgba(0,0,0,0.35)" }}
+            >
               Selected Work
             </p>
-            <p className="text-[9px] text-neutral-300 font-mono">{projects.length} projects</p>
+            <p
+              className="text-[9px] font-mono"
+              style={{ color: "rgba(0,0,0,0.25)" }}
+            >
+              {projects.length} projects
+            </p>
           </div>
 
           {/* Grid */}
@@ -70,10 +91,14 @@ export default function WorkDropdown() {
                 key={project.id}
                 href={`/projects/${project.id}`}
                 onClick={() => setOpen(false)}
-                className="group flex flex-col rounded-xl overflow-hidden border border-transparent hover:border-neutral-200 transition-all duration-200 hover:shadow-sm"
+                className="group flex flex-col rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md"
+                style={{ border: "1px solid rgba(0,0,0,0.06)" }}
               >
                 {/* Image */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100">
+                <div
+                  className="relative aspect-[4/3] overflow-hidden"
+                  style={{ background: "rgba(0,0,0,0.06)" }}
+                >
                   <Image
                     src={project.hero.src}
                     alt={project.name}
@@ -81,19 +106,28 @@ export default function WorkDropdown() {
                     className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
                     sizes="185px"
                   />
-                  {/* Category pill overlaid bottom-left */}
+                  {/* Category pill */}
                   <span className="absolute bottom-2 left-2 px-2 py-0.5 bg-black/60 text-white text-[8px] font-medium tracking-wide rounded-full backdrop-blur-sm">
                     {CATEGORY_LABEL[project.category] ?? project.category}
                   </span>
                 </div>
 
                 {/* Name + metric */}
-                <div className="px-2.5 py-2.5 bg-white group-hover:bg-neutral-50 transition-colors">
-                  <p className="text-[11px] font-semibold text-black leading-tight">
+                <div
+                  className="px-2.5 py-2.5 transition-colors duration-150"
+                  style={{ background: "rgba(255,255,255,0.55)" }}
+                >
+                  <p
+                    className="text-[11px] font-semibold leading-tight"
+                    style={{ color: "rgba(0,0,0,0.82)" }}
+                  >
                     {project.name}
                   </p>
                   {project.metrics?.users && (
-                    <p className="text-[9px] text-neutral-400 mt-0.5 truncate">
+                    <p
+                      className="text-[9px] mt-0.5 truncate"
+                      style={{ color: "rgba(0,0,0,0.36)" }}
+                    >
                       {project.metrics.users}
                     </p>
                   )}
@@ -103,20 +137,26 @@ export default function WorkDropdown() {
           </div>
 
           {/* Footer */}
-          <div className="border-t border-neutral-100 px-6 py-3.5 flex items-center justify-between">
-            <p className="text-[9px] text-neutral-300 uppercase tracking-widest">
+          <div
+            className="px-6 py-3.5 flex items-center justify-between"
+            style={{ borderTop: "1px solid rgba(0,0,0,0.07)" }}
+          >
+            <p
+              className="text-[9px] uppercase tracking-widest"
+              style={{ color: "rgba(0,0,0,0.25)" }}
+            >
               Full-stack · Mobile · AI
             </p>
             <Link
               href="/projects"
               onClick={() => setOpen(false)}
-              className="group inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] font-medium text-black hover:text-neutral-500 transition-colors"
+              className="group inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] font-medium transition-colors"
+              style={{ color: "rgba(0,0,0,0.70)" }}
             >
               View all projects
               <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
-
         </div>
       </div>
     </div>

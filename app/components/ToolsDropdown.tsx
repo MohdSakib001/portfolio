@@ -3,9 +3,18 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import {
-  FileText, QrCode, Lock, Braces, Download,
-  Palette, Timer, AlignLeft, Percent, Hash,
-  ArrowRight, ChevronDown,
+  FileText,
+  QrCode,
+  Lock,
+  Braces,
+  Download,
+  Palette,
+  Timer,
+  AlignLeft,
+  Percent,
+  Hash,
+  ArrowRight,
+  ChevronDown,
   type LucideProps,
 } from "lucide-react";
 import type { ElementType } from "react";
@@ -25,8 +34,16 @@ const FEATURED_IDS = [
 ];
 
 const ICON_MAP: Record<string, ElementType<LucideProps>> = {
-  FileText, QrCode, Lock, Braces, Download,
-  Palette, Timer, AlignLeft, Percent, Hash,
+  FileText,
+  QrCode,
+  Lock,
+  Braces,
+  Download,
+  Palette,
+  Timer,
+  AlignLeft,
+  Percent,
+  Hash,
 };
 
 export default function ToolsDropdown() {
@@ -41,9 +58,9 @@ export default function ToolsDropdown() {
     timeout.current = setTimeout(() => setOpen(false), 160);
   };
 
-  const featured = FEATURED_IDS
-    .map((id) => tools.find((t) => t.id === id))
-    .filter(Boolean) as (typeof tools)[number][];
+  const featured = FEATURED_IDS.map((id) =>
+    tools.find((t) => t.id === id),
+  ).filter(Boolean) as (typeof tools)[number][];
 
   return (
     <div className="relative" onMouseEnter={enter} onMouseLeave={leave}>
@@ -51,7 +68,7 @@ export default function ToolsDropdown() {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="true"
-        className="flex items-center gap-1 text-[11px] uppercase tracking-[0.18em] font-medium px-5 py-2 opacity-70 hover:opacity-100 transition-opacity duration-300"
+        className="flex items-center gap-1 text-[11px] uppercase tracking-[0.18em] font-medium px-5 py-2 cursor-pointer"
       >
         Tools
         <ChevronDown
@@ -66,14 +83,32 @@ export default function ToolsDropdown() {
             : "opacity-0 -translate-y-2 pointer-events-none"
         }`}
       >
-        <div className="w-[300px] max-w-[calc(100vw-2rem)] rounded-2xl border border-neutral-200/70 bg-white shadow-2xl shadow-black/8 overflow-hidden">
-
+        <div
+          className="w-[300px] max-w-[calc(100vw-2rem)] rounded-2xl overflow-hidden"
+          style={{
+            background: "rgba(255,255,255,0.72)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            border: "1px solid rgba(255,255,255,0.60)",
+            boxShadow:
+              "inset 0 1px 0 rgba(255,255,255,0.80), 0 24px 48px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.06)",
+          }}
+        >
           {/* Header */}
-          <div className="px-5 pt-4 pb-3 border-b border-neutral-100 flex items-center justify-between">
-            <p className="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-medium">
+          <div
+            className="px-5 pt-4 pb-3 flex items-center justify-between"
+            style={{ borderBottom: "1px solid rgba(0,0,0,0.07)" }}
+          >
+            <p
+              className="text-[9px] uppercase tracking-[0.25em] font-medium"
+              style={{ color: "rgba(0,0,0,0.35)" }}
+            >
               Free Tools
             </p>
-            <p className="text-[9px] text-neutral-300 font-mono">
+            <p
+              className="text-[9px] font-mono"
+              style={{ color: "rgba(0,0,0,0.25)" }}
+            >
               {tools.length} total
             </p>
           </div>
@@ -88,7 +123,12 @@ export default function ToolsDropdown() {
                   key={tool.id}
                   href={`/tools#${tool.id}`}
                   onClick={() => setOpen(false)}
-                  className="group flex items-center gap-3 px-4 py-2.5 hover:bg-neutral-50 transition-colors duration-150"
+                  className="group flex items-center gap-3 px-4 py-2.5 transition-colors duration-150"
+                  style={{ ["--hover-bg" as string]: "rgba(0,0,0,0.04)" }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.background = "rgba(0,0,0,0.04)")
+                  }
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "")}
                 >
                   <span
                     className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
@@ -96,7 +136,10 @@ export default function ToolsDropdown() {
                   >
                     <Icon size={12} style={{ color: meta.color }} />
                   </span>
-                  <span className="text-[12px] font-medium text-black leading-none">
+                  <span
+                    className="text-[12px] font-medium leading-none"
+                    style={{ color: "rgba(0,0,0,0.82)" }}
+                  >
                     {tool.name}
                   </span>
                 </Link>
@@ -105,20 +148,26 @@ export default function ToolsDropdown() {
           </div>
 
           {/* Footer */}
-          <div className="border-t border-neutral-100 px-5 py-3.5 flex items-center justify-between">
-            <p className="text-[9px] text-neutral-300 uppercase tracking-widest">
+          <div
+            className="px-5 py-3.5 flex items-center justify-between"
+            style={{ borderTop: "1px solid rgba(0,0,0,0.07)" }}
+          >
+            <p
+              className="text-[9px] uppercase tracking-widest"
+              style={{ color: "rgba(0,0,0,0.25)" }}
+            >
               No login · No ads
             </p>
             <Link
               href="/tools"
               onClick={() => setOpen(false)}
-              className="group inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] font-medium text-black hover:text-neutral-500 transition-colors"
+              className="group inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] font-medium transition-colors"
+              style={{ color: "rgba(0,0,0,0.70)" }}
             >
               All tools
               <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
-
         </div>
       </div>
     </div>

@@ -5,15 +5,6 @@ import Footer from "../components/Footer";
 import ProofStrip from "../components/ProofStrip";
 import BentoWork from "../components/BentoWork";
 
-// import Performance from "../components/Performance";
-// import Capabilities from "../components/Capabilities";
-// import CSSection from "../components/CsSection";
-// import Hero from "../components/Hero";
-// import SelectedWork from "../components/SelectedWork";
-// import AISection from "../components/AiSection";
-// import Faq from "../components/Faq";
-// import About from "../components/About";
-
 const Performance = lazy(() => import("../components/Performance"));
 const Capabilities = lazy(() => import("../components/Capabilities"));
 const CSSection = lazy(() => import("../components/CsSection"));
