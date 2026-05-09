@@ -4,6 +4,38 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ProofStrip from "../components/ProofStrip";
 import BentoWork from "../components/BentoWork";
+import Testimonial from "../components/Testimonial";
+
+const TESTIMONIALS = [
+  {
+    id: "adam",
+    name: "Adam",
+    company: "Stakeclash",
+    quote:
+      "Working with Sakib on Stakeclash was a game changer. He turned a complex staking interface into something our users actually enjoy — the speed and attention to detail were unlike anything I'd experienced.",
+  },
+  {
+    id: "oniya",
+    name: "Oniya",
+    company: "Pademi & Tekish Health",
+    quote:
+      "Sakib brought clarity to two very different products at once. Both Pademi and Tekish Health launched on time with zero compromises on the experience. He just gets it.",
+  },
+  {
+    id: "chiddy",
+    name: "Chiddy",
+    company: "Colaw",
+    quote:
+      "Colaw needed someone who could handle legal complexity without losing sight of the user. Sakib delivered exactly that — a clean, intuitive product that our clients and team both love.",
+  },
+  {
+    id: "krapton",
+    name: "Krapton",
+    company: "Techsleight",
+    quote:
+      "The bar Sakib sets for product quality is exceptional. Techsleight looks and works exactly as we envisioned it, and the process was seamless from start to finish.",
+  },
+];
 
 const Performance = lazy(() => import("../components/Performance"));
 const Capabilities = lazy(() => import("../components/Capabilities"));
@@ -33,6 +65,8 @@ export default function Home() {
           </Suspense>
         </div>
 
+        <Testimonial name={TESTIMONIALS[0].name} quote={TESTIMONIALS[0].quote} />
+
         <Suspense fallback={<div className="h-screen bg-black" />}>
           <Performance />
         </Suspense>
@@ -41,6 +75,8 @@ export default function Home() {
           <Capabilities />
         </Suspense>
 
+        <Testimonial name={TESTIMONIALS[1].name} quote={TESTIMONIALS[1].quote} />
+
         <Suspense fallback={<div className="h-screen" />}>
           <AISection />
         </Suspense>
@@ -48,6 +84,8 @@ export default function Home() {
         <Suspense fallback={<div className="h-screen bg-[#0a0a0a]" />}>
           <AutomationSection />
         </Suspense>
+
+        <Testimonial name={TESTIMONIALS[2].name} quote={TESTIMONIALS[2].quote} />
 
         <Suspense fallback={null}>
           <CSSection />

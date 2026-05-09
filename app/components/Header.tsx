@@ -95,12 +95,12 @@ export default function Header() {
                       sizes="185px"
                     />
                   </div>
-                  <p className="text-sm font-semibold text-black tracking-[0.03em]">
+                  <p className="text-caption font-semibold text-black tracking-[0.03em]">
                     {p.name}
                   </p>
                 </div>
                 {p.metrics?.users && (
-                  <p className="text-sm text-black/60 truncate tracking-[0.03em]">
+                  <p className="text-caption text-black/60 truncate tracking-[0.03em]">
                     {p.metrics.users}
                   </p>
                 )}
@@ -138,17 +138,17 @@ export default function Header() {
                     </span>
                     <div>
                       <p
-                        className="text-[9px] uppercase tracking-[0.18em] font-semibold mb-0.5"
+                        className="text-label uppercase tracking-[0.18em] font-semibold mb-0.5"
                         style={{ color: meta.color }}
                       >
                         Featured
                       </p>
-                      <p className="text-sm font-semibold text-black/90 leading-tight">
+                      <p className="text-caption font-semibold text-black/90 leading-tight">
                         {tool.name}
                       </p>
                     </div>
                   </div>
-                  <p className="text-[11px] text-black/50 leading-relaxed line-clamp-2">
+                  <p className="text-label text-black/50 leading-relaxed line-clamp-2">
                     {tool.description}
                   </p>
                 </Link>
@@ -172,7 +172,7 @@ export default function Header() {
                   >
                     <Icon size={13} style={{ color: meta.color }} />
                   </span>
-                  <span className="text-sm font-semibold text-black/90">
+                  <span className="text-caption font-semibold text-black/90">
                     {tool.name}
                   </span>
                 </Link>
@@ -188,7 +188,7 @@ export default function Header() {
               <span className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 bg-black/6">
                 <ArrowRight size={13} className="text-black/50" />
               </span>
-              <span className="text-sm font-semibold text-black/50">
+              <span className="text-caption font-semibold text-black/50">
                 See All
               </span>
             </Link>
@@ -229,7 +229,7 @@ export default function Header() {
               <span
                 key={id}
                 onMouseEnter={() => enter(id)}
-                className={`text-sm tracking-[0.03em] font-medium transition-colors duration-200 cursor-pointer select-none ${
+                className={`text-caption tracking-[0.03em] font-medium transition-colors duration-200 cursor-pointer select-none ${
                   active === id
                     ? "text-black/90"
                     : "text-black/50 hover:text-black/90"
@@ -240,13 +240,13 @@ export default function Header() {
             ))}
             <Link
               href="/#about"
-              className="text-sm tracking-[0.03em] font-medium text-black/50 hover:text-black/90 transition-colors duration-200"
+              className="text-caption tracking-[0.03em] font-medium text-black/50 hover:text-black/90 transition-colors duration-200"
             >
               About
             </Link>
             <Link
               href="/#contact"
-              className="text-sm tracking-[0.03em] font-medium text-black/50 hover:text-black/90 transition-colors duration-200"
+              className="text-caption tracking-[0.03em] font-medium text-black/50 hover:text-black/90 transition-colors duration-200"
             >
               Contact
             </Link>
@@ -254,7 +254,7 @@ export default function Header() {
 
           <a
             href="mailto:mohdsakib.work@gmail.com"
-            className="hidden lg:block text-[11px] uppercase tracking-[0.12em] font-semibold bg-black text-white px-5 py-2.5 rounded-lg hover:bg-neutral-800 transition-colors duration-200"
+            className="hidden lg:block text-label uppercase tracking-[0.12em] font-semibold bg-black text-white px-5 py-2.5 rounded-lg hover:bg-neutral-800 transition-colors duration-200"
           >
             Let&apos;s Talk
           </a>
@@ -262,14 +262,17 @@ export default function Header() {
           <div className="lg:hidden w-7 h-5" />
         </div>
 
-        {/* SINGLE EXPANDABLE PANEL — driven by JS state, no competing transitions */}
-        <div
-          className="hidden lg:grid transition-[grid-template-rows] duration-300 ease-out"
-          style={{ gridTemplateRows: active ? "1fr" : "0fr" }}
-        >
-          <div className="overflow-hidden">
-            {navPanels.map(({ id, panel }) => active === id && panel)}
-          </div>
+        {/* PER-PANEL EXPANDABLE — each panel animates its own height independently */}
+        <div className="hidden lg:block overflow-hidden">
+          {navPanels.map(({ id, panel }) => (
+            <div
+              key={id}
+              className="grid transition-[grid-template-rows] duration-300 ease-out"
+              style={{ gridTemplateRows: active === id ? "1fr" : "0fr" }}
+            >
+              <div className="overflow-hidden">{panel}</div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -294,7 +297,7 @@ export default function Header() {
         >
           <div className="p-2.5 flex flex-col gap-0.5">
             <details className="group/mw">
-              <summary className="list-none cursor-pointer flex items-center justify-between px-3 py-2.5 text-[13px] font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-xl transition-colors">
+              <summary className="list-none cursor-pointer flex items-center justify-between px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-xl transition-colors">
                 Work
                 <svg
                   className="w-3 h-3 transition-transform duration-200 group-open/mw:rotate-180"
@@ -315,14 +318,14 @@ export default function Header() {
                   <Link
                     key={p.id}
                     href={`/projects/${p.id}`}
-                    className="py-1.5 text-[12px] text-black/55 hover:text-black transition-colors"
+                    className="py-1.5 text-caption text-black/55 hover:text-black transition-colors"
                   >
                     {p.name}
                   </Link>
                 ))}
                 <Link
                   href="/projects"
-                  className="pt-1 pb-1.5 text-[10px] uppercase tracking-wider text-black/35 hover:text-black transition-colors"
+                  className="pt-1 pb-1.5 text-label uppercase tracking-wider text-black/35 hover:text-black transition-colors"
                 >
                   View all →
                 </Link>
@@ -330,7 +333,7 @@ export default function Header() {
             </details>
 
             <details className="group/mt">
-              <summary className="list-none cursor-pointer flex items-center justify-between px-3 py-2.5 text-[13px] font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-xl transition-colors">
+              <summary className="list-none cursor-pointer flex items-center justify-between px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-xl transition-colors">
                 Tools
                 <svg
                   className="w-3 h-3 transition-transform duration-200 group-open/mt:rotate-180"
@@ -351,14 +354,14 @@ export default function Header() {
                   <Link
                     key={t.id}
                     href={`/tools#${t.id}`}
-                    className="py-1.5 text-[12px] text-black/55 hover:text-black transition-colors"
+                    className="py-1.5 text-caption text-black/55 hover:text-black transition-colors"
                   >
                     {t.name}
                   </Link>
                 ))}
                 <Link
                   href="/tools"
-                  className="pt-1 pb-1.5 text-[10px] uppercase tracking-wider text-black/35 hover:text-black transition-colors"
+                  className="pt-1 pb-1.5 text-label uppercase tracking-wider text-black/35 hover:text-black transition-colors"
                 >
                   All tools →
                 </Link>
@@ -369,20 +372,20 @@ export default function Header() {
 
             <Link
               href="/#about"
-              className="block px-3 py-2.5 text-[13px] font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-xl transition-colors"
+              className="block px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-xl transition-colors"
             >
               About
             </Link>
             <Link
               href="/#contact"
-              className="block px-3 py-2.5 text-[13px] font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-xl transition-colors"
+              className="block px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-xl transition-colors"
             >
               Contact
             </Link>
 
             <a
               href="mailto:mohdsakib.work@gmail.com"
-              className="mt-1.5 block text-center bg-black text-white text-[10px] uppercase tracking-widest px-4 py-3 rounded-xl hover:bg-neutral-800 transition-colors"
+              className="mt-1.5 block text-center bg-black text-white text-label uppercase tracking-widest px-4 py-3 rounded-xl hover:bg-neutral-800 transition-colors"
             >
               Let&apos;s Talk
             </a>

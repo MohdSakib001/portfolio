@@ -107,10 +107,10 @@ export default function Performance() {
             <div className="relative z-10 max-w-7xl mx-auto">
                 {/* HEADER */}
                 <div className="max-w-3xl mb-24 md:mb-40">
-                    <h2 className="text-5xl md:text-6xl tracking-tighter mb-8 perf-reveal">
+                    <h2 className="text-heading tracking-tighter mb-8 perf-reveal">
                         Zero Tolerance <br /> For Latency.
                     </h2>
-                    <p className="text-lg md:text-xl opacity-60 leading-relaxed font-light perf-reveal max-w-xl">
+                    <p className="text-body opacity-60 leading-relaxed font-light perf-reveal max-w-xl">
                         I don’t merely build accessible UIs — I instrument, measure, and surgically
                         optimize every millisecond of the execution thread. Real scores. Real impact.
                     </p>
@@ -162,18 +162,18 @@ export default function Performance() {
 
                     {/* RIGHT COLUMN: Core Web Vitals */}
                     <div className="lg:col-span-7 flex flex-col justify-center metrics-wrapper">
-                        <h4 className="text-sm uppercase tracking-[0.2em] opacity-40 mb-10 perf-reveal">Core Web Vitals</h4>
+                        <h4 className="text-label uppercase tracking-[0.2em] opacity-40 mb-10 perf-reveal">Core Web Vitals</h4>
 
                         <div className="space-y-10">
                             {vitals.map((metric, i) => (
                                 <div key={i} className="perf-reveal">
                                     <div className="flex justify-between items-end mb-3">
                                         <div className="flex items-baseline gap-3">
-                                            <span className="text-2xl md:text-3xl tracking-tight">{metric.label}</span>
-                                            <span className="text-sm font-mono opacity-60">Target: {metric.target}</span>
+                                            <span className="text-title tracking-tight">{metric.label}</span>
+                                            <span className="text-caption font-mono opacity-60">Target: {metric.target}</span>
                                         </div>
                                         <div className="text-right">
-                                            <span className="text-3xl font-light text-emerald-400">{metric.value}</span>
+                                            <span className="text-title font-light text-emerald-400">{metric.value}</span>
                                         </div>
                                     </div>
 
@@ -186,7 +186,7 @@ export default function Performance() {
                                     </div>
 
                                     {/* Business impact line */}
-                                    <p className="mt-2 text-xs opacity-30 leading-relaxed font-light">
+                                    <p className="mt-2 text-label opacity-30 leading-relaxed font-light">
                                         {metric.impact}
                                     </p>
                                 </div>
@@ -197,14 +197,14 @@ export default function Performance() {
 
                 {/* VISUAL BEFORE / AFTER CHARTS */}
                 <div className="mb-40">
-                    <h3 className="text-3xl mb-16 perf-reveal border-b border-white/10 pb-6">
+                    <h3 className="text-title mb-16 perf-reveal border-b border-white/10 pb-6">
                         Before & After Optimization Letency
                     </h3>
 
                     <div className="space-y-12">
                         {comparisons.map((item, i) => (
                             <div key={i} className="perf-reveal group">
-                                <p className="text-sm opacity-60 mb-4 tracking-wide uppercase font-medium">{item.label}</p>
+                                <p className="text-label opacity-60 mb-4 tracking-wide uppercase font-medium">{item.label}</p>
                                 <div className="grid grid-cols-[1fr_80px_1fr] md:grid-cols-[1fr_120px_1fr] gap-4 items-center">
 
                                     {/* Before Bar */}
@@ -216,8 +216,8 @@ export default function Performance() {
 
                                     {/* Arrow/Difference */}
                                     <div className="flex flex-col items-center justify-center text-center">
-                                        <span className="block text-2xl font-light opacity-40 group-hover:opacity-100 transition-opacity">→</span>
-                                        <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-400 mt-1">{item.diff} better</span>
+                                        <span className="block text-title font-light opacity-40 group-hover:opacity-100 transition-opacity">→</span>
+                                        <span className="text-label uppercase font-bold tracking-widest text-emerald-400 mt-1">{item.diff} better</span>
                                     </div>
 
                                     {/* After Bar */}
@@ -233,7 +233,7 @@ export default function Performance() {
 
                 {/* ARCHITECTURE / TECH MATRIX */}
                 <div>
-                    <h3 className="text-3xl font-semibold mb-12 perf-reveal">Optimization Architecture</h3>
+                    <h3 className="text-title font-semibold mb-12 perf-reveal">Optimization Architecture</h3>
                     <div className="grid md:grid-cols-3 gap-px bg-white/10 border border-white/10">
                         {[
                             { title: "React Concurrency", desc: "Interruptible rendering to eliminate input jank and main-thread blocking." },
@@ -246,10 +246,10 @@ export default function Performance() {
                             <div key={i} className="bg-[#0a0a0a] p-8 md:p-12 perf-reveal hover:bg-white/5 transition-colors duration-500 flex flex-col justify-between group">
                                 <div>
                                     <div className="w-8 h-8 rounded border border-white/20 mb-8 flex items-center justify-center opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all">
-                                        <span className="text-[10px] font-mono">0{i + 1}</span>
+                                        <span className="text-label font-mono">0{i + 1}</span>
                                     </div>
-                                    <h4 className="text-lg font-medium mb-4">{system.title}</h4>
-                                    <p className="text-sm opacity-50 font-light leading-relaxed">{system.desc}</p>
+                                    <h4 className="text-body font-medium mb-4">{system.title}</h4>
+                                    <p className="text-caption opacity-50 font-light leading-relaxed">{system.desc}</p>
                                 </div>
                             </div>
                         ))}

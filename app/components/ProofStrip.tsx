@@ -11,10 +11,10 @@ export default function ProofStrip() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 sm:gap-x-10 max-w-7xl mx-auto">
         {stats.map((s, i) => (
           <div key={i} className="flex flex-col gap-2 items-center">
-            <span className="text-3xl sm:text-4xl xl:text-5xl font-semibold tracking-tight leading-none">
+            <span className="text-heading font-semibold tracking-tight leading-none">
               {s.value}
             </span>
-            <span className="text-[10px] uppercase tracking-[0.2em] opacity-35 font-medium">
+            <span className="text-label uppercase tracking-[0.2em] opacity-35 font-medium">
               {s.label}
             </span>
           </div>

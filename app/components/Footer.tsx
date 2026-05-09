@@ -80,7 +80,7 @@ export default function Footer() {
         {/* TOP ROW — Big CTA text + email */}
         <div className="grid md:grid-cols-2 gap-16 mb-24">
           <div>
-            <h2 className="text-4xl md:text-6xl leading-[1.1] tracking-tight footer-reveal">
+            <h2 className="text-heading leading-[1.1] tracking-tight footer-reveal">
               Got a project?
               <br />
               <span className="opacity-40">Let&apos;s talk.</span>
@@ -88,13 +88,13 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col justify-end footer-reveal">
-            <p className="text-xs uppercase tracking-[0.2em] opacity-30 mb-4">
+            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-4">
               Reach out
             </p>
             <Magnetic>
               <a
                 href="mailto:mohdsakib.work@gmail.com"
-                className="text-xl md:text-2xl underline underline-offset-8 decoration-white/30 hover:decoration-white transition-all duration-500"
+                className="text-title underline underline-offset-8 decoration-white/30 hover:decoration-white transition-all duration-500"
               >
                 mohdsakib.work@gmail.com
               </a>
@@ -215,7 +215,7 @@ export default function Footer() {
               </div>
               <div className="flex-[0.6]">
                 <p
-                  className="font-semibold text-lg uppercase mt-2"
+                  className="text-body font-semibold uppercase mt-2"
                   style={{
                     color: card.theme === "dark" ? "#fff" : "#000",
                   }}
@@ -223,7 +223,7 @@ export default function Footer() {
                   {card.title}
                 </p>
                 <p
-                  className="text-lg opacity-60 mt-2"
+                  className="text-body opacity-60 mt-2"
                   style={{
                     color: card.theme === "dark" ? "#fff" : "#000",
                   }}
@@ -238,11 +238,11 @@ export default function Footer() {
         {/* LINKS GRID */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-24">
           <div className="footer-reveal">
-            <p className="text-xs uppercase tracking-[0.2em] opacity-30 mb-6">Navigation</p>
+            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-6">Navigation</p>
             <div className="flex flex-col gap-3">
               {["Home", "Work", "About", "Contact"].map((item) => (
                 <Magnetic key={item}>
-                  <a href={item === "Home" ? "/" : `#${item.toLowerCase()}`} className="text-sm opacity-60 hover:opacity-100 transition-opacity duration-300">
+                  <a href={item === "Home" ? "/" : `#${item.toLowerCase()}`} className="text-caption opacity-60 hover:opacity-100 transition-opacity duration-300">
                     {item}
                   </a>
                 </Magnetic>
@@ -251,7 +251,7 @@ export default function Footer() {
           </div>
 
           <div className="footer-reveal">
-            <p className="text-xs uppercase tracking-[0.2em] opacity-30 mb-6">Socials</p>
+            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-6">Socials</p>
             <div className="flex flex-col gap-3">
               {[
                 { label: "GitHub", url: "https://github.com/mohdsakib-Krapton" },
@@ -259,7 +259,7 @@ export default function Footer() {
                 { label: "Twitter", url: "https://twitter.com/mohdsakib001" },
               ].map((s) => (
                 <Magnetic key={s.label}>
-                  <a href={s.url} target="_blank" rel="noopener" className="text-sm opacity-60 hover:opacity-100 transition-opacity duration-300">
+                  <a href={s.url} target="_blank" rel="noopener" className="text-caption opacity-60 hover:opacity-100 transition-opacity duration-300">
                     {s.label} ↗
                   </a>
                 </Magnetic>
@@ -268,7 +268,7 @@ export default function Footer() {
           </div>
 
           <div className="footer-reveal">
-            <p className="text-xs uppercase tracking-[0.2em] opacity-30 mb-6">Services</p>
+            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-6">Services</p>
             <div className="flex flex-col gap-3 text-sm opacity-60">
               <a href="/#work" className="hover:opacity-100 transition-opacity duration-300">Full-Stack Dev</a>
               <a href="/#work" className="hover:opacity-100 transition-opacity duration-300">React Native</a>
@@ -278,12 +278,12 @@ export default function Footer() {
           </div>
 
           <div className="footer-reveal">
-            <p className="text-xs uppercase tracking-[0.2em] opacity-30 mb-6">Status</p>
+            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-6">Status</p>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-sm opacity-80">Available for work</span>
+              <span className="text-caption opacity-80">Available for work</span>
             </div>
-            <p className="text-sm opacity-40">
+            <p className="text-caption opacity-40">
               Open to freelance, full-time,
               <br />
               and collaboration.
@@ -293,12 +293,12 @@ export default function Footer() {
 
         {/* BOTTOM BAR */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs opacity-30 footer-reveal">
+          <p className="text-label opacity-30 footer-reveal">
             © {currentYear} Mohd Sakib. Built from scratch.
           </p>
 
           <div className="flex items-center gap-6 footer-reveal">
-            <span className="text-xs opacity-20">Next.js • GSAP • Lenis</span>
+            <span className="text-label opacity-20">Next.js • GSAP • Lenis</span>
           </div>
         </div>
       </div>

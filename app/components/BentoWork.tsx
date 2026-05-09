@@ -254,10 +254,10 @@ export default function BentoWork() {
     <section className="px-4 sm:px-6 md:px-10 lg:px-16 py-24 bg-white">
       {/* HEADER */}
       <div className="flex flex-col items-center text-center mb-12 max-w-400 mx-auto">
-        <p className="text-[10px] uppercase tracking-[0.25em] opacity-30 mb-3 font-medium">
+        <p className="text-label uppercase tracking-[0.25em] opacity-30 mb-3 font-medium">
           Selected Work
         </p>
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight leading-none">
+        <h2 className="text-heading font-semibold tracking-tight leading-none">
           Products I&apos;ve Built.
         </h2>
       </div>
@@ -292,13 +292,13 @@ export default function BentoWork() {
               <div className="flex items-start justify-between gap-2 px-1 pt-1">
                 <div>
                   <p
-                    className="text-[9px] uppercase tracking-[0.28em] font-semibold leading-none mb-1.5"
+                    className="text-label uppercase tracking-[0.28em] font-semibold leading-none mb-1.5"
                     style={{ color: "rgba(0,0,0,0.28)" }}
                   >
                     {p.category}
                   </p>
                   <h3
-                    className="text-[1.18rem] font-semibold tracking-tight leading-tight"
+                    className="text-title font-semibold tracking-tight leading-tight"
                     style={{ color: "rgba(0,0,0,0.88)" }}
                   >
                     {p.name}
@@ -336,7 +336,7 @@ export default function BentoWork() {
                       <span className="relative inline-flex rounded-full w-[6px] h-[6px] bg-emerald-500" />
                     </span>
                     <span
-                      className="text-[8px] font-semibold uppercase tracking-[0.18em]"
+                      className="text-label font-semibold uppercase tracking-[0.18em]"
                       style={{ color: "rgba(0,0,0,0.42)" }}
                     >
                       Live
@@ -403,14 +403,14 @@ export default function BentoWork() {
                           <StatIcon type={stat.type} />
                         </span>
                         <span
-                          className="text-[8px] uppercase tracking-[0.22em] font-semibold"
+                          className="text-label uppercase tracking-[0.22em] font-semibold"
                           style={{ color: "rgba(0,0,0,0.30)" }}
                         >
                           {stat.label}
                         </span>
                       </div>
                       <span
-                        className="text-[1rem] font-semibold tracking-tight leading-none"
+                        className="text-body font-semibold tracking-tight leading-none"
                         style={{ color: "rgba(0,0,0,0.84)" }}
                       >
                         {stat.value}
@@ -453,7 +453,7 @@ export default function BentoWork() {
       <div className="mt-6 sm:hidden text-center">
         <Link
           href="/projects"
-          className="text-[11px] uppercase tracking-[0.2em] opacity-35 hover:opacity-100 transition-opacity duration-300"
+          className="text-label uppercase tracking-[0.2em] opacity-35 hover:opacity-100 transition-opacity duration-300"
         >
           View All Products →
         </Link>

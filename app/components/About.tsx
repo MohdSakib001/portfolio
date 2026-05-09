@@ -52,7 +52,7 @@ export default function About() {
             <div className="max-w-7xl mx-auto">
 
                 {/* LABEL */}
-                <p className="about-reveal text-xs uppercase tracking-[0.2em] opacity-40 mb-12 font-medium">
+                <p className="about-reveal text-label uppercase tracking-[0.2em] opacity-40 mb-12 font-medium">
                     About
                 </p>
 
@@ -60,7 +60,7 @@ export default function About() {
 
                     {/* LEFT — BIO */}
                     <div>
-                        <h2 className="about-reveal text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight mb-10 font-medium">
+                        <h2 className="about-reveal text-heading leading-[1.05] tracking-tight mb-10 font-medium">
                             Engineer by trade.
                             <br />
                             <span className="opacity-40">Architect by instinct.</span>
@@ -89,7 +89,7 @@ export default function About() {
                         <div className="about-reveal mt-10 flex items-center gap-6">
                             <a
                                 href="mailto:mohdsakib.work@gmail.com"
-                                className="text-xs uppercase tracking-[0.18em] font-semibold px-6 py-3 bg-black text-white hover:bg-neutral-800 transition-colors duration-300"
+                                className="text-label uppercase tracking-[0.18em] font-semibold px-6 py-3 bg-black text-white hover:bg-neutral-800 transition-colors duration-300"
                             >
                                 Get In Touch →
                             </a>
@@ -97,7 +97,7 @@ export default function About() {
                                 href="https://www.linkedin.com/in/mohdsakib001"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-xs uppercase tracking-[0.18em] font-medium opacity-50 hover:opacity-100 transition-opacity duration-300"
+                                className="text-label uppercase tracking-[0.18em] font-medium opacity-50 hover:opacity-100 transition-opacity duration-300"
                             >
                                 LinkedIn ↗
                             </a>
@@ -109,14 +109,14 @@ export default function About() {
 
                         {/* TIMELINE */}
                         <div className="about-reveal">
-                            <p className="text-xs uppercase tracking-[0.2em] opacity-40 mb-8">Career Timeline</p>
+                            <p className="text-label uppercase tracking-[0.2em] opacity-40 mb-8">Career Timeline</p>
                             <div className="space-y-6">
                                 {timeline.map((item) => (
                                     <div key={item.year} className="flex gap-6 group">
-                                        <span className="text-xs font-mono opacity-30 pt-1 shrink-0 group-hover:opacity-70 transition-opacity">
+                                        <span className="text-label font-mono opacity-30 pt-1 shrink-0 group-hover:opacity-70 transition-opacity">
                                             {item.year}
                                         </span>
-                                        <p className="text-sm opacity-60 leading-relaxed group-hover:opacity-100 transition-opacity">
+                                        <p className="text-caption opacity-60 leading-relaxed group-hover:opacity-100 transition-opacity">
                                             {item.event}
                                         </p>
                                     </div>
@@ -126,12 +126,12 @@ export default function About() {
 
                         {/* CORE STACK */}
                         <div className="about-reveal">
-                            <p className="text-xs uppercase tracking-[0.2em] opacity-40 mb-6">Core Stack</p>
+                            <p className="text-label uppercase tracking-[0.2em] opacity-40 mb-6">Core Stack</p>
                             <div className="flex flex-wrap gap-2">
                                 {coreStack.map((tech) => (
                                     <span
                                         key={tech}
-                                        className="text-xs font-mono px-3 py-1.5 border border-black/10 opacity-60 hover:opacity-100 hover:border-black/30 transition-all duration-300"
+                                        className="text-label font-mono px-3 py-1.5 border border-black/10 opacity-60 hover:opacity-100 hover:border-black/30 transition-all duration-300"
                                     >
                                         {tech}
                                     </span>
@@ -148,8 +148,8 @@ export default function About() {
                                 { label: "Work Mode", value: "Remote / Hybrid" },
                             ].map((fact) => (
                                 <div key={fact.label} className="border border-black/10 p-4">
-                                    <p className="text-xs uppercase tracking-[0.15em] opacity-40 mb-1">{fact.label}</p>
-                                    <p className="text-sm font-medium">{fact.value}</p>
+                                    <p className="text-label uppercase tracking-[0.15em] opacity-40 mb-1">{fact.label}</p>
+                                    <p className="text-caption font-medium">{fact.value}</p>
                                 </div>
                             ))}
                         </div>

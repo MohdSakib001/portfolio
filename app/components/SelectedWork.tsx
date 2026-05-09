@@ -91,15 +91,15 @@ export default function SelectedWork() {
                         */}
                         <div className="w-full md:w-1/2 min-h-svh md:min-h-0 flex flex-col justify-center px-8 py-16 md:p-16 lg:p-24 bg-white z-10">
                             <div className="max-w-xl mx-auto md:mx-0 w-full">
-                                <p className="text-reveal text-xs uppercase tracking-[0.2em] opacity-50 mb-6 font-bold">
+                                <p className="text-reveal text-label uppercase tracking-[0.2em] opacity-50 mb-6 font-bold">
                                     {project.category}
                                 </p>
 
-                                <h2 className="text-reveal text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight mb-6 font-medium">
+                                <h2 className="text-reveal text-heading leading-[0.95] tracking-tight mb-6 font-medium">
                                     {project.name}
                                 </h2>
 
-                                <p className="text-reveal text-lg opacity-70 mb-10 md:max-w-md leading-relaxed">
+                                <p className="text-reveal text-body opacity-70 mb-10 md:max-w-md leading-relaxed">
                                     {project.tagline}
                                 </p>
 
@@ -107,7 +107,7 @@ export default function SelectedWork() {
                                     {Object.entries(project.metrics).map(([key, val]) => (
                                         <span
                                             key={key}
-                                            className="text-xs font-semibold border border-black/10 px-4 py-2 tracking-wide uppercase rounded-full bg-neutral-50"
+                                            className="text-label font-semibold border border-black/10 px-4 py-2 tracking-wide uppercase rounded-full bg-neutral-50"
                                         >
                                             {val as string}
                                         </span>
@@ -119,7 +119,7 @@ export default function SelectedWork() {
                                     <Magnetic>
                                         <button
                                             onClick={() => router.push(`/projects/${project.id}`)}
-                                            className="group flex items-center justify-center gap-4 px-8 py-4 bg-black text-white rounded-full text-sm font-semibold uppercase tracking-widest hover:scale-105 transition active:scale-95 shadow-xl hover:shadow-black/40"
+                                            className="group flex items-center justify-center gap-4 px-8 py-4 bg-black text-white rounded-full text-caption font-semibold uppercase tracking-widest hover:scale-105 transition active:scale-95 shadow-xl hover:shadow-black/40"
                                         >
                                             <span>Explore Details</span>
                                             <span className="text-lg leading-none transition-transform group-hover:translate-x-1">→</span>
@@ -139,12 +139,12 @@ export default function SelectedWork() {
                                             </a>
                                         )}
                                         {project.links?.webapp && project.links.webapp !== '#' && (
-                                            <a href={project.links.webapp} target="_blank" rel="noreferrer" className="text-xs font-bold uppercase tracking-widest border-b-2 border-transparent hover:border-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100 pb-0.5">
+                                            <a href={project.links.webapp} target="_blank" rel="noreferrer" className="text-label font-bold uppercase tracking-widest border-b-2 border-transparent hover:border-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100 pb-0.5">
                                                 Web App <span className="text-base leading-none">↗</span>
                                             </a>
                                         )}
                                         {project.links?.website && project.links.website !== '#' && (
-                                            <a href={project.links.website} target="_blank" rel="noreferrer" className="text-xs font-bold uppercase tracking-widest border-b-2 border-transparent hover:border-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100 pb-0.5">
+                                            <a href={project.links.website} target="_blank" rel="noreferrer" className="text-label font-bold uppercase tracking-widest border-b-2 border-transparent hover:border-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100 pb-0.5">
                                                 Visit Website <span className="text-base leading-none">↗</span>
                                             </a>
                                         )}
@@ -196,13 +196,13 @@ export default function SelectedWork() {
                 </div>
 
                 <div className="relative z-10 flex flex-col items-center text-center max-w-2xl">
-                    <p className="text-reveal text-sm uppercase tracking-[0.2em] opacity-60 mb-6 font-semibold text-neutral-400">
+                    <p className="text-reveal text-label uppercase tracking-[0.2em] opacity-60 mb-6 font-semibold text-neutral-400">
                         Archive & More
                     </p>
                     <h1 className="text-reveal text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter bg-clip-text text-transparent bg-linear-to-b from-white to-white/40 mb-8 leading-[0.9]">
                         SEE ALL<br />WORK.
                     </h1>
-                    <p className="text-reveal text-lg md:text-xl opacity-60 mb-12">
+                    <p className="text-reveal text-body opacity-60 mb-12">
                         Dive deep into all my enterprise, startup, and full-stack engineering side projects.
                     </p>
 
@@ -210,7 +210,7 @@ export default function SelectedWork() {
                         <Magnetic>
                             <button
                                 onClick={() => router.push(`/projects`)}
-                                className="group flex items-center justify-center gap-4 bg-white text-black px-10 py-5 rounded-full w-max shadow-xl hover:shadow-white/20 transition hover:-translate-y-1 text-sm tracking-widest uppercase font-bold"
+                                className="group flex items-center justify-center gap-4 bg-white text-black px-10 py-5 rounded-full w-max shadow-xl hover:shadow-white/20 transition hover:-translate-y-1 text-caption tracking-widest uppercase font-bold"
                             >
                                 <span>Explore All Projects</span>
                                 <span className="inline-block transition-transform group-hover:translate-x-1">→</span>

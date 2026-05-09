@@ -7,7 +7,7 @@ export default function Hero() {
           &nbsp;·&nbsp; 98 Lighthouse
         </p> */}
 
-        <h1 className="text-[clamp(2.8rem,7vw,6rem)] leading-none tracking-[-0.04em] font-semibold mb-10">
+        <h1 className="text-display leading-none tracking-[-0.04em] font-semibold mb-10">
           I build software that
           <br />
           <span className="text-black">
@@ -106,13 +106,13 @@ export default function Hero() {
         <div className="flex items-center gap-8">
           <a
             href="#work"
-            className="text-[11px] uppercase tracking-[0.2em] font-semibold px-8 py-3.5 bg-black text-white hover:bg-neutral-800 transition-colors duration-300"
+            className="text-label uppercase tracking-[0.2em] font-semibold px-8 py-3.5 bg-black text-white hover:bg-neutral-800 transition-colors duration-300"
           >
             View Case Studies →
           </a>
           <a
             href="mailto:mohdsakib.work@gmail.com"
-            className="text-[11px] uppercase tracking-[0.2em] font-medium opacity-40 hover:opacity-100 transition-opacity duration-300"
+            className="text-label uppercase tracking-[0.2em] font-medium opacity-40 hover:opacity-100 transition-opacity duration-300"
           >
             Let&apos;s Talk →
           </a>
