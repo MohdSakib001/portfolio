@@ -20,7 +20,7 @@ const products: {
   image?: string;
   bg: string;
   accent: string;
-  stores: { ios?: string; android?: string };
+  stores: { ios?: string; android?: string; web?: string };
   col: string;
   row: string;
   priority: boolean;
@@ -36,69 +36,69 @@ const products: {
       { label: "Revenue", value: "$12K MRR", type: "revenue" },
       { label: "Userbase", value: "1K+ MAU", type: "users" },
     ],
-    // image: "/assets/projects/stakeclash/stakeclash2.webp",
+    image: "/assets/projects/stakeclash/stakeclash2.webp",
     bg: "#E6E0F8",
     // bg: "#6C5DD3",
     accent: "#7C6FD4",
-    stores: { ios: "#", android: "#" },
+    stores: { ios: "#", android: "#", web: "https://app.stakeclash.com" },
     col: "lg:col-span-2",
     row: "lg:row-span-2",
     priority: true,
-    featuredComponent: (
-      <section className="bg-[#000518] -z-10">
-        <div className="bg-[#7700FF] blur-[150px] w-50 h-50 absolute -z-10 opacity-50" />
+    // featuredComponent: (
+    //   <section className="bg-[#000518] -z-10 rounded-xl">
+    //     <div className="bg-[#7700FF] blur-[150px] w-50 h-50 absolute -z-10 opacity-50" />
 
-        <div className="relative rounded-lg z-10 grid grid-cols-1 md:grid-cols-2 items-center ">
-          <div className="absolute inset-0 -z-10 opacity-10">
-            <img
-              className="w-full h-full md:h-75 object-cover rounded-lg"
-              src="/assets/projects/stakeclash/herobg.webp"
-              alt="Hero Background"
-            />
-          </div>
+    //     <div className="relative rounded-lg z-10 grid grid-cols-1 md:grid-cols-2 items-center ">
+    //       <div className="absolute inset-0 -z-10 opacity-10">
+    //         <img
+    //           className="w-full h-full md:h-75 object-cover rounded-lg"
+    //           src="/assets/projects/stakeclash/herobg.webp"
+    //           alt="Hero Background"
+    //         />
+    //       </div>
 
-          <div className="flex flex-col gap-y-4 p-4 text-white">
-            <h1 className="text-title font-semibold">
-              Back Yourself and Get Paid.
-            </h1>
-            <p className="text-caption">
-              Challenge friends in skill-based games, lock in the stakes, and
-              let the winner get paid automatically.
-            </p>
+    //       <div className="flex flex-col gap-y-4 p-4 text-white">
+    //         <h1 className="text-title font-semibold">
+    //           Back Yourself and Get Paid.
+    //         </h1>
+    //         <p className="text-caption">
+    //           Challenge friends in skill-based games, lock in the stakes, and
+    //           let the winner get paid automatically.
+    //         </p>
 
-            <div className="flex items-center gap-3">
-              <Link
-                href="https://app.stakeclash.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Stakeclash"
-                className="text-label px-6 w-fit py-2 z-20 bg-white text-purple-800 font-semibold rounded-xl shadow-md hover:bg-gray-200 transition"
-              >
-                Join Now
-              </Link>
-              <div className="flex items-center gap-2">
-                <Image
-                  src="/assets/svg/solana.svg"
-                  alt="Solana Logo"
-                  width={24}
-                  height={24}
-                />
-                <span className="text-label text-white font-bold">
-                  Powered by Solana Blockchain
-                </span>
-              </div>
-            </div>
-          </div>
+    //         <div className="flex items-center gap-3">
+    //           <Link
+    //             href="https://app.stakeclash.com"
+    //             target="_blank"
+    //             rel="noopener noreferrer"
+    //             title="Stakeclash"
+    //             className="text-label px-6 w-fit py-2 z-20 bg-white text-purple-800 font-semibold rounded-xl shadow-md hover:bg-gray-200 transition"
+    //           >
+    //             Join Now
+    //           </Link>
+    //           <div className="flex items-center gap-2">
+    //             <Image
+    //               src="/assets/svg/solana.svg"
+    //               alt="Solana Logo"
+    //               width={24}
+    //               height={24}
+    //             />
+    //             <span className="text-label text-white font-bold">
+    //               Powered by Solana Blockchain
+    //             </span>
+    //           </div>
+    //         </div>
+    //       </div>
 
-          <div className="flex justify-center h-60">
-            <AnimatedImage
-              style="items-end"
-              url="/assets/projects/stakeclash/klaj.webp"
-            />
-          </div>
-        </div>
-      </section>
-    ),
+    //       <div className="flex justify-center h-60">
+    //         <AnimatedImage
+    //           style="items-end"
+    //           url="/assets/projects/stakeclash/klaj.webp"
+    //         />
+    //       </div>
+    //     </div>
+    //   </section>
+    // ),
   },
   {
     id: "artificialmufti",
@@ -107,13 +107,36 @@ const products: {
     platform: "mobile",
     live: true,
     stats: [{ label: "Userbase", value: "200+ DAU", type: "users" }],
-    image: "/assets/projects/artificialmufti/1.png",
+    // image: "/assets/projects/artificialmufti/1.png",
     bg: "#F4EDDA",
     accent: "#B8860B",
     stores: { ios: "#", android: "#" },
     col: "lg:col-span-1",
     row: "lg:row-span-2",
     priority: true,
+    featuredComponent: (
+      <div className="relative w-full h-full flex items-end justify-center m-6">
+        <div className="absolute bottom-[-70%] sm:bottom-[-55%] left-1/2 z-10 -translate-x-[90%] -rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
+          <Image
+            src="/assets/projects/artificialmufti/2.png"
+            alt="Artificial Mufti"
+            width={240}
+            height={500}
+            className="w-[160px] sm:w-[180px] lg:w-[200px] h-auto rounded-xl"
+          />
+        </div>
+
+        <div className="absolute bottom-[-60%] sm:bottom-[-50%] md:bottom-[-55%] left-1/2 z-20 -translate-x-[10%] rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
+          <Image
+            src="/assets/projects/artificialmufti/1.png"
+            alt="Artificial Mufti"
+            width={240}
+            height={500}
+            className="w-[160px] sm:w-[180px] lg:w-[200px] h-auto rounded-xl"
+          />
+        </div>
+      </div>
+    ),
   },
   {
     id: "pademi",
@@ -122,13 +145,35 @@ const products: {
     platform: "mobile",
     live: true,
     stats: [{ label: "Students", value: "25K+", type: "users" }],
-    image: "/assets/projects/pademi/pademi6.webp",
     bg: "#DAF0DE",
     accent: "#2E8B47",
     stores: { ios: "#", android: "#" },
     col: "lg:col-span-1",
     row: "",
     priority: false,
+    featuredComponent: (
+      <div className="relative w-full h-full flex items-end justify-center m-6">
+        <div className="absolute bottom-[-70%] sm:bottom-[-55%] left-1/2 z-10 -translate-x-[90%] -rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
+          <Image
+            src="/assets/projects/pademi/pademi2.png"
+            alt="Pademi"
+            width={240}
+            height={500}
+            className="w-[160px] sm:w-[180px] lg:w-[200px] h-auto rounded-xl"
+          />
+        </div>
+
+        <div className="absolute bottom-[-60%] sm:bottom-[-50%] md:bottom-[-55%] left-1/2 z-20 -translate-x-[10%] rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
+          <Image
+            src="/assets/projects/pademi/pademi1.png"
+            alt="Pademi"
+            width={240}
+            height={500}
+            className="w-[160px] sm:w-[180px] lg:w-[200px] h-auto rounded-xl"
+          />
+        </div>
+      </div>
+    ),
   },
   {
     id: "sendora",
@@ -182,28 +227,14 @@ const products: {
     platform: "web",
     live: true,
     stats: [{ label: "GMV / mo", value: "$100K+", type: "revenue" }],
-    image: "/assets/projects/tekish/th2.webp",
+    // image: "/assets/projects/tekish/th2.webp",
     bg: "#F2E2CC",
     accent: "#C4713A",
     stores: {},
     col: "lg:col-span-2",
     row: "",
     priority: false,
-  },
-  {
-    id: "techs",
-    name: "Techs",
-    category: "Enterprise · DevOps",
-    platform: "web",
-    live: true,
-    stats: [{ label: "Scale", value: "M+ Logs/day", type: "scale" }],
-    image: "/assets/projects/techs/techs2.png",
-    bg: "#E2E6EE",
-    accent: "#3B5EA6",
-    stores: {},
-    col: "lg:col-span-3",
-    row: "",
-    priority: false,
+    featuredComponent: <></>,
   },
 ];
 
@@ -311,7 +342,7 @@ function PlatformIcon({ platform }: { platform: Platform }) {
 
 export default function BentoWork() {
   return (
-    <section className="px-4 sm:px-6 md:px-10 lg:px-16 py-24 bg-white">
+    <section className="px-4 sm:px-6 md:px-10 lg:px-16 py-24 max-w-7xl mx-auto">
       {/* HEADER */}
       <div className="flex flex-col items-center text-center mb-12 max-w-400 mx-auto">
         <p className="text-label uppercase tracking-[0.25em] opacity-30 mb-3 font-medium">
@@ -357,12 +388,9 @@ export default function BentoWork() {
               <div className="flex gap-x-4">
                 <BlurContainer className="rounded-xl p-4 shrink-0 flex-1">
                   <p className="text-body font-semibold">Mertices</p>
-                  <div className="flex items-center mt-4">
+                  <div className="flex items-center flex-wrap mt-4 gap-x-2">
                     {p.stats.map((stat, i) => (
-                      <div
-                        key={i}
-                        className={`flex-1 ${i > 0 ? "pl-3 ml-3" : ""}`}
-                      >
+                      <div key={i} className={`flex-1`}>
                         <span className="text-body font-semibold tracking-tight leading-none">
                           {stat.value}
                         </span>
@@ -373,7 +401,7 @@ export default function BentoWork() {
 
                 <BlurContainer className="rounded-xl p-4 shrink-0 flex-1">
                   <p className="text-body font-semibold">Available On</p>
-                  <div className="flex items-center gap-2 mt-4">
+                  <div className="flex items-center flex-wrap gap-2 mt-4">
                     {p.stores.ios && (
                       <Icon
                         href={p.stores.ios}
@@ -390,17 +418,25 @@ export default function BentoWork() {
                         img="/assets/svg/playstore.svg"
                       />
                     )}
+                    {p.stores.web && (
+                      <Icon
+                        href={p.stores.web}
+                        title={"Web App"}
+                        type="img"
+                        img="/assets/svg/chrome.svg"
+                      />
+                    )}
                   </div>
                 </BlurContainer>
               </div>
 
-              <div className="relative w-full flex min-h-60 overflow-hidden rounded-xl items-end">
+              <div className="relative w-full flex min-h-60 items-end">
                 {p.image ? (
                   <Image
                     src={p.image}
                     alt={`${p.name} — ${p.category}`}
                     fill
-                    className="object-cover object-top"
+                    className="object-cover object-top rounded-xl"
                     priority={p.priority}
                     quality={90}
                     sizes={
