@@ -20,6 +20,8 @@ import {
 import type { ElementType } from "react";
 import { projects } from "../data/projects";
 import { tools, CATEGORY_META } from "../data/tools";
+import PrimaryButton from "./primaryButton";
+import MyLink from "./Link";
 
 const TOOL_ICONS: Record<string, ElementType<LucideProps>> = {
   FileText,
@@ -47,36 +49,41 @@ const FEATURED = [
   "base64-encoder",
 ];
 
-const cardStyle = {
-  background: "rgba(255,255,255, 0.40)",
+export const cardStyle = {
+  background: "rgba(255,255,255, 0.45)",
   backdropFilter: "blur(6px)",
   WebkitBackdropFilter: "blur(6px)",
-  border: "1px solid rgba(255,255,255,0.72)",
-  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.95), 0 4px 24px rgba(0,0,0,0.08)",
 } as const;
 
 export default function Header() {
-  const [active, setActive] = useState<string | null>(null);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   const featuredTools = FEATURED.map((id) =>
     tools.find((t) => t.id === id),
   ).filter(Boolean) as typeof tools;
 
-  const enter = (id: string) => {
-    if (timer.current) clearTimeout(timer.current);
-    setActive(id);
-  };
-  const leave = () => {
-    timer.current = setTimeout(() => setActive(null), 150);
-  };
+  const navLinks = [
+    {
+      id: "products",
+      href: "products",
+      title: "Products",
+      text: "Products",
+    },
+    {
+      id: "tools",
+      href: "tools",
+      title: "Tools",
+      text: "Tools",
+    },
+    { id: "about", href: "/#about", title: "About", text: "About" },
+    { id: "contact", href: "/#contact", title: "Contact", text: "Contact" },
+  ];
 
   const navPanels = [
     {
       id: "products",
       label: "Products",
+      triggerClass: "[div:has([data-nav='products']:hover)_&]:grid-rows-[1fr]",
       panel: (
-        <div className="px-6 pb-6 pt-5">
+        <div className="p-4">
           <div className="grid grid-cols-3 gap-3">
             {projects.map((p) => (
               <Link
@@ -85,7 +92,7 @@ export default function Header() {
                 className="flex flex-col rounded-xl overflow-hidden p-4"
                 style={cardStyle}
               >
-                <div className="flex flex-row gap-x-2 items-center mb-6">
+                <div className="flex flex-row gap-x-2 items-center">
                   <div className="relative aspect-square w-6 h-6 overflow-hidden rounded-lg">
                     <Image
                       src={p.hero.src}
@@ -100,12 +107,25 @@ export default function Header() {
                   </p>
                 </div>
                 {p.metrics?.users && (
-                  <p className="text-caption text-black/60 truncate tracking-[0.03em]">
+                  <p className="text-label text-black/60 truncate tracking-[0.03em] mt-2">
                     {p.metrics.users}
                   </p>
                 )}
               </Link>
             ))}
+
+            <div className="md:hidden max-h-64 overflow-y-auto overscroll-contain flex flex-col divide-y divide-black/6">
+              {projects.map((p) => (
+                <Link
+                  key={p.id}
+                  href={`/projects/${p.id}`}
+                  className="flex items-center justify-between py-3 text-caption font-medium text-black/75 hover:text-black transition-colors"
+                >
+                  {p.name}
+                  <ArrowRight size={13} className="text-black/30" />
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       ),
@@ -113,6 +133,7 @@ export default function Header() {
     {
       id: "tools",
       label: "Tools",
+      triggerClass: "[div:has([data-nav='tools']:hover)_&]:grid-rows-[1fr]",
       panel: (
         <div className="px-6 pb-6 pt-5">
           <div className="grid grid-cols-3 gap-1">
@@ -201,22 +222,17 @@ export default function Header() {
   return (
     <header className="fixed top-3 left-3 right-3 z-50 max-w-4xl mx-auto">
       <div
-        className="rounded-4xl overflow-hidden"
+        className="rounded-[40px] overflow-hidden"
         style={{
-          background: "rgba(255,255,255, 0.40)",
-          backdropFilter: "blur(6px)",
-          WebkitBackdropFilter: "blur(6px)",
+          background: "rgba(255,255,255, 0.60)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
           border: "1px solid rgba(255,255,255,0.72)",
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.95), 0 4px 24px rgba(0,0,0,0.08)",
         }}
-        onMouseEnter={() => {
-          if (timer.current) clearTimeout(timer.current);
-        }}
-        onMouseLeave={leave}
       >
-        {/* TOP ROW */}
-        <div className="flex items-center justify-between px-6 py-2">
+        <div className="flex items-center justify-between px-4 py-2">
           <Link
             href="/"
             className="text-[15px] font-bold tracking-[0.07em] uppercase text-black"
@@ -224,51 +240,40 @@ export default function Header() {
             Sakib
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-x-4">
-            {navPanels.map(({ id, label }) => (
-              <span
-                key={id}
-                onMouseEnter={() => enter(id)}
-                className={`text-caption tracking-[0.03em] font-medium transition-colors duration-200 cursor-pointer select-none ${
-                  active === id
-                    ? "text-black/90"
-                    : "text-black/50 hover:text-black/90"
-                }`}
-              >
-                {label}
-              </span>
-            ))}
-            <Link
-              href="/#about"
-              className="text-caption tracking-[0.03em] font-medium text-black/50 hover:text-black/90 transition-colors duration-200"
-            >
-              About
-            </Link>
-            <Link
-              href="/#contact"
-              className="text-caption tracking-[0.03em] font-medium text-black/50 hover:text-black/90 transition-colors duration-200"
-            >
-              Contact
-            </Link>
+          <nav className="hidden md:flex items-center gap-x-4">
+            {navLinks.map((nav) => {
+              return (
+                <span
+                  key={nav.id}
+                  data-nav={nav.id}
+                  className="text-black/90 [nav:has([data-nav]:hover)_&:not(:hover)]:text-black/50 transition-colors duration-200 cursor-pointer select-none text-caption tracking-[0.03em] font-medium"
+                >
+                  <MyLink href={nav.href} title={nav.title} text={nav.text} />
+                </span>
+              );
+            })}
           </nav>
 
-          <a
-            href="mailto:mohdsakib.work@gmail.com"
-            className="hidden lg:block text-label uppercase tracking-[0.12em] font-semibold bg-black text-white px-5 py-2.5 rounded-lg hover:bg-neutral-800 transition-colors duration-200"
-          >
-            Let&apos;s Talk
-          </a>
+          <div className="flex justify-center items-center gap-x-2">
+            <PrimaryButton
+              href="mailto:mohdsakib.work@gmail.com"
+              title="Let's Talk"
+              text="Let's Talk"
+            />
 
-          <div className="lg:hidden w-7 h-5" />
+            <summary className="md:hidden list-none cursor-pointer w-4 h-3 flex flex-col justify-between">
+              <span className="h-0.5 w-full bg-black block transition-all duration-500 ease-in-out origin-center group-open/m:opacity-0" />
+              <span className="h-0.5 w-full bg-black" />
+              <span className="h-0.5 w-full bg-black block transition-all duration-500 ease-in-out origin-center group-open/m:opacity-0" />
+            </summary>
+          </div>
         </div>
 
-        {/* PER-PANEL EXPANDABLE — each panel animates its own height independently */}
-        <div className="hidden lg:block overflow-hidden">
-          {navPanels.map(({ id, panel }) => (
+        <div className="block overflow-hidden">
+          {navPanels.map(({ id, triggerClass, panel }) => (
             <div
               key={id}
-              className="grid transition-[grid-template-rows] duration-300 ease-out"
-              style={{ gridTemplateRows: active === id ? "1fr" : "0fr" }}
+              className={`grid grid-rows-[0fr] ${triggerClass} transition-[grid-template-rows] duration-300 ease-out`}
             >
               <div className="overflow-hidden">{panel}</div>
             </div>
@@ -277,12 +282,15 @@ export default function Header() {
       </div>
 
       {/* MOBILE */}
-      <details className="lg:hidden group/m absolute top-0 right-0 z-10">
-        <summary className="list-none cursor-pointer absolute top-3.5 right-6 w-7 h-5 flex flex-col justify-between">
-          <span className="h-0.5 w-full bg-black block transition-all duration-300 origin-center group-open/m:rotate-45 group-open/m:translate-y-2.25" />
-          <span className="h-0.5 w-full bg-black block transition-all duration-300 group-open/m:opacity-0" />
-          <span className="h-0.5 w-full bg-black block transition-all duration-300 origin-center group-open/m:-rotate-45 group-open/m:-translate-y-2.25" />
-        </summary>
+      <details
+        // className="md:hidden group/m absolute top-0 right-0 z-10"
+        className="hidden"
+      >
+        {/* <summary className="list-none cursor-pointer absolute top-3.5 right-6 w-4 h-3 flex flex-col justify-between">
+          <span className="h-0.5 w-full bg-black block transition-all duration-500 ease-in-out origin-center group-open/m:opacity-0" />
+          <span className="h-0.5 w-full bg-black" />
+          <span className="h-0.5 w-full bg-black block transition-all duration-500 ease-in-out origin-center group-open/m:opacity-0" />
+        </summary> */}
 
         <nav
           className="absolute right-0 top-13 w-64 rounded-2xl overflow-hidden"

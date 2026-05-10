@@ -1,12 +1,11 @@
+import { email } from "../data/constants";
+import MyLink from "./Link";
+import PrimaryButton from "./primaryButton";
+
 export default function Hero() {
   return (
     <section className="relative min-h-screen w-full overflow-hidden bg-white text-black flex flex-col items-center justify-center">
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-5xl mx-auto w-full">
-        {/* <p className="text-[11px] tracking-[0.08em] opacity-80 mb-7 uppercase">
-          8 products &nbsp;·&nbsp; 25K+ users &nbsp;·&nbsp; $100K+ GMV
-          &nbsp;·&nbsp; 98 Lighthouse
-        </p> */}
-
         <h1 className="text-display leading-none tracking-[-0.04em] font-semibold mb-10">
           I build software that
           <br />
@@ -96,26 +95,16 @@ export default function Hero() {
           </span>
         </h1>
 
-        {/* PROOF LINE */}
-        {/* <p className="text-[11px] tracking-[0.08em] opacity-25 mb-14 uppercase">
-          8 products &nbsp;·&nbsp; 25K+ users &nbsp;·&nbsp; $100K+ GMV
-          &nbsp;·&nbsp; 98 Lighthouse
-        </p> */}
-
         {/* CTA ROW */}
         <div className="flex items-center gap-8">
-          <a
+          <PrimaryButton
+            title="Case Studies"
             href="#work"
-            className="text-label uppercase tracking-[0.2em] font-semibold px-8 py-3.5 bg-black text-white hover:bg-neutral-800 transition-colors duration-300"
-          >
-            View Case Studies →
-          </a>
-          <a
-            href="mailto:mohdsakib.work@gmail.com"
-            className="text-label uppercase tracking-[0.2em] font-medium opacity-40 hover:opacity-100 transition-opacity duration-300"
-          >
-            Let&apos;s Talk →
-          </a>
+            text="View Case Studies"
+            size="base"
+          />
+
+          <MyLink href={`mailto:${email}`} title="Email" text="Let's Talk →" />
         </div>
       </div>
     </section>

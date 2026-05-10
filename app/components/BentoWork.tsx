@@ -2,6 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import Icon from "./icon";
+import BlurContainer from "./BlurContainer";
+import AnimatedImage from "./AnimatedImage";
 
 type StatType = "revenue" | "users" | "scale" | "clients";
 type Platform = "mobile" | "web";
@@ -14,13 +17,14 @@ const products: {
   platform: Platform;
   live: boolean;
   stats: Stat[];
-  image: string;
+  image?: string;
   bg: string;
   accent: string;
   stores: { ios?: string; android?: string };
   col: string;
   row: string;
   priority: boolean;
+  featuredComponent?: React.ReactNode;
 }[] = [
   {
     id: "stakeclash",
@@ -32,13 +36,69 @@ const products: {
       { label: "Revenue", value: "$12K MRR", type: "revenue" },
       { label: "Userbase", value: "1K+ MAU", type: "users" },
     ],
-    image: "/assets/projects/stakeclash/stakeclash2.webp",
+    // image: "/assets/projects/stakeclash/stakeclash2.webp",
     bg: "#E6E0F8",
+    // bg: "#6C5DD3",
     accent: "#7C6FD4",
     stores: { ios: "#", android: "#" },
     col: "lg:col-span-2",
     row: "lg:row-span-2",
     priority: true,
+    featuredComponent: (
+      <section className="bg-[#000518] -z-10">
+        <div className="bg-[#7700FF] blur-[150px] w-50 h-50 absolute -z-10 opacity-50" />
+
+        <div className="relative rounded-lg z-10 grid grid-cols-1 md:grid-cols-2 items-center ">
+          <div className="absolute inset-0 -z-10 opacity-10">
+            <img
+              className="w-full h-full md:h-75 object-cover rounded-lg"
+              src="/assets/projects/stakeclash/herobg.webp"
+              alt="Hero Background"
+            />
+          </div>
+
+          <div className="flex flex-col gap-y-4 p-4 text-white">
+            <h1 className="text-title font-semibold">
+              Back Yourself and Get Paid.
+            </h1>
+            <p className="text-caption">
+              Challenge friends in skill-based games, lock in the stakes, and
+              let the winner get paid automatically.
+            </p>
+
+            <div className="flex items-center gap-3">
+              <Link
+                href="https://app.stakeclash.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Stakeclash"
+                className="text-label px-6 w-fit py-2 z-20 bg-white text-purple-800 font-semibold rounded-xl shadow-md hover:bg-gray-200 transition"
+              >
+                Join Now
+              </Link>
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/assets/svg/solana.svg"
+                  alt="Solana Logo"
+                  width={24}
+                  height={24}
+                />
+                <span className="text-label text-white font-bold">
+                  Powered by Solana Blockchain
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-center h-60">
+            <AnimatedImage
+              style="items-end"
+              url="/assets/projects/stakeclash/klaj.webp"
+            />
+          </div>
+        </div>
+      </section>
+    ),
   },
   {
     id: "artificialmufti",
@@ -263,15 +323,13 @@ export default function BentoWork() {
       </div>
 
       {/* BENTO GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-400 mx-auto lg:auto-rows-[300px]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-400 mx-auto lg:auto-rows-[min-h[300px]]">
         {products.map((p) => (
-          <Link
+          <div
             key={p.id}
-            href={`/projects/${p.id}`}
-            className={`group relative overflow-hidden rounded-2xl flex flex-col h-75 sm:h-80 lg:h-full ${p.col} ${p.row} shadow-[0_1px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.10)] transition-shadow duration-500`}
+            className={`group relative overflow-hidden rounded-2xl flex flex-col min-h-75 sm:min-h-80 lg:min-h-full ${p.col} ${p.row} shadow-[0_16px_48px_rgba(0,0,0,0.10)]`}
             style={{ backgroundColor: p.bg }}
           >
-            {/* PAPER TEXTURE */}
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-45"
@@ -280,172 +338,85 @@ export default function BentoWork() {
                 backgroundSize: "cover",
               }}
             />
-            {/* TOP EDGE HIGHLIGHT */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 top-0 h-px"
-              style={{ background: "rgba(255,255,255,0.65)" }}
-            />
 
-            <div className="relative z-10 flex flex-col h-full p-3 gap-2">
-              {/* ── ZONE 1: NAME + CATEGORY ── */}
-              <div className="flex items-start justify-between gap-2 px-1 pt-1">
-                <div>
-                  <p
-                    className="text-label uppercase tracking-[0.28em] font-semibold leading-none mb-1.5"
-                    style={{ color: "rgba(0,0,0,0.28)" }}
-                  >
-                    {p.category}
-                  </p>
-                  <h3
-                    className="text-title font-semibold tracking-tight leading-tight"
-                    style={{ color: "rgba(0,0,0,0.88)" }}
-                  >
-                    {p.name}
-                  </h3>
-                </div>
-                {/* Arrow circle */}
-                <div
-                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110 mt-0.5"
-                  style={{ background: "rgba(0,0,0,0.07)" }}
-                >
-                  <span
-                    className="text-[10px] leading-none transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    style={{ color: "rgba(0,0,0,0.35)" }}
-                  >
-                    ↗
-                  </span>
-                </div>
-              </div>
-
-              {/* ── ZONE 2: PLATFORM ICON · LIVE BADGE · STORE LINKS ── */}
-              <div className="flex items-center gap-2 px-1">
-                {/* Platform type icon */}
-                <span style={{ color: "rgba(0,0,0,0.28)" }}>
-                  <PlatformIcon platform={p.platform} />
-                </span>
-
-                {/* Live pulse badge */}
-                {p.live && (
-                  <div
-                    className="flex items-center gap-1.5 rounded-full px-2 py-[3px]"
-                    style={{ background: "rgba(0,0,0,0.06)" }}
-                  >
-                    <span className="relative flex w-[6px] h-[6px]">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-60" />
-                      <span className="relative inline-flex rounded-full w-[6px] h-[6px] bg-emerald-500" />
-                    </span>
-                    <span
-                      className="text-label font-semibold uppercase tracking-[0.18em]"
-                      style={{ color: "rgba(0,0,0,0.42)" }}
-                    >
-                      Live
-                    </span>
-                  </div>
-                )}
-
-                {/* Clickable store badges — stop propagation so outer Link doesn't fire */}
-                {p.stores.ios && (
-                  <a
-                    href={p.stores.ios}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="opacity-22 hover:opacity-55 transition-opacity duration-200"
-                  >
-                    <img
-                      src="/assets/svg/app-store.svg"
-                      alt="App Store"
-                      className="h-[14px]"
-                    />
-                  </a>
-                )}
-                {p.stores.android && (
-                  <a
-                    href={p.stores.android}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="opacity-22 hover:opacity-55 transition-opacity duration-200"
-                  >
-                    <img
-                      src="/assets/svg/playstore.svg"
-                      alt="Play Store"
-                      className="h-[14px]"
-                    />
-                  </a>
-                )}
-              </div>
-
-              {/* ── ZONE 3: GLASSMORPHISM METRICS BOX ── */}
-              <div
-                className="backdrop-blur-sm rounded-xl px-3.5 py-2.5 shrink-0"
-                style={{
-                  background: "rgba(255,255,255,0.60)",
-                  border: "1px solid rgba(255,255,255,0.72)",
-                  boxShadow:
-                    "inset 0 1px 0 rgba(255,255,255,0.88), 0 2px 12px rgba(0,0,0,0.055)",
-                }}
+            <div className="relative z-10 flex flex-col h-full p-4 gap-4">
+              <Link
+                href={`/projects/${p.id}`}
+                title={p.name}
+                className=" w-7 h-7 rounded-full flex items-center justify-center self-end p-4 bg-white"
               >
-                <div className="flex">
-                  {p.stats.map((stat, i) => (
-                    <div
-                      key={i}
-                      className={`flex-1 ${i > 0 ? "pl-3 ml-3" : ""}`}
-                      style={
-                        i > 0
-                          ? { borderLeft: "1px solid rgba(0,0,0,0.07)" }
-                          : {}
-                      }
-                    >
-                      <div className="flex items-center gap-1 mb-[3px]">
-                        <span style={{ color: p.accent, opacity: 0.72 }}>
-                          <StatIcon type={stat.type} />
-                        </span>
-                        <span
-                          className="text-label uppercase tracking-[0.22em] font-semibold"
-                          style={{ color: "rgba(0,0,0,0.30)" }}
-                        >
-                          {stat.label}
+                <span className="text-body leading-none">↗</span>
+              </Link>
+
+              <div className="flex items-start justify-between gap-2 px-1 pt-1">
+                <h3 className="text-title font-semibold tracking-tight leading-tight">
+                  {p.name}
+                </h3>
+              </div>
+
+              <div className="flex gap-x-4">
+                <BlurContainer className="rounded-xl p-4 shrink-0 flex-1">
+                  <p className="text-body font-semibold">Mertices</p>
+                  <div className="flex items-center mt-4">
+                    {p.stats.map((stat, i) => (
+                      <div
+                        key={i}
+                        className={`flex-1 ${i > 0 ? "pl-3 ml-3" : ""}`}
+                      >
+                        <span className="text-body font-semibold tracking-tight leading-none">
+                          {stat.value}
                         </span>
                       </div>
-                      <span
-                        className="text-body font-semibold tracking-tight leading-none"
-                        style={{ color: "rgba(0,0,0,0.84)" }}
-                      >
-                        {stat.value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                </BlurContainer>
+
+                <BlurContainer className="rounded-xl p-4 shrink-0 flex-1">
+                  <p className="text-body font-semibold">Available On</p>
+                  <div className="flex items-center gap-2 mt-4">
+                    {p.stores.ios && (
+                      <Icon
+                        href={p.stores.ios}
+                        title={"Appstore"}
+                        type="img"
+                        img="/assets/svg/app-store.svg"
+                      />
+                    )}
+                    {p.stores.android && (
+                      <Icon
+                        href={p.stores.android}
+                        title={"Playstore"}
+                        type="img"
+                        img="/assets/svg/playstore.svg"
+                      />
+                    )}
+                  </div>
+                </BlurContainer>
               </div>
 
-              {/* ── ZONE 4: IMAGE ── */}
-              <div
-                className="relative flex-1 min-h-0 overflow-hidden rounded-xl"
-                style={{
-                  boxShadow:
-                    "inset 0 0 0 1px rgba(0,0,0,0.05), 0 2px 16px rgba(0,0,0,0.09)",
-                }}
-              >
-                <Image
-                  src={p.image}
-                  alt={`${p.name} — ${p.category}`}
-                  fill
-                  className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]"
-                  priority={p.priority}
-                  quality={90}
-                  sizes={
-                    p.col === "lg:col-span-3"
-                      ? "100vw"
-                      : p.col === "lg:col-span-2"
-                        ? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 67vw"
-                        : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  }
-                />
+              <div className="relative w-full flex min-h-60 overflow-hidden rounded-xl items-end">
+                {p.image ? (
+                  <Image
+                    src={p.image}
+                    alt={`${p.name} — ${p.category}`}
+                    fill
+                    className="object-cover object-top"
+                    priority={p.priority}
+                    quality={90}
+                    sizes={
+                      p.col === "lg:col-span-3"
+                        ? "100vw"
+                        : p.col === "lg:col-span-2"
+                          ? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 67vw"
+                          : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    }
+                  />
+                ) : (
+                  p.featuredComponent
+                )}
               </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
 

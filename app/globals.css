@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #fcf9f7;
   --foreground: #171717;
 }
 
@@ -16,11 +16,11 @@
 
   /* ── Type scale ── */
   --text-display: clamp(2.8rem, 7vw, 6rem);
-  --text-heading: clamp(1.875rem, 5vw, 4.5rem);
-  --text-title:   clamp(1.25rem, 2.5vw, 2rem);
-  --text-body:    1.0625rem;
+  --text-heading: clamp(1.875rem, 5vw, 2.5rem);
+  --text-title: clamp(1.25rem, 2.5vw, 2rem);
+  --text-body: 1.0625rem;
   --text-caption: 0.875rem;
-  --text-label:   0.6875rem;
+  --text-label: 0.6875rem;
 
   --animate-marquee: marquee 30s linear infinite;
   --animate-marquee-reverse: marquee-reverse 30s linear infinite;
