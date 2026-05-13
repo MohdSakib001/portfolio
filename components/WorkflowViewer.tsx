@@ -17,29 +17,88 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import {
-  Clock, Play, Mail, MailOpen, Code2, GitBranch,
-  Globe, Layers, Sparkles, Send, Table2, Timer,
-  GitMerge, Zap, Bot, Plus, Minus, Maximize2,
+  Clock,
+  Play,
+  Mail,
+  MailOpen,
+  Code2,
+  GitBranch,
+  Globe,
+  Layers,
+  Sparkles,
+  Send,
+  Table2,
+  Timer,
+  GitMerge,
+  Zap,
+  Bot,
+  Plus,
+  Minus,
+  Maximize2,
 } from "lucide-react";
 
 type NodeConfig = { icon: React.ElementType; color: string; label: string };
 
 const TYPE_CONFIG: Record<string, NodeConfig> = {
-  "n8n-nodes-base.scheduleTrigger":              { icon: Clock,     color: "#ff6d5a", label: "Schedule"    },
-  "n8n-nodes-base.manualTrigger":                { icon: Play,      color: "#ff6d5a", label: "Manual"      },
-  "n8n-nodes-base.gmailTrigger":                 { icon: MailOpen,  color: "#ea4335", label: "Gmail Watch" },
-  "n8n-nodes-base.gmail":                        { icon: Mail,      color: "#ea4335", label: "Gmail"       },
-  "n8n-nodes-base.googleSheets":                 { icon: Table2,    color: "#34a853", label: "Sheets"      },
-  "n8n-nodes-base.code":                         { icon: Code2,     color: "#f5a623", label: "Code"        },
-  "n8n-nodes-base.if":                           { icon: GitBranch, color: "#50c878", label: "IF"          },
-  "n8n-nodes-base.switch":                       { icon: GitMerge,  color: "#50c878", label: "Switch"      },
-  "n8n-nodes-base.httpRequest":                  { icon: Globe,     color: "#9b59b6", label: "HTTP"        },
-  "n8n-nodes-base.splitInBatches":               { icon: Layers,    color: "#1abc9c", label: "Batches"     },
-  "n8n-nodes-base.wait":                         { icon: Timer,     color: "#95a5a6", label: "Wait"        },
-  "n8n-nodes-base.telegram":                     { icon: Send,      color: "#2ca5e0", label: "Telegram"    },
-  "@n8n/n8n-nodes-langchain.lmChatGoogleGemini": { icon: Sparkles,  color: "#8e75ff", label: "Gemini AI"  },
-  "@n8n/n8n-nodes-langchain.googleGemini":       { icon: Sparkles,  color: "#8e75ff", label: "Gemini AI"  },
-  "@n8n/n8n-nodes-langchain.agent":              { icon: Bot,       color: "#8e75ff", label: "AI Agent"   },
+  "n8n-nodes-base.scheduleTrigger": {
+    icon: Clock,
+    color: "#ff6d5a",
+    label: "Schedule",
+  },
+  "n8n-nodes-base.manualTrigger": {
+    icon: Play,
+    color: "#ff6d5a",
+    label: "Manual",
+  },
+  "n8n-nodes-base.gmailTrigger": {
+    icon: MailOpen,
+    color: "#ea4335",
+    label: "Gmail Watch",
+  },
+  "n8n-nodes-base.gmail": { icon: Mail, color: "#ea4335", label: "Gmail" },
+  "n8n-nodes-base.googleSheets": {
+    icon: Table2,
+    color: "#34a853",
+    label: "Sheets",
+  },
+  "n8n-nodes-base.code": { icon: Code2, color: "#f5a623", label: "Code" },
+  "n8n-nodes-base.if": { icon: GitBranch, color: "#50c878", label: "IF" },
+  "n8n-nodes-base.switch": {
+    icon: GitMerge,
+    color: "#50c878",
+    label: "Switch",
+  },
+  "n8n-nodes-base.httpRequest": {
+    icon: Globe,
+    color: "#9b59b6",
+    label: "HTTP",
+  },
+  "n8n-nodes-base.splitInBatches": {
+    icon: Layers,
+    color: "#1abc9c",
+    label: "Batches",
+  },
+  "n8n-nodes-base.wait": { icon: Timer, color: "#95a5a6", label: "Wait" },
+  "n8n-nodes-base.telegram": {
+    icon: Send,
+    color: "#2ca5e0",
+    label: "Telegram",
+  },
+  "@n8n/n8n-nodes-langchain.lmChatGoogleGemini": {
+    icon: Sparkles,
+    color: "#8e75ff",
+    label: "Gemini AI",
+  },
+  "@n8n/n8n-nodes-langchain.googleGemini": {
+    icon: Sparkles,
+    color: "#8e75ff",
+    label: "Gemini AI",
+  },
+  "@n8n/n8n-nodes-langchain.agent": {
+    icon: Bot,
+    color: "#8e75ff",
+    label: "AI Agent",
+  },
 };
 
 export function getConfig(type: string): NodeConfig {
@@ -51,7 +110,8 @@ const ICON_BOX = 60;
 // Node that matches real n8n's visual style — square icon card, label below
 function N8nNode({ data }: { data: { label: string; nodeType: string } }) {
   const { icon: Icon, color } = getConfig(data.nodeType);
-  const name = data.label.length > 20 ? data.label.slice(0, 19) + "…" : data.label;
+  const name =
+    data.label.length > 20 ? data.label.slice(0, 19) + "…" : data.label;
 
   return (
     <div style={{ width: 100, textAlign: "center" }}>
@@ -81,7 +141,8 @@ function N8nNode({ data }: { data: { label: string; nodeType: string } }) {
           alignItems: "center",
           justifyContent: "center",
           margin: "0 auto",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
+          boxShadow:
+            "0 2px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
           position: "relative",
         }}
       >
@@ -191,7 +252,10 @@ function ZoomControls() {
         <button className={btn} onClick={() => zoomOut({ duration: 200 })}>
           <Minus size={11} />
         </button>
-        <button className={btn} onClick={() => fitView({ duration: 300, padding: 0.15 })}>
+        <button
+          className={btn}
+          onClick={() => fitView({ duration: 300, padding: 0.15 })}
+        >
           <Maximize2 size={10} />
         </button>
       </div>
@@ -205,8 +269,14 @@ interface Props {
   focusNodeNames?: string[];
 }
 
-export default function WorkflowViewer({ filename, onLoad, focusNodeNames }: Props) {
-  const [flow, setFlow] = useState<{ nodes: Node[]; edges: Edge[] } | null>(null);
+export default function WorkflowViewer({
+  filename,
+  onLoad,
+  focusNodeNames,
+}: Props) {
+  const [flow, setFlow] = useState<{ nodes: Node[]; edges: Edge[] } | null>(
+    null,
+  );
 
   useEffect(() => {
     setFlow(null);
@@ -231,7 +301,7 @@ export default function WorkflowViewer({ filename, onLoad, focusNodeNames }: Pro
   let fitNodes: Node[] | undefined;
   if (focusNodeNames && focusNodeNames.length > 0) {
     const found = flow.nodes.filter((n) =>
-      focusNodeNames.includes((n.data as { label: string }).label)
+      focusNodeNames.includes((n.data as { label: string }).label),
     );
     fitNodes = found.length > 0 ? found : undefined;
   } else if (flow.nodes.length > 10) {
@@ -247,14 +317,11 @@ export default function WorkflowViewer({ filename, onLoad, focusNodeNames }: Pro
       fitViewOptions={{ nodes: fitNodes, padding: 0.2 }}
       minZoom={0.05}
       maxZoom={2}
-      nodesDraggable={false}
-      nodesConnectable={false}
-      elementsSelectable={false}
       panOnDrag
       zoomOnScroll={false}
       zoomOnPinch={false}
       preventScrolling={false}
-      colorMode="dark"
+      colorMode="light"
       proOptions={{ hideAttribution: true }}
     >
       <Background

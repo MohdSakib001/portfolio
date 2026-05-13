@@ -9,7 +9,6 @@ const Performance = lazy(() => import("../../components/Performance"));
 const Capabilities = lazy(() => import("../../components/Capabilities"));
 const CSSection = lazy(() => import("../../components/CsSection"));
 const Hero = lazy(() => import("../../components/Hero"));
-const AISection = lazy(() => import("../../components/AiSection"));
 const AutomationSection = lazy(
   () => import("../../components/AutomationSection"),
 );
@@ -54,10 +53,6 @@ export default function Home() {
           quote={TESTIMONIALS[1].quote}
           idx={2}
         />
-
-        <Suspense fallback={<div className="h-screen" />}>
-          <AISection />
-        </Suspense>
 
         <Suspense fallback={<div className="h-screen bg-[#0a0a0a]" />}>
           <AutomationSection />

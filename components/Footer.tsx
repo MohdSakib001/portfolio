@@ -6,6 +6,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Magnetic from "./Magnetic";
 import Image from "next/image";
+import { MOBILE_NUMBER } from "@/data/constants";
+import Link from "next/link";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -106,7 +108,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-24">
           {[
             {
-              href: "https://wa.me/917417141204",
+              href: `https://wa.me/${MOBILE_NUMBER}`,
               title: "WHATSAPP",
               desc: "Let's Talk, I'm just a message away",
               bg: "#25D366",
@@ -131,12 +133,7 @@ export default function Footer() {
               theme: "dark",
               iconBg: "rgba(255,255,255,0.15)",
               icon: (
-                <svg
-                  width="30"
-                  height="30"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="blue">
                   <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
                   <rect x="2" y="9" width="4" height="12" />
                   <circle cx="4" cy="4" r="2" />
@@ -151,12 +148,7 @@ export default function Footer() {
               theme: "dark",
               iconBg: "rgba(0,0,0,0.06)",
               icon: (
-                <svg
-                  width="30"
-                  height="30"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="black">
                   <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                 </svg>
               ),
@@ -169,12 +161,7 @@ export default function Footer() {
               theme: "light",
               iconBg: "rgba(0,0,0,0.06)",
               icon: (
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="black">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
               ),
@@ -186,7 +173,7 @@ export default function Footer() {
               target={card.href.startsWith("mailto") ? undefined : "_blank"}
               rel="noopener noreferrer"
               className="footer-reveal relative group rounded-3xl p-6 flex flex-col items-center text-center justify-top aspect-square hover:scale-[1.03] transition-transform "
-              style={{ backgroundColor: card.bg}}
+              style={{ backgroundColor: card.bg }}
             >
               <div
                 aria-hidden="true"
@@ -238,50 +225,96 @@ export default function Footer() {
         {/* LINKS GRID */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-24">
           <div className="footer-reveal">
-            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-6">Navigation</p>
+            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-6">
+              Navigation
+            </p>
             <div className="flex flex-col gap-3">
               {["Home", "Work", "About", "Contact"].map((item) => (
-                <Magnetic key={item}>
-                  <a href={item === "Home" ? "/" : `#${item.toLowerCase()}`} className="text-caption opacity-60 hover:opacity-100 transition-opacity duration-300">
+                <span key={item}>
+                  <Link
+                    title={item}
+                    href={item === "Home" ? "/" : `#${item.toLowerCase()}`}
+                    className="text-caption opacity-60 hover:opacity-100 transition-opacity duration-300"
+                  >
                     {item}
-                  </a>
-                </Magnetic>
+                  </Link>
+                </span>
               ))}
             </div>
           </div>
 
           <div className="footer-reveal">
-            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-6">Socials</p>
+            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-6">
+              Socials
+            </p>
             <div className="flex flex-col gap-3">
               {[
-                { label: "GitHub", url: "https://github.com/mohdsakib-Krapton" },
-                { label: "LinkedIn", url: "https://www.linkedin.com/in/mohdsakib001" },
+                {
+                  label: "GitHub",
+                  url: "https://github.com/mohdsakib-Krapton",
+                },
+                {
+                  label: "LinkedIn",
+                  url: "https://www.linkedin.com/in/mohdsakib001",
+                },
                 { label: "Twitter", url: "https://twitter.com/mohdsakib001" },
               ].map((s) => (
-                <Magnetic key={s.label}>
-                  <a href={s.url} target="_blank" rel="noopener" className="text-caption opacity-60 hover:opacity-100 transition-opacity duration-300">
+                <span key={s.label}>
+                  <Link
+                    href={s.url}
+                    title={s.label}
+                    target="_blank"
+                    rel="noopener"
+                    className="text-caption opacity-60 hover:opacity-100 transition-opacity duration-300"
+                  >
                     {s.label} ↗
-                  </a>
-                </Magnetic>
+                  </Link>
+                </span>
               ))}
             </div>
           </div>
 
           <div className="footer-reveal">
-            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-6">Services</p>
-            <div className="flex flex-col gap-3 text-sm opacity-60">
-              <a href="/#work" className="hover:opacity-100 transition-opacity duration-300">Full-Stack Dev</a>
-              <a href="/#work" className="hover:opacity-100 transition-opacity duration-300">React Native</a>
-              <a href="/#work" className="hover:opacity-100 transition-opacity duration-300">System Design</a>
-              <a href="/#work" className="hover:opacity-100 transition-opacity duration-300">AI Integration</a>
+            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-6">
+              Services
+            </p>
+            <div className="flex flex-col gap-3 text-sm">
+              {[
+                {
+                  label: "Full-Stack Development",
+                  url: "/#work",
+                },
+                {
+                  label: "React Native",
+                  url: "/#work",
+                },
+                { label: "System Design", url: "/#work" },
+                { label: "AI Automation", url: "/#work" },
+              ].map((s) => (
+                <span key={s.label}>
+                  <Link
+                    href={s.url}
+                    title={s.label}
+                    target="_blank"
+                    rel="noopener"
+                    className="text-caption opacity-60 hover:opacity-100 transition-opacity duration-300"
+                  >
+                    {s.label} ↗
+                  </Link>
+                </span>
+              ))}
             </div>
           </div>
 
           <div className="footer-reveal">
-            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-6">Status</p>
+            <p className="text-label uppercase tracking-[0.2em] opacity-30 mb-6">
+              Status
+            </p>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-caption opacity-80">Available for work</span>
+              <span className="text-caption opacity-80">
+                Available for work
+              </span>
             </div>
             <p className="text-caption opacity-40">
               Open to freelance, full-time,
@@ -292,14 +325,10 @@ export default function Footer() {
         </div>
 
         {/* BOTTOM BAR */}
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-center items-center gap-4">
           <p className="text-label opacity-30 footer-reveal">
             © {currentYear} Mohd Sakib. Built from scratch.
           </p>
-
-          <div className="flex items-center gap-6 footer-reveal">
-            <span className="text-label opacity-20">Next.js • GSAP • Lenis</span>
-          </div>
         </div>
       </div>
     </footer>

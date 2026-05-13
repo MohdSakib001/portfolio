@@ -11,7 +11,7 @@ const BlurContainer = ({
     <div
       className={`backdrop-blur-sm ${className || ""}`}
       style={{
-        background: "rgba(255,255,255,0.60)",
+        background: "rgba(255,255,255,0.85)",
         boxShadow:
           "inset 0 1px 0 rgba(255,255,255,0.88), 0 2px 12px rgba(0,0,0,0.055)",
       }}
@@ -22,3 +22,4 @@ const BlurContainer = ({
 };
 
 export default BlurContainer;
+8;
