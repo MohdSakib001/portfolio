@@ -3,25 +3,99 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
-  Search, X,
-  FileText, Type, AlignLeft, FileCode, Sparkles, PenLine,
-  Download, Maximize2, Eraser, Palette, Smile, FileImage, FileOutput, Video,
-  CalendarDays, Scale, Percent, Shuffle, Receipt, Home, ArrowLeftRight,
-  Timer, Clock, Globe, ClipboardList, Briefcase, BookOpen, Database, Crop,
-  Braces, KeyRound, CalendarClock, Hash, Eye, Table2, Plug, GitBranch, QrCode, Lock,
+  Search,
+  X,
+  FileText,
+  Type,
+  AlignLeft,
+  FileCode,
+  Sparkles,
+  PenLine,
+  Download,
+  Maximize2,
+  Eraser,
+  Palette,
+  Smile,
+  FileImage,
+  FileOutput,
+  Video,
+  CalendarDays,
+  Scale,
+  Percent,
+  Shuffle,
+  Receipt,
+  Home,
+  ArrowLeftRight,
+  Timer,
+  Clock,
+  Globe,
+  ClipboardList,
+  Briefcase,
+  BookOpen,
+  Database,
+  Crop,
+  Braces,
+  KeyRound,
+  CalendarClock,
+  Hash,
+  Eye,
+  Table2,
+  Plug,
+  GitBranch,
+  QrCode,
+  Lock,
   type LucideProps,
 } from "lucide-react";
 import type { ElementType } from "react";
-import { tools, CATEGORY_META, type Tool, type ToolCategory } from "../data/tools";
+import {
+  tools,
+  CATEGORY_META,
+  type Tool,
+  type ToolCategory,
+} from "../../data/tools";
 
 const ICON_MAP: Record<string, ElementType<LucideProps>> = {
-  FileText, Type, AlignLeft, FileCode, Sparkles, PenLine,
-  Download, Maximize2, Eraser, Palette, Smile, FileImage, FileOutput, Video,
-  CalendarDays, Scale, Percent, Shuffle, Receipt, Home, ArrowLeftRight,
-  Timer, Clock, Globe, ClipboardList, Briefcase, BookOpen, Database, Crop,
-  Braces, KeyRound, Search, CalendarClock, Hash, Eye, Table2, Plug, GitBranch, QrCode, Lock,
+  FileText,
+  Type,
+  AlignLeft,
+  FileCode,
+  Sparkles,
+  PenLine,
+  Download,
+  Maximize2,
+  Eraser,
+  Palette,
+  Smile,
+  FileImage,
+  FileOutput,
+  Video,
+  CalendarDays,
+  Scale,
+  Percent,
+  Shuffle,
+  Receipt,
+  Home,
+  ArrowLeftRight,
+  Timer,
+  Clock,
+  Globe,
+  ClipboardList,
+  Briefcase,
+  BookOpen,
+  Database,
+  Crop,
+  Braces,
+  KeyRound,
+  Search,
+  CalendarClock,
+  Hash,
+  Eye,
+  Table2,
+  Plug,
+  GitBranch,
+  QrCode,
+  Lock,
 };
-
 
 // Colors by index — not by category — so the bento looks varied
 const PALETTE = [
@@ -38,12 +112,20 @@ const PALETTE = [
 const TOOL_COLORS = tools.map((_, i) => PALETTE[i % PALETTE.length]);
 
 const FEATURED = new Set([
-  "word-counter", "lorem-ipsum-generator", "image-compressor",
-  "color-picker", "pomodoro-timer", "json-formatter",
-  "qr-code-generator", "password-generator",
+  "word-counter",
+  "lorem-ipsum-generator",
+  "image-compressor",
+  "color-picker",
+  "pomodoro-timer",
+  "json-formatter",
+  "qr-code-generator",
+  "password-generator",
 ]);
 
-const CATEGORIES = Object.entries(CATEGORY_META) as [ToolCategory, (typeof CATEGORY_META)[ToolCategory]][];
+const CATEGORIES = Object.entries(CATEGORY_META) as [
+  ToolCategory,
+  (typeof CATEGORY_META)[ToolCategory],
+][];
 
 function CardContent({
   tool,
@@ -73,12 +155,20 @@ function CardContent({
       </div>
 
       <div className="flex items-start justify-between gap-4 mb-2 relative z-10">
-        <h3 className={`font-semibold text-neutral-800 leading-snug ${featured ? "text-[17px]" : "text-[13px]"}`}>
+        <h3
+          className={`font-semibold text-neutral-800 leading-snug ${featured ? "text-[17px]" : "text-[13px]"}`}
+        >
           {tool.name}
         </h3>
         {live ? (
-          <span className="shrink-0 flex items-center gap-1 text-[9px] uppercase tracking-widest font-medium mt-0.5" style={{ color: palette.color }}>
-            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: palette.color }} />
+          <span
+            className="shrink-0 flex items-center gap-1 text-[9px] uppercase tracking-widest font-medium mt-0.5"
+            style={{ color: palette.color }}
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full animate-pulse"
+              style={{ backgroundColor: palette.color }}
+            />
             Live
           </span>
         ) : (
@@ -88,25 +178,41 @@ function CardContent({
         )}
       </div>
 
-      <p className={`text-neutral-500 leading-relaxed flex-1 relative z-10 ${featured ? "text-[12px] line-clamp-3" : "text-[11px] line-clamp-2"}`}>
+      <p
+        className={`text-neutral-500 leading-relaxed flex-1 relative z-10 ${featured ? "text-[12px] line-clamp-3" : "text-[11px] line-clamp-2"}`}
+      >
         {tool.description}
       </p>
 
       <div className="flex flex-wrap items-center gap-3 mt-4 relative z-10">
         {tool.tags.slice(0, featured ? 3 : 2).map((tag) => (
-          <span key={tag} className="text-[9px] font-medium uppercase tracking-wide" style={{ color: palette.color, opacity: 0.55 }}>
+          <span
+            key={tag}
+            className="text-[9px] font-medium uppercase tracking-wide"
+            style={{ color: palette.color, opacity: 0.55 }}
+          >
             {tag}
           </span>
         ))}
         {tool.needsApi && (
-          <span className="ml-auto text-[9px] text-violet-500/50 font-medium tracking-wide">AI</span>
+          <span className="ml-auto text-[9px] text-violet-500/50 font-medium tracking-wide">
+            AI
+          </span>
         )}
       </div>
     </>
   );
 }
 
-function ToolCard({ tool, palette, featured }: { tool: Tool; palette: { bg: string; color: string }; featured: boolean }) {
+function ToolCard({
+  tool,
+  palette,
+  featured,
+}: {
+  tool: Tool;
+  palette: { bg: string; color: string };
+  featured: boolean;
+}) {
   const live = tool.status === "live";
   const sharedClass = [
     "group relative overflow-hidden rounded-2xl flex flex-col scroll-mt-28",
@@ -116,33 +222,55 @@ function ToolCard({ tool, palette, featured }: { tool: Tool; palette: { bg: stri
 
   if (live) {
     return (
-      <Link href={`/tools/${tool.id}`} id={tool.id} className={sharedClass} style={{ backgroundColor: palette.bg }}>
-        <CardContent tool={tool} palette={palette} featured={featured} live={live} />
+      <Link
+        href={`/tools/${tool.id}`}
+        id={tool.id}
+        className={sharedClass}
+        style={{ backgroundColor: palette.bg }}
+      >
+        <CardContent
+          tool={tool}
+          palette={palette}
+          featured={featured}
+          live={live}
+        />
       </Link>
     );
   }
 
   return (
-    <div id={tool.id} className={sharedClass} style={{ backgroundColor: palette.bg }}>
-      <CardContent tool={tool} palette={palette} featured={featured} live={live} />
+    <div
+      id={tool.id}
+      className={sharedClass}
+      style={{ backgroundColor: palette.bg }}
+    >
+      <CardContent
+        tool={tool}
+        palette={palette}
+        featured={featured}
+        live={live}
+      />
     </div>
   );
 }
 
 export default function ToolsGrid() {
   const [query, setQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState<ToolCategory | "all">("all");
+  const [activeCategory, setActiveCategory] = useState<ToolCategory | "all">(
+    "all",
+  );
 
   const filtered = useMemo(() => {
     let result = tools;
-    if (activeCategory !== "all") result = result.filter((t) => t.category === activeCategory);
+    if (activeCategory !== "all")
+      result = result.filter((t) => t.category === activeCategory);
     if (query.trim()) {
       const q = query.toLowerCase();
       result = result.filter(
         (t) =>
           t.name.toLowerCase().includes(q) ||
           t.description.toLowerCase().includes(q) ||
-          t.tags.some((tag) => tag.toLowerCase().includes(q))
+          t.tags.some((tag) => tag.toLowerCase().includes(q)),
       );
     }
     return result;
@@ -152,10 +280,12 @@ export default function ToolsGrid() {
 
   return (
     <section className="px-6 md:px-16 max-w-6xl mx-auto pb-32">
-
       {/* Search */}
       <div className="relative mb-4">
-        <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" />
+        <Search
+          size={15}
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"
+        />
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -163,7 +293,10 @@ export default function ToolsGrid() {
           className="w-full pl-11 pr-10 py-3.5 bg-white border border-neutral-200 rounded-xl text-sm text-black placeholder:text-neutral-400 outline-none focus:border-neutral-400 transition-colors duration-150"
         />
         {query && (
-          <button onClick={() => setQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors">
+          <button
+            onClick={() => setQuery("")}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
+          >
             <X size={14} />
           </button>
         )}
@@ -195,7 +328,9 @@ export default function ToolsGrid() {
 
       {query.trim() && (
         <p className="text-[11px] text-neutral-400 mb-5">
-          {filtered.length === 0 ? `No results for "${query}"` : `${filtered.length} tool${filtered.length === 1 ? "" : "s"} found`}
+          {filtered.length === 0
+            ? `No results for "${query}"`
+            : `${filtered.length} tool${filtered.length === 1 ? "" : "s"} found`}
         </p>
       )}
 
@@ -215,9 +350,14 @@ export default function ToolsGrid() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-32 text-center">
-          <p className="text-neutral-400 text-sm mb-3">No tools match &ldquo;{query}&rdquo;</p>
+          <p className="text-neutral-400 text-sm mb-3">
+            No tools match &ldquo;{query}&rdquo;
+          </p>
           <button
-            onClick={() => { setQuery(""); setActiveCategory("all"); }}
+            onClick={() => {
+              setQuery("");
+              setActiveCategory("all");
+            }}
             className="text-[11px] uppercase tracking-[0.15em] font-medium text-black underline underline-offset-4"
           >
             Clear search

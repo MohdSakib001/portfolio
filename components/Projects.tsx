@@ -39,7 +39,6 @@ const projects = [
       app: false,
     },
   },
-  // 👉 add unlimited projects here
 ];
 
 function ProjectCard({ project }: { project: any }) {
@@ -65,25 +64,36 @@ function ProjectCard({ project }: { project: any }) {
         {/* CONTENT */}
         <div className="flex-1 flex flex-col justify-between">
           <div>
-            <h3 className="text-2xl md:text-3xl mb-3">
-              {project.title}
-            </h3>
+            <h3 className="text-2xl md:text-3xl mb-3">{project.title}</h3>
 
-            <p className="text-sm opacity-70 mb-6">
-              {project.tagline}
-            </p>
+            <p className="text-sm opacity-70 mb-6">{project.tagline}</p>
           </div>
 
           {/* LINKS (images not text) */}
           <div className="flex gap-4 items-center">
             {project.links.web && (
-              <Image src="/assets/icons/web.png" width={28} height={28} alt="web" />
+              <Image
+                src="/assets/icons/web.png"
+                width={28}
+                height={28}
+                alt="web"
+              />
             )}
             {project.links.play && (
-              <Image src="/assets/playstore.webp" width={120} height={60} alt="play" />
+              <Image
+                src="/assets/playstore.webp"
+                width={120}
+                height={60}
+                alt="play"
+              />
             )}
             {project.links.app && (
-              <Image src="/assets/appstore.webp" width={120} height={60} alt="app" />
+              <Image
+                src="/assets/appstore.webp"
+                width={120}
+                height={60}
+                alt="app"
+              />
             )}
           </div>
         </div>
@@ -91,8 +101,9 @@ function ProjectCard({ project }: { project: any }) {
 
       {/* EXPANDABLE */}
       <div
-        className={`overflow-hidden transition-all duration-500 ${open ? "max-h-[300px] mt-6 opacity-100" : "max-h-0 opacity-0"
-          }`}
+        className={`overflow-hidden transition-all duration-500 ${
+          open ? "max-h-[300px] mt-6 opacity-100" : "max-h-0 opacity-0"
+        }`}
       >
         <p className="text-sm opacity-80 leading-relaxed">
           {project.description}

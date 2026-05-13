@@ -56,6 +56,8 @@ export const cardStyle = {
 } as const;
 
 export default function Header() {
+  const [activePanel, setActivePanel] = useState<string | null>(null);
+
   const featuredTools = FEATURED.map((id) =>
     tools.find((t) => t.id === id),
   ).filter(Boolean) as typeof tools;
@@ -81,7 +83,6 @@ export default function Header() {
     {
       id: "products",
       label: "Products",
-      triggerClass: "[div:has([data-nav='products']:hover)_&]:grid-rows-[1fr]",
       panel: (
         <div className="p-4">
           <div className="grid grid-cols-3 gap-3">
@@ -133,7 +134,6 @@ export default function Header() {
     {
       id: "tools",
       label: "Tools",
-      triggerClass: "[div:has([data-nav='tools']:hover)_&]:grid-rows-[1fr]",
       panel: (
         <div className="px-6 pb-6 pt-5">
           <div className="grid grid-cols-3 gap-1">
@@ -222,7 +222,7 @@ export default function Header() {
   return (
     <header className="fixed top-3 left-3 right-3 z-50 max-w-4xl mx-auto">
       <div
-        className="rounded-[40px] overflow-hidden"
+        className={`overflow-hidden ${activePanel ? "rounded-[25px]" : "rounded-[40px]"}`}
         style={{
           background: "rgba(255,255,255, 0.60)",
           backdropFilter: "blur(8px)",
@@ -231,6 +231,7 @@ export default function Header() {
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.95), 0 4px 24px rgba(0,0,0,0.08)",
         }}
+        onMouseLeave={() => setActivePanel(null)}
       >
         <div className="flex items-center justify-between px-4 py-2">
           <Link
@@ -246,6 +247,7 @@ export default function Header() {
                 <span
                   key={nav.id}
                   data-nav={nav.id}
+                  onMouseEnter={() => setActivePanel(nav.id)}
                   className="text-black/90 [nav:has([data-nav]:hover)_&:not(:hover)]:text-black/50 transition-colors duration-200 cursor-pointer select-none text-caption tracking-[0.03em] font-medium"
                 >
                   <MyLink href={nav.href} title={nav.title} text={nav.text} />
@@ -270,10 +272,12 @@ export default function Header() {
         </div>
 
         <div className="block overflow-hidden">
-          {navPanels.map(({ id, triggerClass, panel }) => (
+          {navPanels.map(({ id, panel }) => (
             <div
               key={id}
-              className={`grid grid-rows-[0fr] ${triggerClass} transition-[grid-template-rows] duration-300 ease-out`}
+              className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                activePanel === id ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+              }`}
             >
               <div className="overflow-hidden">{panel}</div>
             </div>

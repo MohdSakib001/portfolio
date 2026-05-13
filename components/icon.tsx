@@ -9,6 +9,7 @@ const Icon = ({
   icon,
   Svg,
   type = "icon",
+  className,
 }: {
   href: string;
   title: string;
@@ -16,6 +17,7 @@ const Icon = ({
   img?: string;
   icon?: any;
   Svg?: any;
+  className?: string;
 }) => {
   return (
     <Link
@@ -23,17 +25,19 @@ const Icon = ({
       title={title}
       target="_blank"
       rel="noopener noreferrer"
-      className="w-10 h-10 p-1 bg-white shadow-md rounded-lg relative border-2 border-transparent hover:border-black/30 group"
+      className={`w-10 h-10 bg-white shadow-md rounded-lg relative group/icon overflow-hidden hover:border-2 hover:border-black/30 group ${className}`}
     >
-      <div className="group-[hover:block] hidden inset-0 absolute bg-black ">
-        <p>{title}</p>
+      <div className="absolute inset-0 z-10 bg-black/0 group-hover/icon:bg-gray-800 transition-all duration-300 flex items-center justify-center">
+        <p className="text-white text-label opacity-0 group-hover/icon:opacity-100 transition-opacity text-center px-1">
+          {title}
+        </p>
       </div>
 
       {type === "svg" ? (
         <Svg />
-      ) : type === "img" ? (
+      ) : type === "img" && img ? (
         <div className="w-full h-full relative">
-          <Image src={img ?? ""} alt={title} fill />
+          <Image src={img} alt={title} fill />
         </div>
       ) : null}
     </Link>

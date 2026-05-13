@@ -1,51 +1,22 @@
 import { lazy, Suspense } from "react";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import ProofStrip from "../components/ProofStrip";
-import BentoWork from "../components/BentoWork";
-import Testimonial from "../components/Testimonial";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import ProofStrip from "../../components/ProofStrip";
+import { TESTIMONIALS } from "@/data/testimonials";
 
-const TESTIMONIALS = [
-  {
-    id: "adam",
-    name: "Adam",
-    company: "Stakeclash",
-    quote:
-      "Working with Sakib on Stakeclash was a game changer. He turned a complex staking interface into something our users actually enjoy — the speed and attention to detail were unlike anything I'd experienced.",
-  },
-  {
-    id: "oniya",
-    name: "Oniya",
-    company: "Pademi & Tekish Health",
-    quote:
-      "Sakib brought clarity to two very different products at once. Both Pademi and Tekish Health launched on time with zero compromises on the experience. He just gets it.",
-  },
-  {
-    id: "chiddy",
-    name: "Chiddy",
-    company: "Colaw",
-    quote:
-      "Colaw needed someone who could handle legal complexity without losing sight of the user. Sakib delivered exactly that — a clean, intuitive product that our clients and team both love.",
-  },
-  {
-    id: "krapton",
-    name: "Krapton",
-    company: "Techsleight",
-    quote:
-      "The bar Sakib sets for product quality is exceptional. Techsleight looks and works exactly as we envisioned it, and the process was seamless from start to finish.",
-  },
-];
-
-const Performance = lazy(() => import("../components/Performance"));
-const Capabilities = lazy(() => import("../components/Capabilities"));
-const CSSection = lazy(() => import("../components/CsSection"));
-const Hero = lazy(() => import("../components/Hero"));
-const SelectedWork = lazy(() => import("../components/SelectedWork"));
-const AISection = lazy(() => import("../components/AiSection"));
-const AutomationSection = lazy(() => import("../components/AutomationSection"));
-const Faq = lazy(() => import("../components/Faq"));
-const About = lazy(() => import("../components/About"));
+const Performance = lazy(() => import("../../components/Performance"));
+const Capabilities = lazy(() => import("../../components/Capabilities"));
+const CSSection = lazy(() => import("../../components/CsSection"));
+const Hero = lazy(() => import("../../components/Hero"));
+const AISection = lazy(() => import("../../components/AiSection"));
+const AutomationSection = lazy(
+  () => import("../../components/AutomationSection"),
+);
+const Faq = lazy(() => import("../../components/Faq"));
+const About = lazy(() => import("../../components/About"));
+const BentoWork = lazy(() => import("../../components/BentoWork"));
+const Testimonial = lazy(() => import("../../components/Testimonial"));
 
 export default function Home() {
   return (
@@ -59,13 +30,16 @@ export default function Home() {
         <ProofStrip />
 
         <div id="work">
-          <BentoWork />
           <Suspense fallback={<div className="h-screen" />}>
-            <SelectedWork />
+            <BentoWork />
           </Suspense>
         </div>
 
-        <Testimonial name={TESTIMONIALS[0].name} quote={TESTIMONIALS[0].quote} />
+        <Testimonial
+          name={TESTIMONIALS[0].name}
+          quote={TESTIMONIALS[0].quote}
+          idx={1}
+        />
 
         <Suspense fallback={<div className="h-screen bg-black" />}>
           <Performance />
@@ -75,7 +49,11 @@ export default function Home() {
           <Capabilities />
         </Suspense>
 
-        <Testimonial name={TESTIMONIALS[1].name} quote={TESTIMONIALS[1].quote} />
+        <Testimonial
+          name={TESTIMONIALS[1].name}
+          quote={TESTIMONIALS[1].quote}
+          idx={2}
+        />
 
         <Suspense fallback={<div className="h-screen" />}>
           <AISection />
@@ -85,7 +63,11 @@ export default function Home() {
           <AutomationSection />
         </Suspense>
 
-        <Testimonial name={TESTIMONIALS[2].name} quote={TESTIMONIALS[2].quote} />
+        <Testimonial
+          name={TESTIMONIALS[2].name}
+          quote={TESTIMONIALS[2].quote}
+          idx={3}
+        />
 
         <Suspense fallback={null}>
           <CSSection />

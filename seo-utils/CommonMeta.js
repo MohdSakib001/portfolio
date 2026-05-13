@@ -1,4 +1,4 @@
-import { HOST } from "@/app/data/constants";
+import { HOST } from "@/data/constants";
 
 export const createMetaData = ({
   url = `${HOST}`,

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import { tools } from "../data/tools";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import { tools } from "../../data/tools";
 import ToolsGrid from "./ToolsGrid";
 
 export const metadata: Metadata = {
@@ -10,12 +10,28 @@ export const metadata: Metadata = {
   description:
     "36 free browser-based tools — word counter, JSON formatter, QR code generator, image compressor, regex tester, Pomodoro timer, invoice generator, and more. No login. No ads. Nothing sent to any server.",
   keywords: [
-    "free online tools", "browser tools", "web utilities", "free developer tools",
-    "word counter", "JSON formatter", "QR code generator", "image compressor",
-    "regex tester", "password generator", "Pomodoro timer", "base64 encoder",
-    "invoice generator", "resume builder", "markdown preview", "color picker",
-    "unit converter", "cron builder", "n8n workflow validator", "JWT decoder",
-    "free productivity tools", "free tools no login",
+    "free online tools",
+    "browser tools",
+    "web utilities",
+    "free developer tools",
+    "word counter",
+    "JSON formatter",
+    "QR code generator",
+    "image compressor",
+    "regex tester",
+    "password generator",
+    "Pomodoro timer",
+    "base64 encoder",
+    "invoice generator",
+    "resume builder",
+    "markdown preview",
+    "color picker",
+    "unit converter",
+    "cron builder",
+    "n8n workflow validator",
+    "JWT decoder",
+    "free productivity tools",
+    "free tools no login",
   ],
   alternates: { canonical: "https://mohdsakib.vercel.app/tools" },
   openGraph: {
@@ -36,7 +52,8 @@ const collectionSchema = {
   "@type": "CollectionPage",
   "@id": `${HOST}/tools`,
   name: "Free Online Tools by Mohd Sakib",
-  description: "36 free browser-based utilities — word counter, JSON formatter, QR code generator, image compressor, regex tester, and more.",
+  description:
+    "36 free browser-based utilities — word counter, JSON formatter, QR code generator, image compressor, regex tester, and more.",
   url: `${HOST}/tools`,
   author: { "@type": "Person", name: "Mohd Sakib", url: HOST },
   hasPart: liveTools.map((t) => ({
@@ -53,10 +70,12 @@ const collectionSchema = {
 export default function ToolsPage() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      />
       <Header />
       <main className="min-h-screen bg-white">
-
         {/* Hero */}
         <section className="pt-40 pb-12 px-6 md:px-16 max-w-6xl mx-auto">
           <p className="text-[10px] uppercase tracking-[0.28em] text-neutral-400 font-medium mb-5">
@@ -66,8 +85,8 @@ export default function ToolsPage() {
             Free Tools.
           </h1>
           <p className="text-sm text-neutral-400 max-w-sm leading-relaxed">
-            {tools.length} utilities that run entirely in your browser.
-            Nothing is sent anywhere.
+            {tools.length} utilities that run entirely in your browser. Nothing
+            is sent anywhere.
           </p>
         </section>
 
@@ -77,7 +96,9 @@ export default function ToolsPage() {
         {/* Suggest strip */}
         <div className="border-t border-neutral-100 px-6 md:px-16 max-w-6xl mx-auto py-14 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <div>
-            <p className="text-sm font-semibold text-black mb-1">Got a tool idea?</p>
+            <p className="text-sm font-semibold text-black mb-1">
+              Got a tool idea?
+            </p>
             <p className="text-[12px] text-neutral-400">
               Suggest it and I&apos;ll add it to the roadmap.
             </p>
@@ -96,11 +117,12 @@ export default function ToolsPage() {
             href="/"
             className="inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-neutral-400 hover:text-black transition-colors duration-300 group"
           >
-            <span className="transition-transform duration-300 group-hover:-translate-x-1">←</span>
+            <span className="transition-transform duration-300 group-hover:-translate-x-1">
+              ←
+            </span>
             Back to portfolio
           </Link>
         </div>
-
       </main>
       <Footer />
     </>

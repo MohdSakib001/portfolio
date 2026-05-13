@@ -4,12 +4,20 @@ export interface TestimonialProps {
   name: string;
   quote: string;
   avatar?: string;
+  idx: number;
 }
 
-export default function Testimonial({ name, quote, avatar }: TestimonialProps) {
+export default function Testimonial({
+  name,
+  quote,
+  avatar,
+  idx,
+}: TestimonialProps) {
   return (
     <section className="py-24 px-6 min-h-screen flex items-center justify-center">
-      <div className="max-w-4xl mx-auto flex items-start gap-6">
+      <div
+        className={`max-w-4xl mx-auto flex items-start gap-6 ${idx % 2 === 0 ? "flex-row-reverse" : "flex-row"}`}
+      >
         {/* Avatar + name + line */}
         <div className="flex items-center gap-3 shrink-0 pt-2.5">
           <div className="w-11 h-11 rounded-full overflow-hidden bg-black/8 flex items-center justify-center shrink-0">
@@ -34,7 +42,7 @@ export default function Testimonial({ name, quote, avatar }: TestimonialProps) {
         </div>
 
         {/* Quote */}
-        <blockquote className="text-title font-display leading-snug italic text-black/85">
+        <blockquote className="text-title font-display font-medium leading-snug italic">
           &ldquo;{quote}&rdquo;
         </blockquote>
       </div>
