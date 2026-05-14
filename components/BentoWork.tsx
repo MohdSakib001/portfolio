@@ -5,6 +5,7 @@ import Link from "next/link";
 import Icon from "./icon";
 import BlurContainer from "./BlurContainer";
 import AnimatedImage from "./AnimatedImage";
+import Container from "./Container";
 
 type StatType = "revenue" | "users" | "scale" | "clients";
 type Platform = "mobile" | "web";
@@ -232,8 +233,12 @@ const products: {
 
 export default function BentoWork() {
   return (
-    <section className="px-4 sm:px-6 md:px-10 lg:px-16 py-24 max-w-7xl mx-auto">
-      {/* HEADER */}
+    <Container
+      style={{
+        paddingLeft: 0,
+        paddingRight: 0,
+      }}
+    >
       <div className="flex flex-col items-center text-center mb-12 max-w-400 mx-auto">
         <p className="text-label uppercase tracking-[0.25em] opacity-30 mb-3 font-medium">
           Selected Work
@@ -347,6 +352,6 @@ export default function BentoWork() {
           </div>
         </Link>
       </div>
-    </section>
+    </Container>
   );
 }

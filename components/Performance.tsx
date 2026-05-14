@@ -1,4 +1,5 @@
 import BlurContainer from "./BlurContainer";
+import Container from "./Container";
 
 export default function Performance() {
   const vitals = [
@@ -95,7 +96,7 @@ export default function Performance() {
 
   return (
     <>
-      <section className="relative z-10 px-6 md:px-16 py-24 max-w-6xl mx-auto bg-blue-300/70 rounded-4xl overflow-hidden">
+      <Container className="relative z-10 bg-blue-300/70 rounded-4xl overflow-hidden">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-45"
@@ -151,7 +152,7 @@ export default function Performance() {
             ))}
           </div>
         </div>
-      </section>
+      </Container>
 
       <section className="relative z-10 px-6 md:px-16 py-24 max-w-6xl mx-auto rounded-4xl overflow-hidden flex flex-col gap-20">
         <div className="text-center mx-auto gap-y-16 flex-[0.4]">

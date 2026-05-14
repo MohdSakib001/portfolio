@@ -58,6 +58,11 @@ export const cardStyle = {
 export default function Header() {
   const [activePanel, setActivePanel] = useState<string | null>(null);
 
+  const isMobileMenuOpen =
+    activePanel === "mobile-nav" ||
+    activePanel === "mobile-products" ||
+    activePanel === "mobile-tools";
+
   const featuredTools = FEATURED.map((id) =>
     tools.find((t) => t.id === id),
   ).filter(Boolean) as typeof tools;
@@ -84,7 +89,7 @@ export default function Header() {
       id: "products",
       label: "Products",
       panel: (
-        <div className="p-4">
+        <div className="p-4 max-h-[80vh] overflow-y-scroll">
           <div className="grid grid-cols-3 gap-3">
             {projects.map((p) => (
               <Link
@@ -94,24 +99,26 @@ export default function Header() {
                 style={cardStyle}
               >
                 <div className="flex flex-row gap-x-2 items-center">
-                  <div className="relative aspect-square w-6 h-6 overflow-hidden rounded-lg">
+                  <div className="relative aspect-square w-24 h-24 overflow-hidden rounded-lg">
                     <Image
                       src={p.hero.src}
                       alt={p.name}
                       fill
-                      className="object-cover object-top"
-                      sizes="185px"
+                      className="object-contain object-center"
+                      sizes="740px"
                     />
                   </div>
-                  <p className="text-caption font-semibold text-black tracking-[0.03em]">
-                    {p.name}
-                  </p>
+                  <div>
+                    <p className="text-caption font-semibold text-black tracking-[0.03em]">
+                      {p.name}
+                    </p>
+                    {p.metrics?.users && (
+                      <p className="text-label text-black/60 truncate tracking-[0.03em] mt-2">
+                        {p.metrics.users}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                {p.metrics?.users && (
-                  <p className="text-label text-black/60 truncate tracking-[0.03em] mt-2">
-                    {p.metrics.users}
-                  </p>
-                )}
               </Link>
             ))}
 
@@ -135,7 +142,7 @@ export default function Header() {
       id: "tools",
       label: "Tools",
       panel: (
-        <div className="px-6 pb-6 pt-5">
+        <div className="p-6 max-h-[80vh] overflow-y-scroll">
           <div className="grid grid-cols-3 gap-1">
             {/* Featured tool — spans 2 columns */}
             {(() => {
@@ -217,6 +224,175 @@ export default function Header() {
         </div>
       ),
     },
+    {
+      id: "mobile-nav",
+      label: "Mobile Nav",
+      panel: (
+        <div className="md:hidden p-4 flex flex-col gap-0.5 gap-y-4 max-h-[70vh] overflow-y-scroll">
+          <div
+            className="rounded-2xl"
+            style={{
+              background: "rgba(255,255,255, 0.90)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+            }}
+          >
+            <button
+              onClick={() =>
+                setActivePanel((prev) =>
+                  prev === "mobile-products" ? "mobile-nav" : "mobile-products",
+                )
+              }
+              className="list-none cursor-pointer flex items-center justify-between px-3 py-2.5 text-black w-full rounded-xl transition-colors"
+            >
+              <p className="text-caption font-medium text-black/75">Products</p>
+              <svg
+                className={`w-3 h-3 transition-transform duration-200 ${activePanel === "mobile-products" ? "rotate-180" : ""}`}
+                viewBox="0 0 10 6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              >
+                <path d="M1 1l4 4 4-4" />
+              </svg>
+            </button>
+
+            <div
+              className={`grid transition-[grid-template-rows] duration-500 ease-in-out ${activePanel === "mobile-products" ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+            >
+              <div className="overflow-hidden">
+                <div className="px-2 pb-3 flex flex-col gap-2">
+                  {projects.map((p) => (
+                    <Link
+                      key={p.id}
+                      href={`/projects/${p.id}`}
+                      className="flex items-center gap-3 p-3 rounded-xl"
+                      style={cardStyle}
+                    >
+                      <div className="relative w-12 h-12 shrink-0 rounded-lg overflow-hidden">
+                        <Image
+                          src={p.hero.src}
+                          alt={p.name}
+                          fill
+                          className="object-contain object-center"
+                          sizes="48px"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-caption font-semibold text-black tracking-[0.03em]">
+                          {p.name}
+                        </p>
+                        {p.metrics?.users && (
+                          <p className="text-label text-black/50 mt-0.5 truncate">
+                            {p.metrics.users}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="rounded-2xl"
+            style={{
+              background: "rgba(255,255,255, 0.90)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+            }}
+          >
+            <button
+              onClick={() =>
+                setActivePanel((prev) =>
+                  prev === "mobile-tools" ? "mobile-nav" : "mobile-tools",
+                )
+              }
+              className="list-none cursor-pointer flex w-full items-center justify-between text-black px-3 py-2.5  rounded-xl transition-all"
+            >
+              <p className="text-caption font-medium text-black/75">Tools</p>
+              <svg
+                className={`w-3 h-3 transition-transform duration-200 ${activePanel === "mobile-tools" ? "rotate-180" : ""}`}
+                viewBox="0 0 10 6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              >
+                <path d="M1 1l4 4 4-4" />
+              </svg>
+            </button>
+
+            <div
+              className={`grid transition-[grid-template-rows] duration-300 ease-out overflow-hidden ${activePanel === "mobile-tools" ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+            >
+              <div className="overflow-hidden">
+                <div className="px-2 pb-3 pt-1 flex flex-col gap-2">
+                  {featuredTools.slice(0, 6).map((tool) => {
+                    const Icon = TOOL_ICONS[tool.icon] ?? FileText;
+                    const meta = CATEGORY_META[tool.category];
+                    return (
+                      <Link
+                        key={tool.id}
+                        href={`/tools#${tool.id}`}
+                        className="flex items-center gap-3 p-3 rounded-xl"
+                        style={cardStyle}
+                      >
+                        <span
+                          className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                          style={{ background: meta.bg }}
+                        >
+                          <Icon size={15} style={{ color: meta.color }} />
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-caption font-semibold text-black/90">
+                            {tool.name}
+                          </p>
+                          <p className="text-label text-black/50 mt-0.5 truncate">
+                            {tool.description}
+                          </p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                  <Link
+                    href="/tools"
+                    className="px-3 pt-1 pb-0.5 text-label uppercase tracking-wider text-black/35"
+                  >
+                    All tools →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <Link
+            href="/#about"
+            style={{
+              background: "rgba(255,255,255, 0.90)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+            }}
+            className="px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-2xl transition-colors"
+          >
+            About
+          </Link>
+          <Link
+            href="/#contact"
+            style={{
+              background: "rgba(255,255,255, 0.90)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+            }}
+            className="px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-2xl transition-colors"
+          >
+            Contact
+          </Link>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -263,147 +439,43 @@ export default function Header() {
               text="Let's Talk"
             />
 
-            <summary className="md:hidden list-none cursor-pointer w-4 h-3 flex flex-col justify-between">
-              <span className="h-0.5 w-full bg-black block transition-all duration-500 ease-in-out origin-center group-open/m:opacity-0" />
-              <span className="h-0.5 w-full bg-black" />
-              <span className="h-0.5 w-full bg-black block transition-all duration-500 ease-in-out origin-center group-open/m:opacity-0" />
-            </summary>
+            <button
+              className="md:hidden flex flex-col justify-between w-4 h-3"
+              onClick={() =>
+                setActivePanel(isMobileMenuOpen ? null : "mobile-nav")
+              }
+            >
+              <span
+                className={`h-0.5 w-full bg-black block transition-all duration-500 ease-in-out ${isMobileMenuOpen ? "translate-y-[5px] rotate-45" : ""}`}
+              />
+              <span
+                className={`h-0.5 w-full bg-black block transition-all duration-300 ease-in-out ${isMobileMenuOpen ? "opacity-0" : "opacity-100"}`}
+              />
+              <span
+                className={`h-0.5 w-full bg-black block transition-all duration-500 ease-in-out ${isMobileMenuOpen ? "-translate-y-[5px] -rotate-45" : ""}`}
+              />
+            </button>
           </div>
         </div>
 
         <div className="block overflow-hidden">
-          {navPanels.map(({ id, panel }) => (
-            <div
-              key={id}
-              className={`grid transition-[grid-template-rows] duration-300 ease-out ${
-                activePanel === id ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-              }`}
-            >
-              <div className="overflow-hidden">{panel}</div>
-            </div>
-          ))}
+          {navPanels.map(({ id, panel }) => {
+            const isOpen =
+              id === "mobile-nav" ? isMobileMenuOpen : activePanel === id;
+
+            return (
+              <div
+                key={id}
+                className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                  isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                }`}
+              >
+                <div className="overflow-hidden">{panel}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
-
-      {/* MOBILE */}
-      <details
-        // className="md:hidden group/m absolute top-0 right-0 z-10"
-        className="hidden"
-      >
-        {/* <summary className="list-none cursor-pointer absolute top-3.5 right-6 w-4 h-3 flex flex-col justify-between">
-          <span className="h-0.5 w-full bg-black block transition-all duration-500 ease-in-out origin-center group-open/m:opacity-0" />
-          <span className="h-0.5 w-full bg-black" />
-          <span className="h-0.5 w-full bg-black block transition-all duration-500 ease-in-out origin-center group-open/m:opacity-0" />
-        </summary> */}
-
-        <nav
-          className="absolute right-0 top-13 w-64 rounded-2xl overflow-hidden"
-          style={{
-            background: "rgba(255,255,255,0.92)",
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            border: "1px solid rgba(255,255,255,0.72)",
-            boxShadow:
-              "inset 0 1px 0 rgba(255,255,255,0.95), 0 16px 40px rgba(0,0,0,0.10)",
-          }}
-        >
-          <div className="p-2.5 flex flex-col gap-0.5">
-            <details className="group/mw">
-              <summary className="list-none cursor-pointer flex items-center justify-between px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-xl transition-colors">
-                Work
-                <svg
-                  className="w-3 h-3 transition-transform duration-200 group-open/mw:rotate-180"
-                  viewBox="0 0 10 6"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                >
-                  <path d="M1 1l4 4 4-4" />
-                </svg>
-              </summary>
-              <div
-                className="ml-3 mt-1 mb-1 pl-3 flex flex-col gap-0.5"
-                style={{ borderLeft: "1px solid rgba(0,0,0,0.08)" }}
-              >
-                {projects.map((p) => (
-                  <Link
-                    key={p.id}
-                    href={`/projects/${p.id}`}
-                    className="py-1.5 text-caption text-black/55 hover:text-black transition-colors"
-                  >
-                    {p.name}
-                  </Link>
-                ))}
-                <Link
-                  href="/projects"
-                  className="pt-1 pb-1.5 text-label uppercase tracking-wider text-black/35 hover:text-black transition-colors"
-                >
-                  View all →
-                </Link>
-              </div>
-            </details>
-
-            <details className="group/mt">
-              <summary className="list-none cursor-pointer flex items-center justify-between px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-xl transition-colors">
-                Tools
-                <svg
-                  className="w-3 h-3 transition-transform duration-200 group-open/mt:rotate-180"
-                  viewBox="0 0 10 6"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                >
-                  <path d="M1 1l4 4 4-4" />
-                </svg>
-              </summary>
-              <div
-                className="ml-3 mt-1 mb-1 pl-3 flex flex-col gap-0.5"
-                style={{ borderLeft: "1px solid rgba(0,0,0,0.08)" }}
-              >
-                {featuredTools.slice(0, 6).map((t) => (
-                  <Link
-                    key={t.id}
-                    href={`/tools#${t.id}`}
-                    className="py-1.5 text-caption text-black/55 hover:text-black transition-colors"
-                  >
-                    {t.name}
-                  </Link>
-                ))}
-                <Link
-                  href="/tools"
-                  className="pt-1 pb-1.5 text-label uppercase tracking-wider text-black/35 hover:text-black transition-colors"
-                >
-                  All tools →
-                </Link>
-              </div>
-            </details>
-
-            <div className="h-px bg-black/[0.06] my-1 mx-1" />
-
-            <Link
-              href="/#about"
-              className="block px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-xl transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              href="/#contact"
-              className="block px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-xl transition-colors"
-            >
-              Contact
-            </Link>
-
-            <a
-              href="mailto:mohdsakib.work@gmail.com"
-              className="mt-1.5 block text-center bg-black text-white text-label uppercase tracking-widest px-4 py-3 rounded-xl hover:bg-neutral-800 transition-colors"
-            >
-              Let&apos;s Talk
-            </a>
-          </div>
-        </nav>
-      </details>
     </header>
   );
 }
