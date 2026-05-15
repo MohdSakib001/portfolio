@@ -96,103 +96,101 @@ export default function Performance() {
 
   return (
     <>
-      <Container className="relative z-10 bg-blue-300/70 rounded-4xl overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-45"
-          style={{
-            backgroundImage: `url("/assets/paper-texture.avif")`,
-            backgroundSize: "cover",
-          }}
-        />
+      <Container>
+        <div className="px-4 sm:px-6 md:px-10 lg:px-16 py-24 relative z-10 bg-blue-300/70 rounded-4xl overflow-hidden">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-45"
+            style={{
+              backgroundImage: `url("/assets/paper-texture.avif")`,
+              backgroundSize: "cover",
+            }}
+          />
 
-        <div className="flex flex-col lg:flex-row gap-y-12 lg:gap-x-24">
-          <div className="mb-24 md:mb-40 text-left mx-auto gap-y-8 flex-[0.4]">
-            <p className="text-body uppercase tracking-wide">Performance</p>
-            <h2 className="text-heading tracking-tighter perf-reveal">
-              Zero Tolerance For Latency.
-            </h2>
-            <p className="text-body text-black/80 leading-relaxed font-light perf-reveal ">
+          <div className="flex flex-col lg:flex-row gap-y-12 lg:gap-x-24">
+            <div className="mb-24 md:mb-40 text-left mx-auto gap-y-8 flex-[0.4]">
+              <p className="text-body uppercase tracking-wide">Performance</p>
+              <h2 className="text-heading tracking-tighter perf-reveal">
+                Zero Tolerance For Latency.
+              </h2>
+              <p className="text-body text-black/80 leading-relaxed font-light perf-reveal ">
+                I don’t merely build accessible UIs — I instrument, measure, and
+                surgically optimize every millisecond of the execution thread.
+                Real scores. Real impact.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 grid-rows-2 gap-6 flex-[0.6] metrics-wrapper">
+              {vitals.map((metric, i) => (
+                <BlurContainer key={i} className="p-6 rounded-2xl bg-white">
+                  <div className="flex justify-between items-center mb-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-title tracking-tight">
+                        {metric.label}
+                      </span>
+                      <span className="text-label opacity-60">
+                        Target: {metric.target}
+                      </span>
+                      <span className="text-title font-light text-emerald-400">
+                        {metric.value}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="h-[2px] w-full bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="metric-fill h-full bg-linear-to-r from-emerald-600 to-emerald-400 rounded-full"
+                      style={{ width: metric.pct }}
+                    />
+                  </div>
+
+                  <p className="mt-2 text-label text-black/30 leading-relaxed font-light">
+                    {metric.impact}
+                  </p>
+                </BlurContainer>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Container>
+
+      <Container>
+        <div className="relative z-10 rounded-4xl overflow-hidden flex flex-col gap-20 py-24">
+          <div className="text-center mx-auto gap-y-16 flex-[0.4]">
+            <p className="text-body uppercase tracking-wide font-medium">
+              Performance
+            </p>
+            <h2 className="text-heading tracking-tighter ">Architecture</h2>
+            <p className="text-body text-black/80 leading-relaxed font-light perf-reveal max-w-[70%] mx-auto">
               I don’t merely build accessible UIs — I instrument, measure, and
               surgically optimize every millisecond of the execution thread.
               Real scores. Real impact.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 grid-rows-2 gap-6 flex-[0.6] metrics-wrapper">
-            {vitals.map((metric, i) => (
-              <BlurContainer key={i} className="p-6 rounded-2xl bg-white">
-                <div className="flex justify-between items-center mb-3">
-                  <div className="flex items-center gap-3">
-                    <span className="text-title tracking-tight">
-                      {metric.label}
-                    </span>
-                    <span className="text-label opacity-60">
-                      Target: {metric.target}
-                    </span>
-                    <span className="text-title font-light text-emerald-400">
-                      {metric.value}
-                    </span>
-                  </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {architecture.map((system, i) => (
+              <div
+                key={i}
+                className={`p-8 md:p-12 relative flex flex-col justify-between group rounded-2xl overflow-hidden ${system.color}`}
+              >
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-45"
+                  style={{
+                    backgroundImage: `url("/assets/paper-texture.avif")`,
+                    backgroundSize: "cover",
+                  }}
+                />
+                <div>
+                  <h4 className="text-body font-medium mb-4">{system.title}</h4>
+                  <p className="text-caption text-gray-500 font-medium leading-relaxed">
+                    {system.desc}
+                  </p>
                 </div>
-
-                <div className="h-[2px] w-full bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className="metric-fill h-full bg-linear-to-r from-emerald-600 to-emerald-400 rounded-full"
-                    style={{ width: metric.pct }}
-                  />
-                </div>
-
-                <p className="mt-2 text-label text-black/30 leading-relaxed font-light">
-                  {metric.impact}
-                </p>
-              </BlurContainer>
+              </div>
             ))}
           </div>
-        </div>
-      </Container>
-
-      <Container
-        style={{
-          paddingLeft: 0,
-          paddingRight: 0,
-        }}
-        className="relative z-10 rounded-4xl overflow-hidden flex flex-col gap-20"
-      >
-        <div className="text-center mx-auto gap-y-16 flex-[0.4]">
-          <p className="text-body uppercase tracking-wide font-medium">
-            Performance
-          </p>
-          <h2 className="text-heading tracking-tighter ">Architecture</h2>
-          <p className="text-body text-black/80 leading-relaxed font-light perf-reveal max-w-[70%] mx-auto">
-            I don’t merely build accessible UIs — I instrument, measure, and
-            surgically optimize every millisecond of the execution thread. Real
-            scores. Real impact.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {architecture.map((system, i) => (
-            <div
-              key={i}
-              className={`p-8 md:p-12 relative flex flex-col justify-between group rounded-2xl overflow-hidden ${system.color}`}
-            >
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-45"
-                style={{
-                  backgroundImage: `url("/assets/paper-texture.avif")`,
-                  backgroundSize: "cover",
-                }}
-              />
-              <div>
-                <h4 className="text-body font-medium mb-4">{system.title}</h4>
-                <p className="text-caption text-gray-500 font-medium leading-relaxed">
-                  {system.desc}
-                </p>
-              </div>
-            </div>
-          ))}
         </div>
       </Container>
     </>

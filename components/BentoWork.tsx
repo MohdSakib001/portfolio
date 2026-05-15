@@ -234,10 +234,11 @@ const products: {
 export default function BentoWork() {
   return (
     <Container
-      style={{
-        paddingLeft: 0,
-        paddingRight: 0,
-      }}
+    // style={{
+    //   paddingLeft: 0,
+    //   paddingRight: 0,
+    // }}
+    // className="md:px-0"
     >
       <div className="flex flex-col items-center text-center mb-12 max-w-400 mx-auto">
         <p className="text-label uppercase tracking-[0.25em] opacity-30 mb-3 font-medium">
