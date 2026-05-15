@@ -122,16 +122,14 @@ export default function Performance() {
           <div className="grid grid-cols-2 grid-rows-2 gap-6 flex-[0.6] metrics-wrapper">
             {vitals.map((metric, i) => (
               <BlurContainer key={i} className="p-6 rounded-2xl bg-white">
-                <div className="flex justify-between items-end mb-3">
-                  <div className="flex items-baseline gap-3">
+                <div className="flex justify-between items-center mb-3">
+                  <div className="flex items-center gap-3">
                     <span className="text-title tracking-tight">
                       {metric.label}
                     </span>
-                    <span className="text-caption font-mono opacity-60">
+                    <span className="text-label opacity-60">
                       Target: {metric.target}
                     </span>
-                  </div>
-                  <div className="text-right">
                     <span className="text-title font-light text-emerald-400">
                       {metric.value}
                     </span>
@@ -154,7 +152,13 @@ export default function Performance() {
         </div>
       </Container>
 
-      <section className="relative z-10 px-6 md:px-16 py-24 max-w-6xl mx-auto rounded-4xl overflow-hidden flex flex-col gap-20">
+      <Container
+        style={{
+          paddingLeft: 0,
+          paddingRight: 0,
+        }}
+        className="relative z-10 rounded-4xl overflow-hidden flex flex-col gap-20"
+      >
         <div className="text-center mx-auto gap-y-16 flex-[0.4]">
           <p className="text-body uppercase tracking-wide font-medium">
             Performance
@@ -190,7 +194,7 @@ export default function Performance() {
             </div>
           ))}
         </div>
-      </section>
+      </Container>
     </>
   );
 }
