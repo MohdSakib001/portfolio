@@ -3,6 +3,9 @@
 import dynamic from "next/dynamic";
 import { useState, useCallback } from "react";
 import { Globe, RefreshCw, Filter, BarChart2 } from "lucide-react";
+import GridSection from "./GridSection";
+import Container from "./Container";
+import BlurContainer from "./BlurContainer";
 
 const WorkflowViewer = dynamic(() => import("./WorkflowViewer"), {
   ssr: false,
@@ -95,22 +98,26 @@ const WORKFLOWS = [
 const capabilities = [
   {
     title: "LLM Integration",
-    desc: "Production pipelines with streaming, tool-calling, and multi-agent orchestration.",
+    description:
+      "Production pipelines with streaming, tool-calling, and multi-agent orchestration.",
     tags: ["OpenAI", "Claude", "Gemini", "Vercel AI SDK"],
   },
   {
     title: "RAG Systems",
-    desc: "Retrieval pipelines with semantic chunking, re-ranking, and hybrid search.",
+    description:
+      "Retrieval pipelines with semantic chunking, re-ranking, and hybrid search.",
     tags: ["LangChain", "pgvector", "Supabase", "Pinecone"],
   },
   {
     title: "Computer Vision",
-    desc: "Real-time detection, pose estimation, OCR — deployed to edge for ultra-low latency.",
+    description:
+      "Real-time detection, pose estimation, OCR — deployed to edge for ultra-low latency.",
     tags: ["PyTorch", "YOLO", "MediaPipe", "ONNX"],
   },
   {
     title: "Fine-Tuning",
-    desc: "LoRA / QLoRA tuning on custom datasets with efficient GPU utilization.",
+    description:
+      "LoRA / QLoRA tuning on custom datasets with efficient GPU utilization.",
     tags: ["HuggingFace", "PEFT", "Modal", "Axolotl"],
   },
 ];
@@ -130,21 +137,21 @@ export default function AutomationSection() {
   const Icon = w.icon;
 
   return (
-    <section className="bg-[#050505] text-white py-24 px-4 sm:px-6 md:px-10 lg:px-16 border-t border-white/5">
-      <div className="max-w-6xl mx-auto">
-        <div className="max-w-400 mx-auto mb-14">
+    <>
+      <Container className="w-full h-full">
+        <div className="mb-14 text-center">
           <h2 className="text-heading font-semibold tracking-tight leading-tight">
             38-Node Production Pipeline.
           </h2>
-          <p className="mt-3 text-caption text-white/40 max-w-lg leading-relaxed">
+          <p className="mt-3 text-caption text-black/40 max-w-lg leading-relaxed mx-auto">
             One autonomous system, four distinct layers. The same workflow
             powering Krapton&apos;s client acquisition — explore each phase
             below.
           </p>
         </div>
 
-        <div className="max-w-400 mx-auto mb-6 overflow-x-auto">
-          <div className="flex gap-1 min-w-max sm:min-w-0 bg-white/3 border border-white/6 rounded-xl p-1">
+        <div className="max-w-400 mx-auto">
+          <div className="inline-flex gap-2 bg-white/3 rounded-xl p-1 mb-6">
             {WORKFLOWS.map((wf, i) => {
               const TabIcon = wf.icon;
               const isActive = active === i;
@@ -152,98 +159,71 @@ export default function AutomationSection() {
                 <button
                   key={wf.phase}
                   onClick={() => handleTab(i)}
-                  className={`flex items-center gap-2.5 px-4 py-2 rounded-lg text-label font-medium transition-all duration-200 cursor-pointer whitespace-nowrap ${
-                    isActive
-                      ? "bg-white text-black shadow-sm"
-                      : "text-white/35 hover:text-white/65 hover:bg-white/[0.04]"
-                  }`}
+                  className={`flex items-center gap-2.5 px-4 py-2 text-black bg-white shadow-sm rounded-lg text-label font-medium transition-all duration-200 cursor-pointer whitespace-nowrap`}
                 >
-                  <span
-                    className={`text-label font-mono ${isActive ? "text-black/40" : "text-white/20"}`}
-                  >
-                    {wf.phase}
-                  </span>
                   <TabIcon size={11} />
                   {wf.label}
                 </button>
               );
             })}
           </div>
-        </div>
 
-        <div className="max-w-400 mx-auto">
-          <div className="rounded-2xl overflow-hidden h-115 lg:h-135 border border-white/7 bg-[#0a0a0a]">
-            <WorkflowViewer
-              key={active}
-              filename={w.file}
-              focusNodeNames={w.focusNodeNames}
-              onLoad={handleLoad}
+          <div className="bg-violet-300/70 flex z-10 px-4 sm:px-6 md:px-10 lg:px-16 py-24 rounded-4xl gap-x-6 overflow-hidden relative">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-45"
+              style={{
+                backgroundImage: `url("/assets/paper-texture.avif")`,
+                backgroundSize: "cover",
+              }}
             />
-          </div>
 
-          {/* Bottom strip */}
-          <div className="flex items-start justify-between mt-5 gap-6">
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-2">
-                <Icon size={12} className="text-white/30" />
-                <span className="text-label font-mono text-white/25 uppercase tracking-widest">
-                  Phase {w.phase} — {w.label}
-                </span>
+            <div className="flex flex-col items-start justify-between mt-5 gap-6 flex-[0.4]">
+              <div className="flex-1 min-w-0 flex gap-4 flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <Icon size={20} />
+                  <span className="text-body uppercase tracking-wide">
+                    {w.label}
+                  </span>
+                </div>
+                <h2 className="text-title tracking-tighter perf-reveal max-w-[70%]">
+                  Built For Speed, Scale & Clean UX.
+                </h2>
+                <p className="text-body text-black/80 leading-relaxed font-light perf-reveal max-w-[70%]">
+                  {w.description}
+                </p>
               </div>
-              <p className="text-caption text-white/45 leading-relaxed max-w-2xl">
-                {w.description}
-              </p>
+
               <div className="flex flex-wrap items-center gap-1.5 mt-3">
                 {w.tags.map((tag) => (
-                  <span
+                  <BlurContainer
                     key={tag}
-                    className="px-2.5 py-1 bg-white/3 border border-white/7 rounded-full text-label text-white/30 font-mono"
+                    className="rounded-full p-2 text-label"
                   >
                     {tag}
-                  </span>
+                  </BlurContainer>
                 ))}
               </div>
             </div>
 
-            <div className="shrink-0 text-right pt-1">
-              <p className="text-label text-white/20 font-mono">{w.stat}</p>
-              <p className="text-label text-white/12 mt-1 italic hidden sm:block">
-                drag · zoom ±
-              </p>
-            </div>
+            <BlurContainer className=" rounded-4xl overflow-hidden h-115 lg:h-135 flex-[0.6]">
+              <WorkflowViewer
+                key={active}
+                filename={w.file}
+                focusNodeNames={w.focusNodeNames}
+                onLoad={handleLoad}
+              />
+            </BlurContainer>
           </div>
         </div>
-      </div>
+      </Container>
 
-      {/* CORE CAPABILITIES */}
-      <div className="px-6 md:px-16 py-24 lg:py-32">
-        <h3 className="text-title font-semibold tracking-tight mb-12 lg:mb-16 ai-reveal pb-6 border-b border-white/10">
-          Core Capabilities
-        </h3>
-
-        <div className="grid md:grid-cols-2 gap-px bg-white/10 border border-white/10">
-          {capabilities.map((cap, i) => (
-            <div
-              key={i}
-              className="bg-[#050505] p-8 lg:p-16 ai-reveal group hover:bg-[#0a0a0a] transition-colors"
-            >
-              <h4 className="text-title mb-4 font-medium tracking-tight text-white group-hover:text-white/90">
-                {cap.title}
-              </h4>
-              <p className="text-caption opacity-60 mb-8 font-light leading-relaxed">
-                {cap.desc}
-              </p>
-              <div className="flex flex-wrap gap-2 text-label font-mono opacity-60">
-                {cap.tags.map((t, j) => (
-                  <span key={j} className="border border-white/20 px-3 py-1">
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
+      <GridSection
+        topic="System Design"
+        title="Core Capabilities"
+        description="I don’t merely build accessible UIs — I instrument, measure, and surgically optimize every millisecond of the execution thread. Realscores. Real impact."
+        cards={capabilities}
+      />
+    </>
   );
 }

@@ -36,6 +36,7 @@ import {
   Minus,
   Maximize2,
 } from "lucide-react";
+import BlurContainer from "./BlurContainer";
 
 type NodeConfig = { icon: React.ElementType; color: string; label: string };
 
@@ -129,36 +130,35 @@ function N8nNode({ data }: { data: { label: string; nodeType: string } }) {
         }}
       />
 
-      {/* Icon square — matches n8n's node card */}
       <div
         style={{
           width: ICON_BOX,
           height: ICON_BOX,
-          background: "#1e1e1e",
-          border: "1px solid #2e2e2e",
           borderRadius: 12,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           margin: "0 auto",
-          boxShadow:
-            "0 2px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
           position: "relative",
         }}
+        className="overflow-hidden"
       >
-        <Icon size={26} style={{ color }} />
+        <BlurContainer className="w-full h-full flex items-center justify-center">
+          <Icon size={26} style={{ color }} />
+        </BlurContainer>
       </div>
 
       <p
         style={{
           marginTop: 7,
-          fontSize: 10,
-          fontWeight: 500,
-          color: "#aaa",
-          lineHeight: 1.35,
+          // fontSize: 10,
+          // fontWeight: 500,
+          // color: "#aaa",
+          // lineHeight: 1.35,
           padding: "0 4px",
           wordBreak: "break-word",
         }}
+        className="text-caption text-black"
       >
         {name}
       </p>
@@ -239,30 +239,6 @@ function convertWorkflow(wf: any): { nodes: Node[]; edges: Edge[] } {
   return { nodes, edges };
 }
 
-function ZoomControls() {
-  const { zoomIn, zoomOut, fitView } = useReactFlow();
-  const btn =
-    "w-7 h-7 rounded-lg bg-[#1e1e1e] hover:bg-[#2a2a2a] border border-[#333] flex items-center justify-center text-white/30 hover:text-white/70 transition-all duration-150 cursor-pointer";
-  return (
-    <Panel position="top-right">
-      <div className="flex flex-col gap-1 m-3">
-        <button className={btn} onClick={() => zoomIn({ duration: 200 })}>
-          <Plus size={11} />
-        </button>
-        <button className={btn} onClick={() => zoomOut({ duration: 200 })}>
-          <Minus size={11} />
-        </button>
-        <button
-          className={btn}
-          onClick={() => fitView({ duration: 300, padding: 0.15 })}
-        >
-          <Maximize2 size={10} />
-        </button>
-      </div>
-    </Panel>
-  );
-}
-
 interface Props {
   filename: string;
   onLoad?: (nodeCount: number) => void;
@@ -323,23 +299,7 @@ export default function WorkflowViewer({
       preventScrolling={false}
       colorMode="light"
       proOptions={{ hideAttribution: true }}
-    >
-      <Background
-        variant={BackgroundVariant.Dots}
-        color="#ffffff05"
-        gap={28}
-        size={1}
-      />
-      <MiniMap
-        className="hidden! sm:block! rounded-xl! border-[#2a2a2a]! bg-[#111]!"
-        nodeColor={(node) =>
-          getConfig((node.data as { nodeType: string }).nodeType).color + "99"
-        }
-        maskColor="rgba(0,0,0,0.8)"
-        pannable
-        zoomable={false}
-      />
-      <ZoomControls />
-    </ReactFlow>
+      style={{ background: "transparent" }}
+    />
   );
 }
