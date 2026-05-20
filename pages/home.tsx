@@ -1,29 +1,21 @@
 import { lazy, Suspense } from "react";
 
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import ProofStrip from "../../components/ProofStrip";
+import ProofStrip from "../components/ProofStrip";
 import { TESTIMONIALS } from "@/data/testimonials";
+import Hero from "@/components/Hero";
 
-const Performance = lazy(() => import("../../components/Performance"));
-const Capabilities = lazy(() => import("../../components/Capabilities"));
-const CSSection = lazy(() => import("../../components/CsSection"));
-const Hero = lazy(() => import("../../components/Hero"));
-const AutomationSection = lazy(
-  () => import("../../components/AutomationSection"),
-);
-const Faq = lazy(() => import("../../components/Faq"));
-const About = lazy(() => import("../../components/About"));
-const BentoWork = lazy(() => import("../../components/BentoWork"));
-const Testimonial = lazy(() => import("../../components/Testimonial"));
+const Performance = lazy(() => import("../components/Performance"));
+const Capabilities = lazy(() => import("../components/Capabilities"));
+const CSSection = lazy(() => import("../components/CsSection"));
+const AutomationSection = lazy(() => import("../components/AutomationSection"));
+const Faq = lazy(() => import("../components/Faq"));
+const About = lazy(() => import("../components/About"));
+const BentoWork = lazy(() => import("../components/BentoWork"));
+const Testimonial = lazy(() => import("../components/Testimonial"));
 
 export default function Home() {
   return (
     <>
-      <Suspense fallback={null}>
-        <Header />
-      </Suspense>
-
       <main className="bg-white text-black overflow-x-hidden">
         <Hero />
         <ProofStrip />
@@ -76,8 +68,6 @@ export default function Home() {
           <Faq />
         </Suspense>
       </main>
-
-      <Footer />
     </>
   );
 }

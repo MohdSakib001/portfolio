@@ -1,3 +1,5 @@
+import { projects } from "./projects";
+
 export const homeKeyword = [
   // Identity / Brand
   "Mohd Sakib",
@@ -44,3 +46,33 @@ export const homeKeyword = [
   "web app development services India",
   "mobile app development React Native",
 ];
+
+export const projectsKeyword = projects.flatMap((project) => {
+  const architecture = Object.values(project.architecture || {});
+
+  return [
+    // Project
+    `${project.name} project`,
+    `${project.name} case study`,
+    `${project.name} architecture`,
+    `${project.name} tech stack`,
+    `${project.name} system design`,
+
+    // Tagline
+    project.tagline,
+
+    // Stack
+    ...project.stack.map((tech) => `${tech} ${project.category} application`),
+
+    // Features
+    ...project.features.map((feature) => `${feature} implementation`),
+
+    // Architecture
+    ...architecture.map((item) => `${item} scalable architecture`),
+
+    // Semantic SEO
+    `${project.name} built with ${project.stack.join(", ")}`,
+
+    `${project.name} scalable ${project.category} platform`,
+  ];
+});

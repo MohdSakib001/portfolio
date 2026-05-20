@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
+import { lazy, Suspense } from "react";
+
+const Header = lazy(() => import("@/components/Header"));
+const Footer = lazy(() => import("@/components/Footer"));
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -79,7 +83,13 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <Suspense fallback={null}>
+          <Header />
+        </Suspense>
         {children}
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
         {/* JSON-LD Structured Data for robust SEO crawling */}
         <script
           type="application/ld+json"
