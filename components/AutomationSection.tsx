@@ -2,13 +2,30 @@
 
 import dynamic from "next/dynamic";
 import { useState, useCallback } from "react";
-import { Globe, RefreshCw, Filter, BarChart2 } from "lucide-react";
+import {
+  Globe,
+  RefreshCw,
+  Filter,
+  BarChart2,
+  Sparkle,
+  DatabaseZap,
+  ScanEye,
+  SlidersHorizontal,
+} from "lucide-react";
 import GridSection from "./GridSection";
 import Container from "./Container";
 import BlurContainer from "./BlurContainer";
+import { color } from "framer-motion";
 
 const WorkflowViewer = dynamic(() => import("./WorkflowViewer"), {
   ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center animate-pulse bg-white/5">
+      <span className="text-black/40 text-sm font-medium">
+        Loading Pipeline...
+      </span>
+    </div>
+  ),
 });
 
 const WORKFLOWS = [
@@ -101,35 +118,39 @@ const capabilities = [
     description:
       "Production pipelines with streaming, tool-calling, and multi-agent orchestration.",
     tags: ["OpenAI", "Claude", "Gemini", "Vercel AI SDK"],
+    color: "bg-orange-300/70",
+    icon: Sparkle,
   },
   {
     title: "RAG Systems",
     description:
       "Retrieval pipelines with semantic chunking, re-ranking, and hybrid search.",
     tags: ["LangChain", "pgvector", "Supabase", "Pinecone"],
+    color: "bg-violet-300/70",
+    icon: DatabaseZap,
   },
   {
     title: "Computer Vision",
     description:
       "Real-time detection, pose estimation, OCR — deployed to edge for ultra-low latency.",
     tags: ["PyTorch", "YOLO", "MediaPipe", "ONNX"],
+    color: "bg-green-300/70",
+    icon: ScanEye,
   },
   {
     title: "Fine-Tuning",
     description:
       "LoRA / QLoRA tuning on custom datasets with efficient GPU utilization.",
     tags: ["HuggingFace", "PEFT", "Modal", "Axolotl"],
+    color: "bg-blue-300/70",
+    icon: SlidersHorizontal,
   },
 ];
 
 export default function AutomationSection() {
   const [active, setActive] = useState(0);
-  const [nodeCount, setNodeCount] = useState<number | null>(null);
-
-  const handleLoad = useCallback((count: number) => setNodeCount(count), []);
 
   const handleTab = (i: number) => {
-    setNodeCount(null);
     setActive(i);
   };
 
@@ -154,7 +175,6 @@ export default function AutomationSection() {
           <div className="inline-flex gap-2 bg-white/3 rounded-xl p-1 mb-6">
             {WORKFLOWS.map((wf, i) => {
               const TabIcon = wf.icon;
-              const isActive = active === i;
               return (
                 <button
                   key={wf.phase}
@@ -196,22 +216,20 @@ export default function AutomationSection() {
 
               <div className="flex flex-wrap items-center gap-1.5 mt-3">
                 {w.tags.map((tag) => (
-                  <BlurContainer
+                  <div
                     key={tag}
-                    className="rounded-full p-2 text-label"
+                    className="rounded-full p-2 text-label bg-white/70"
                   >
                     {tag}
-                  </BlurContainer>
+                  </div>
                 ))}
               </div>
             </div>
 
             <BlurContainer className=" rounded-4xl overflow-hidden h-115 lg:h-135 flex-[0.6]">
               <WorkflowViewer
-                key={active}
                 filename={w.file}
                 focusNodeNames={w.focusNodeNames}
-                onLoad={handleLoad}
               />
             </BlurContainer>
           </div>

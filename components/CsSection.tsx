@@ -4,51 +4,67 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Container from "./Container";
 import GridSection from "./GridSection";
+import {
+  ScanLine,
+  MoveHorizontal,
+  Network,
+  Layers,
+  Split,
+  Undo2,
+  Combine,
+} from "lucide-react";
 
 export const algorithms = [
   {
     title: "Sliding Window",
     description:
       "Efficient range-based processing technique used to reduce nested iteration into linear time complexity.",
+    icon: ScanLine,
+    color: "bg-blue-300/70",
   },
-
   {
     title: "Two Pointers",
     description:
       "Pointer manipulation strategy for optimized traversal, partitioning, and pair-based computations.",
+    icon: MoveHorizontal,
+    color: "bg-emerald-300/70",
   },
-
   {
     title: "DFS / BFS",
     description:
       "Core graph traversal algorithms powering search, connectivity analysis, and path exploration.",
+    icon: Network,
+    color: "bg-rose-300/70",
   },
-
   {
     title: "Dynamic Programming",
     description:
       "State-transition optimization approach for solving overlapping subproblems efficiently.",
+    icon: Layers,
+    color: "bg-amber-300/70",
   },
-
   {
     title: "Binary Search",
     description:
       "Logarithmic-time searching technique applied across sorted data and answer-space optimization.",
+    icon: Split,
+    color: "bg-cyan-300/70",
   },
-
   {
     title: "Backtracking",
     description:
       "Recursive exploration strategy with pruning for combinatorial and constraint-based problems.",
+    icon: Undo2,
+    color: "bg-fuchsia-300/70",
   },
-
   {
     title: "Union Find",
     description:
       "Disjoint set data structure enabling near constant-time connectivity and component merging.",
+    icon: Combine,
+    color: "bg-indigo-300/70",
   },
 ];
-
 export default function CSSection() {
   return (
     <>

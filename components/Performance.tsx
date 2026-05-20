@@ -1,6 +1,7 @@
 import BlurContainer from "./BlurContainer";
 import Container from "./Container";
 import GridSection from "./GridSection";
+import { Zap, Boxes, Globe, Cpu, Image, Shapes } from "lucide-react";
 
 export default function Performance() {
   const vitals = [
@@ -70,40 +71,45 @@ export default function Performance() {
       title: "React Concurrency",
       description:
         "Interruptible rendering to eliminate input jank and main-thread blocking.",
+      icon: Zap,
       color: "bg-emerald-300/70",
     },
     {
       title: "Dynamic Code Splitting",
       description:
         "Component-level granular chunking. Shipping precisely zero unnecessary bytes.",
+      icon: Boxes,
       color: "bg-purple-300/70",
     },
     {
       title: "Edge Architecture",
       description:
         "ISR and CDN edge rules creating sub-10ms Time To First Byte globally.",
-      color: "bg-cyan-300/70",
+      icon: Globe,
+      color: "bg-sky-300/70",
     },
     {
       title: "Memory Allocation",
       description:
         "Aggressive cleanup sweeps and strict object pooling to defeat memory leaks.",
-      color: "bg-green-300/70",
+      icon: Cpu,
+      color: "bg-amber-300/70",
     },
     {
       title: "Asset Pipeline",
       description:
         "AVIF/WebP transpilation, lazy hydration, and hardcoded aspect ratios for zero CLS.",
-      color: "bg-cyan-300/70",
+      icon: Image,
+      color: "bg-rose-300/70",
     },
     {
       title: "Custom WebGL/GSAP",
       description:
         "Offloading calculations to GPU threads avoiding standard DOM reflows.",
-      color: "bg-cyan-300/70",
+      icon: Shapes,
+      color: "bg-indigo-300/70",
     },
   ];
-
   return (
     <>
       <Container>

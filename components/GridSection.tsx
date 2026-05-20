@@ -45,9 +45,18 @@ const GridSection = ({
                   backgroundSize: "cover",
                 }}
               />
+
               <div>
-                <h4 className="text-body font-medium mb-4">{system.title}</h4>
-                <p className="text-caption text-gray-500 font-medium leading-relaxed">
+                <div className="flex items-center justify-start gap-x-2 mb-4">
+                  {system.icon &&
+                    React.createElement(system.icon, {
+                      size: 20,
+                      strokeWidth: 1.5,
+                    })}
+
+                  <h4 className="text-body font-medium">{system.title}</h4>
+                </div>
+                <p className="text-caption text-black/50 font-medium leading-relaxed">
                   {system.description}
                 </p>
               </div>
