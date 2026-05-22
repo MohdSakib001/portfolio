@@ -97,6 +97,7 @@ export default function Header() {
                 href={`/projects/${p.id}`}
                 className="flex flex-col rounded-xl overflow-hidden p-4"
                 style={cardStyle}
+                title={p.name}
               >
                 <div className="flex flex-row gap-x-2 items-center">
                   <div className="relative aspect-square w-24 h-24 overflow-hidden rounded-lg">
@@ -106,6 +107,7 @@ export default function Header() {
                       fill
                       className="object-contain object-center"
                       sizes="740px"
+                      title={p.name}
                     />
                   </div>
                   <div>
@@ -128,6 +130,7 @@ export default function Header() {
                   key={p.id}
                   href={`/projects/${p.id}`}
                   className="flex items-center justify-between py-3 text-caption font-medium text-black/75 hover:text-black transition-colors"
+                  title={p.name}
                 >
                   {p.name}
                   <ArrowRight size={13} className="text-black/30" />
@@ -156,6 +159,7 @@ export default function Header() {
                   href={`/tools#${tool.id}`}
                   className="col-span-2 flex flex-col gap-2.5 px-4 py-3.5 rounded-xl hover:bg-black/6 transition-colors duration-150"
                   style={cardStyle}
+                  title={tool.name}
                 >
                   <div className="flex items-center gap-2.5">
                     <span
@@ -193,6 +197,7 @@ export default function Header() {
                   href={`/tools#${tool.id}`}
                   className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-black/4 transition-colors duration-150"
                   style={cardStyle}
+                  title={tool.name}
                 >
                   <span
                     className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
@@ -212,6 +217,7 @@ export default function Header() {
               href="/tools"
               className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-black/4 transition-colors duration-150"
               style={cardStyle}
+              title="See All Tools"
             >
               <span className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 bg-black/6">
                 <ArrowRight size={13} className="text-black/50" />
@@ -244,6 +250,8 @@ export default function Header() {
                 )
               }
               className="list-none cursor-pointer flex items-center justify-between px-3 py-2.5 text-black w-full rounded-xl transition-colors"
+              name="Mobile Products Toggle"
+              title="Mobile Products Toggle"
             >
               <p className="text-caption font-medium text-black/75">Products</p>
               <svg
@@ -269,6 +277,7 @@ export default function Header() {
                       href={`/projects/${p.id}`}
                       className="flex items-center gap-3 p-3 rounded-xl"
                       style={cardStyle}
+                      title={p.name}
                     >
                       <div className="relative w-12 h-12 shrink-0 rounded-lg overflow-hidden">
                         <Image
@@ -311,6 +320,8 @@ export default function Header() {
                 )
               }
               className="list-none cursor-pointer flex w-full items-center justify-between text-black px-3 py-2.5  rounded-xl transition-all"
+              name="Mobile Tools Toggle"
+              title="Mobile Tools Toggle"
             >
               <p className="text-caption font-medium text-black/75">Tools</p>
               <svg
@@ -339,6 +350,7 @@ export default function Header() {
                         href={`/tools#${tool.id}`}
                         className="flex items-center gap-3 p-3 rounded-xl"
                         style={cardStyle}
+                        title={tool.name}
                       >
                         <span
                           className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
@@ -370,6 +382,7 @@ export default function Header() {
 
           <Link
             href="/#about"
+            title="About"
             style={{
               background: "rgba(255,255,255, 0.90)",
               backdropFilter: "blur(8px)",
@@ -381,6 +394,7 @@ export default function Header() {
           </Link>
           <Link
             href="/#contact"
+            title="Contact"
             style={{
               background: "rgba(255,255,255, 0.90)",
               backdropFilter: "blur(8px)",
@@ -413,6 +427,7 @@ export default function Header() {
           <Link
             href="/"
             className="text-[15px] font-bold tracking-[0.07em] uppercase text-black"
+            title="Home"
           >
             Sakib
           </Link>
@@ -444,15 +459,16 @@ export default function Header() {
               onClick={() =>
                 setActivePanel(isMobileMenuOpen ? null : "mobile-nav")
               }
+              name="HamburgerMenu"
             >
               <span
-                className={`h-0.5 w-full bg-black block transition-all duration-500 ease-in-out ${isMobileMenuOpen ? "translate-y-[5px] rotate-45" : ""}`}
+                className={`h-0.5 w-full bg-black block transition-all duration-500 ease-in-out ${isMobileMenuOpen ? "translate-y-1.25 rotate-45" : ""}`}
               />
               <span
                 className={`h-0.5 w-full bg-black block transition-all duration-300 ease-in-out ${isMobileMenuOpen ? "opacity-0" : "opacity-100"}`}
               />
               <span
-                className={`h-0.5 w-full bg-black block transition-all duration-500 ease-in-out ${isMobileMenuOpen ? "-translate-y-[5px] -rotate-45" : ""}`}
+                className={`h-0.5 w-full bg-black block transition-all duration-500 ease-in-out ${isMobileMenuOpen ? "-translate-y-1.25 -rotate-45" : ""}`}
               />
             </button>
           </div>

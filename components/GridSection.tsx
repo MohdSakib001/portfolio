@@ -54,7 +54,7 @@ const GridSection = ({
                       strokeWidth: 1.5,
                     })}
 
-                  <h4 className="text-body font-medium">{system.title}</h4>
+                  <h3 className="text-body font-medium">{system.title}</h3>
                 </div>
                 <p className="text-caption text-black/50 font-medium leading-relaxed">
                   {system.description}

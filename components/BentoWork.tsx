@@ -6,6 +6,7 @@ import Icon from "./icon";
 import BlurContainer from "./BlurContainer";
 import AnimatedImage from "./AnimatedImage";
 import Container from "./Container";
+import FloatingButton from "./common/floatingButton";
 
 type StatType = "revenue" | "users" | "scale" | "clients";
 type Platform = "mobile" | "web";
@@ -124,7 +125,8 @@ const products: {
             alt="Artificial Mufti"
             width={240}
             height={500}
-            className="w-[160px] sm:w-[180px] lg:w-[200px] h-auto rounded-xl"
+            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
+            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
           />
         </div>
 
@@ -134,7 +136,8 @@ const products: {
             alt="Artificial Mufti"
             width={240}
             height={500}
-            className="w-[160px] sm:w-[180px] lg:w-[200px] h-auto rounded-xl"
+            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
+            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
           />
         </div>
       </div>
@@ -161,7 +164,8 @@ const products: {
             alt="Pademi"
             width={240}
             height={500}
-            className="w-[160px] sm:w-[180px] lg:w-[200px] h-auto rounded-xl"
+            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
+            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
           />
         </div>
 
@@ -171,7 +175,8 @@ const products: {
             alt="Pademi"
             width={240}
             height={500}
-            className="w-[160px] sm:w-[180px] lg:w-[200px] h-auto rounded-xl"
+            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
+            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
           />
         </div>
       </div>
@@ -233,13 +238,7 @@ const products: {
 
 export default function BentoWork() {
   return (
-    <Container
-    // style={{
-    //   paddingLeft: 0,
-    //   paddingRight: 0,
-    // }}
-    // className="md:px-0"
-    >
+    <Container>
       <div className="flex flex-col items-center text-center mb-12 max-w-400 mx-auto">
         <p className="text-label uppercase tracking-[0.25em] opacity-30 mb-3 font-medium">
           Selected Work
@@ -334,25 +333,7 @@ export default function BentoWork() {
         ))}
       </div>
 
-      <div className="mt-24 flex justify-center">
-        <Link href="/projects" title="View all projects">
-          <div className="group relative w-[320px] cursor-pointer">
-            {/* ghost cards — depth only */}
-            <div className="absolute left-8 right-8 -bottom-2.5 h-15 rounded-[18px] bg-[#1a1a1a] opacity-[0.06] transition-all duration-300 group-hover:translate-y-1 group-hover:opacity-[0.04]" />
-            <div className="absolute left-4 right-4 -bottom-1.5 h-15 rounded-[18px] bg-[#1a1a1a] opacity-[0.12] transition-all duration-300 group-hover:translate-y-0.5 group-hover:opacity-[0.09]" />
-
-            {/* front card */}
-            <div className="relative z-10 flex h-15 items-center justify-between rounded-[18px] bg-[#1a1a1a] px-5 transition-transform duration-300 ease-out group-hover:-translate-y-0.5">
-              <span className="text-[12px] font-medium uppercase tracking-[0.15em] text-white/55">
-                All projects
-              </span>
-              <span className="text-base text-white/90 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                ↗
-              </span>
-            </div>
-          </div>
-        </Link>
-      </div>
+      <FloatingButton href="/projects" title="All projects" />
     </Container>
   );
 }

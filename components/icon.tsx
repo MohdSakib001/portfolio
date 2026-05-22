@@ -37,7 +37,7 @@ const Icon = ({
         <Svg />
       ) : type === "img" && img ? (
         <div className="w-full h-full relative">
-          <Image src={img} alt={title} fill sizes={"40px"} />
+          <Image src={img} alt={""} fill sizes={"40px"} />
         </div>
       ) : null}
     </Link>
