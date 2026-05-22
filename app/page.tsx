@@ -5,9 +5,9 @@ import { createMetaData } from "@/seo-utils/CommonMeta";
 import { personSchema } from "@/seo-utils/personSchema";
 import { faqSchema } from "@/seo-utils/faqSchema";
 import { profilePageSchema } from "@/seo-utils/profilePageSchema";
-import Home from "../pages/home";
 import { HOST } from "../data/constants";
 import { homeKeyword } from "../data/keywords";
+import Home from "@/components/pages/home";
 
 const url = HOST;
 const title = `Mohd Sakib | Senior Full Stack & React Native Developer`;

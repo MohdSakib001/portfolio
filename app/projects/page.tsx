@@ -5,9 +5,9 @@ import { createMetaData } from "@/seo-utils/CommonMeta";
 import { personSchema } from "@/seo-utils/personSchema";
 import { faqSchema } from "@/seo-utils/faqSchema";
 import { profilePageSchema } from "@/seo-utils/profilePageSchema";
-import ProjectsArchive from "@/pages/projects/page";
 import { HOST } from "@/data/constants";
 import { projectsKeyword } from "@/data/keywords";
+import ProjectsArchive from "@/components/pages/projects/page";
 
 const url = HOST;
 const title =

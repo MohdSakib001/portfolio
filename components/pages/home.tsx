@@ -1,16 +1,16 @@
 import { lazy, Suspense } from "react";
 
-import ProofStrip from "../components/ProofStrip";
+import ProofStrip from "../ProofStrip";
 import { TESTIMONIALS } from "@/data/testimonials";
 import Hero from "@/components/Hero";
 
-const Performance = lazy(() => import("../components/Performance"));
-const Capabilities = lazy(() => import("../components/Capabilities"));
-const CSSection = lazy(() => import("../components/CsSection"));
-const AutomationSection = lazy(() => import("../components/AutomationSection"));
-const Faq = lazy(() => import("../components/Faq"));
-const BentoWork = lazy(() => import("../components/BentoWork"));
-const Testimonial = lazy(() => import("../components/Testimonial"));
+const Performance = lazy(() => import("../Performance"));
+const Capabilities = lazy(() => import("../Capabilities"));
+const CSSection = lazy(() => import("../CsSection"));
+const AutomationSection = lazy(() => import("../AutomationSection"));
+const Faq = lazy(() => import("../Faq"));
+const BentoWork = lazy(() => import("../BentoWork"));
+const Testimonial = lazy(() => import("../Testimonial"));
 
 export default function Home() {
   return (

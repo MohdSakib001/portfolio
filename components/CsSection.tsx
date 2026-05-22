@@ -512,7 +512,7 @@ const LeetcodeStats = () => {
 
 const SaaSArchitectureFlow = () => {
   return (
-    <div className="relative w-full h-[320px] bg-white/20 rounded-3xl border border-white/30 backdrop-blur-sm p-6 flex items-center justify-between shadow-sm">
+    <div className="relative w-full h-80 bg-white/20 rounded-3xl border border-white/30 backdrop-blur-sm p-6 flex items-center justify-between shadow-sm">
       {/* 1. Client Layer */}
       <div className="flex flex-col items-center gap-3 relative z-10">
         <div className="w-14 h-14 bg-white rounded-2xl shadow-sm border border-white/50 flex items-center justify-center text-black/70">
@@ -556,7 +556,7 @@ const SaaSArchitectureFlow = () => {
             <span className="text-[13px] font-semibold text-black">
               Redis Cache
             </span>
-            <span className="text-[11px] text-black/50 font-medium">
+            <span className="text-label text-black/50 font-medium">
               Sub-ms reads
             </span>
           </div>
@@ -571,7 +571,7 @@ const SaaSArchitectureFlow = () => {
             <span className="text-[13px] font-semibold text-black">
               Kafka Queue
             </span>
-            <span className="text-[11px] text-black/50 font-medium">
+            <span className="text-label text-black/50 font-medium">
               Event streaming
             </span>
           </div>
@@ -586,7 +586,7 @@ const SaaSArchitectureFlow = () => {
             <span className="text-[13px] font-semibold text-black">
               PostgreSQL
             </span>
-            <span className="text-[11px] text-black/50 font-medium">
+            <span className="text-label text-black/50 font-medium">
               Primary Shards
             </span>
           </div>

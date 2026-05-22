@@ -1,120 +1,10 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { projects } from "@/data/projects";
+import { Project } from "@/types/projects";
 
-type Props = {
-  params: Promise<{ id: string }>;
-};
-
-export async function generateStaticParams() {
-  return projects.map((p) => ({ id: p.id }));
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params;
-  const project = projects.find((p) => p.id === id);
-
-  if (!project) return {};
-
-  const title = `${project.name} — ${project.tagline}`;
-  const description = `${project.overview.problem} Built by Mohd Sakib using ${project.stack.join(", ")}. ${Object.values(project.metrics).join(" · ")}.`;
-
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `https://mohdsakib.vercel.app/projects/${id}`,
-    },
-    openGraph: {
-      title: `${project.name} | Mohd Sakib`,
-      description,
-      type: "website",
-      url: `https://mohdsakib.vercel.app/projects/${id}`,
-      images: [
-        {
-          url: project.hero.src,
-          width: 1200,
-          height: 630,
-          alt: `${project.name} — ${project.tagline}`,
-        },
-      ],
-    },
-    twitter: {
-      title: `${project.name} | Mohd Sakib`,
-      description,
-      card: "summary_large_image",
-    },
-  };
-}
-
-export default async function ProjectPage({ params }: Props) {
-  const { id } = await params;
-  const project = projects.find((p) => p.id === id);
-
-  if (!project) notFound();
-
-  const softwareApplicationSchema = JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: project.name,
-    description: project.tagline,
-    url:
-      project.links.live && project.links.live !== "#"
-        ? project.links.live
-        : undefined,
-    applicationCategory: "WebApplication",
-    operatingSystem: "Web",
-    author: {
-      "@type": "Person",
-      "@id": "https://mohdsakib.vercel.app/#person",
-      name: "Mohd Sakib",
-      url: "https://mohdsakib.vercel.app",
-    },
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-  });
-
-  const breadcrumbSchema = JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://mohdsakib.vercel.app",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Projects",
-        item: "https://mohdsakib.vercel.app/projects",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: project.name,
-        item: `https://mohdsakib.vercel.app/projects/${project.id}`,
-      },
-    ],
-  });
-
+export default function ProjectPage({ project }: { project: Project }) {
   return (
     <main className="bg-white text-black">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: softwareApplicationSchema }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: breadcrumbSchema }}
-      />
-
       {/* BACK LINK */}
       <div className="px-6 md:px-16 pt-8">
         <Link
@@ -209,7 +99,7 @@ export default async function ProjectPage({ params }: Props) {
 
         <div className="flex flex-col gap-10">
           {project.gallery.map((item, i) => (
-            <div key={i} className="relative w-full h-[400px]">
+            <div key={i} className="relative w-full h-100">
               {item.type === "image" ? (
                 <Image
                   src={item.src}

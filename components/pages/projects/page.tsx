@@ -1,6 +1,5 @@
+import { projects } from "@/data/projects";
 import Image from "next/image";
-import { projects } from "../../data/projects";
-import Link from "next/link";
 
 export default function ProjectsArchive() {
   return (
