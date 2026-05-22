@@ -105,7 +105,7 @@ export default function ToolsPage() {
           </div>
           <a
             href="mailto:mohdsakib.work@gmail.com"
-            className="shrink-0 px-6 py-3 bg-black text-white text-[11px] uppercase tracking-[0.15em] font-medium hover:bg-neutral-800 transition-colors duration-200"
+            className="shrink-0 px-6 py-3 bg-black text-white text-label uppercase tracking-[0.15em] font-medium hover:bg-neutral-800 transition-colors duration-200"
           >
             Suggest a tool
           </a>
@@ -115,7 +115,7 @@ export default function ToolsPage() {
         <div className="border-t border-neutral-100 px-6 md:px-16 py-8 max-w-6xl mx-auto">
           <Link
             href="/"
-            className="inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-neutral-400 hover:text-black transition-colors duration-300 group"
+            className="inline-flex items-center gap-3 text-label uppercase tracking-[0.2em] text-neutral-400 hover:text-black transition-colors duration-300 group"
           >
             <span className="transition-transform duration-300 group-hover:-translate-x-1">
               ←

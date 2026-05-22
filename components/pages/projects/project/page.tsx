@@ -5,17 +5,6 @@ import { Project } from "@/types/projects";
 export default function ProjectPage({ project }: { project: Project }) {
   return (
     <main className="bg-white text-black">
-      {/* BACK LINK */}
-      <div className="px-6 md:px-16 pt-8">
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] opacity-50 hover:opacity-100 transition-opacity"
-        >
-          <span>←</span>
-          <span>All Projects</span>
-        </Link>
-      </div>
-
       {/* HERO */}
       <section className="relative h-[80vh] w-full mt-4">
         {project.hero.type === "image" ? (
