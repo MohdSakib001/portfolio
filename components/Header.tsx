@@ -70,7 +70,7 @@ export default function Header() {
   const navLinks = [
     {
       id: "products",
-      href: "products",
+      href: "projects",
       title: "Products",
       text: "Products",
     },
@@ -94,7 +94,7 @@ export default function Header() {
             {projects.map((p) => (
               <Link
                 key={p.id}
-                href={`/products/${p.id}`}
+                href={`/projects/${p.id}`}
                 className="flex flex-col rounded-xl overflow-hidden p-4"
                 style={cardStyle}
                 title={p.name}
