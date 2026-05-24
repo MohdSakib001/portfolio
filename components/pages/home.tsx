@@ -3,6 +3,8 @@ import { lazy, Suspense } from "react";
 import ProofStrip from "../ProofStrip";
 import { TESTIMONIALS } from "@/data/testimonials";
 import Hero from "@/components/Hero";
+import BlogSection from "@/components/blogs/BlogSection";
+import { getFeaturedBlogs } from "@/data/blogs";
 
 const Performance = lazy(() => import("../Performance"));
 const Capabilities = lazy(() => import("../Capabilities"));
@@ -13,6 +15,8 @@ const BentoWork = lazy(() => import("../BentoWork"));
 const Testimonial = lazy(() => import("../Testimonial"));
 
 export default function Home() {
+  const featuredBlogs = getFeaturedBlogs(3);
+
   return (
     <>
       <main className="bg-white text-black overflow-x-hidden">
@@ -58,6 +62,8 @@ export default function Home() {
         <Suspense fallback={null}>
           <CSSection />
         </Suspense>
+
+        <BlogSection blogs={featuredBlogs} />
 
         <Suspense fallback={<div className="h-screen bg-black" />}>
           <Faq />

@@ -63,3 +63,89 @@ body::before {
   pointer-events: none;
   z-index: 50;
 }
+
+.blog-content {
+  color: #1c1b18;
+  font-size: 1.0625rem;
+  line-height: 1.85;
+}
+
+.blog-content > * + * {
+  margin-top: 1.25rem;
+}
+
+.blog-content h2 {
+  margin-top: 3rem;
+  font-size: clamp(1.75rem, 4vw, 2.4rem);
+  line-height: 1.05;
+  letter-spacing: 0;
+  font-weight: 650;
+}
+
+.blog-content h3 {
+  margin-top: 2.5rem;
+  font-size: 1.45rem;
+  line-height: 1.2;
+  font-weight: 650;
+}
+
+.blog-content p,
+.blog-content li {
+  color: rgba(0, 0, 0, 0.68);
+}
+
+.blog-content strong {
+  color: #000000;
+  font-weight: 650;
+}
+
+.blog-content a {
+  color: #000000;
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 0, 0, 0.2);
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color 150ms ease;
+}
+
+.blog-content a:hover {
+  text-decoration-color: rgba(0, 0, 0, 0.75);
+}
+
+.blog-content ul,
+.blog-content ol {
+  padding-left: 1.3rem;
+}
+
+.blog-content ul {
+  list-style: disc;
+}
+
+.blog-content ol {
+  list-style: decimal;
+}
+
+.blog-content li + li {
+  margin-top: 0.65rem;
+}
+
+.blog-content figure {
+  margin: 3rem 0;
+}
+
+.blog-content img {
+  width: 100%;
+  height: auto;
+  max-height: 620px;
+  border-radius: 1.25rem;
+  object-fit: cover;
+  box-shadow:
+    0 0 0 1px rgba(3, 3, 2, 0.06),
+    0 14px 46px rgba(3, 3, 2, 0.08);
+}
+
+.blog-content figcaption {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.42);
+}

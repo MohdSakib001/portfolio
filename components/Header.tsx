@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -79,6 +79,13 @@ export default function Header() {
       href: "tools",
       title: "Tools",
       text: "Tools",
+    },
+    { id: "blogs", href: "/blogs", title: "Blogs", text: "Blogs" },
+    {
+      id: "hire",
+      href: "/hire-nextjs-developer-india",
+      title: "Hire Next.js Developer",
+      text: "Hire",
     },
     { id: "about", href: "/#about", title: "About", text: "About" },
     { id: "contact", href: "/#contact", title: "Contact", text: "Contact" },
@@ -380,6 +387,30 @@ export default function Header() {
             </div>
           </div>
 
+          <Link
+            href="/blogs"
+            title="Blogs"
+            style={{
+              background: "rgba(255,255,255, 0.90)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+            }}
+            className="px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-2xl transition-colors"
+          >
+            Blogs
+          </Link>
+          <Link
+            href="/hire-nextjs-developer-india"
+            title="Hire Next.js Developer"
+            style={{
+              background: "rgba(255,255,255, 0.90)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+            }}
+            className="px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-2xl transition-colors"
+          >
+            Hire
+          </Link>
           <Link
             href="/#about"
             title="About"

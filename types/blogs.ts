@@ -1,0 +1,30 @@
+export type BlogPost = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  cover_image_url: string;
+  category: string;
+  tags: string[];
+  focus_keyword: string;
+  secondary_keywords: string[];
+  seo_meta_title: string;
+  seo_meta_description: string;
+  author_name: string;
+  author_slug: string;
+  author_bio: string;
+  inline_image_urls: string[];
+  image_ids: string[];
+  image_credits: {
+    id: string;
+    author_name: string;
+    author_url: string;
+    photo_url: string;
+    source_url: string;
+    source_name: string;
+  }[];
+  createdAt: string;
+  mode: string;
+  generatedAt: string;
+};
