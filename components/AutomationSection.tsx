@@ -188,7 +188,7 @@ export default function AutomationSection() {
             })}
           </div>
 
-          <div className="bg-violet-300/70 flex z-10 px-4 sm:px-6 md:px-10 lg:px-16 py-24 rounded-4xl gap-x-6 overflow-hidden relative">
+          <div className="bg-violet-300/70 flex flex-col lg:flex-row z-10 px-4 sm:px-6 md:px-10 lg:px-16 py-24 rounded-4xl gap-6 overflow-hidden relative">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-45"
@@ -226,11 +226,13 @@ export default function AutomationSection() {
               </div>
             </div>
 
-            <BlurContainer className=" rounded-4xl overflow-hidden h-115 lg:h-135 flex-[0.6]">
-              <WorkflowViewer
-                filename={w.file}
-                focusNodeNames={w.focusNodeNames}
-              />
+            <BlurContainer className=" rounded-4xl overflow-hidden min-h-115 lg:h-135 flex-[0.6] relative">
+              <div className="absolute inset-0">
+                <WorkflowViewer
+                  filename={w.file}
+                  focusNodeNames={w.focusNodeNames}
+                />
+              </div>
             </BlurContainer>
           </div>
         </div>

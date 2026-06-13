@@ -16,7 +16,7 @@ export default function Testimonial({
   return (
     <section className="py-24 px-6 min-h-screen flex items-center justify-center">
       <div
-        className={`max-w-4xl mx-auto flex items-start gap-6 ${idx % 2 === 0 ? "flex-row-reverse" : "flex-row"}`}
+        className={`max-w-4xl mx-auto flex items-start gap-6 ${idx % 2 === 0 ? "flex-col-reverse lg:flex-row-reverse" : "flex-col lg:flex-row"}`}
       >
         {/* Avatar + name + line */}
         <div className="flex items-center gap-3 shrink-0 pt-2.5">
