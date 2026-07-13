@@ -8,6 +8,12 @@ export type ServicePage = {
   keywords: string[];
   primaryCta: string;
   secondaryCta: string;
+  /** Structured-data overrides (optional — sensible fallbacks applied in ServicePageShell). */
+  serviceName?: string;
+  serviceType?: string;
+  areaServed?: string[];
+  /** mailto subject used by the ServiceLanding CTA. */
+  inquirySubject?: string;
   proof: {
     value: string;
     label: string;

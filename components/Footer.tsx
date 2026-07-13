@@ -229,14 +229,20 @@ export default function Footer() {
               Navigation
             </p>
             <div className="flex flex-col gap-3">
-              {["Home", "Work", "About", "Contact"].map((item) => (
-                <span key={item}>
+              {[
+                { label: "Home", url: "/" },
+                { label: "Work", url: "/projects" },
+                { label: "About", url: "/about" },
+                { label: "Blogs", url: "/blogs" },
+                { label: "Contact", url: "/#contact" },
+              ].map((item) => (
+                <span key={item.label}>
                   <Link
-                    title={item}
-                    href={item === "Home" ? "/" : `#${item.toLowerCase()}`}
+                    title={item.label}
+                    href={item.url}
                     className="text-caption opacity-60 hover:opacity-100 transition-opacity duration-300"
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 </span>
               ))}
@@ -281,25 +287,29 @@ export default function Footer() {
             <div className="flex flex-col gap-3 text-sm">
               {[
                 {
-                  label: "Full-Stack Development",
-                  url: "/#work",
+                  label: "Hire Next.js Developer",
+                  url: "/hire-nextjs-developer-india",
                 },
                 {
-                  label: "React Native",
-                  url: "/#work",
+                  label: "Hire React Native Developer",
+                  url: "/hire-react-native-developer-india",
                 },
-                { label: "System Design", url: "/#work" },
-                { label: "AI Automation", url: "/#work" },
+                {
+                  label: "Hire SaaS Developer",
+                  url: "/hire-saas-developer-india",
+                },
+                {
+                  label: "Hire AI Developer",
+                  url: "/hire-ai-developer-india",
+                },
               ].map((s) => (
                 <span key={s.label}>
                   <Link
                     href={s.url}
                     title={s.label}
-                    target="_blank"
-                    rel="noopener"
                     className="text-caption opacity-60 hover:opacity-100 transition-opacity duration-300"
                   >
-                    {s.label} ↗
+                    {s.label} →
                   </Link>
                 </span>
               ))}

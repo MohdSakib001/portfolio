@@ -57,6 +57,7 @@ function ProjectCard({ project }: { project: any }) {
             src={project.image}
             alt="project"
             fill
+            sizes="(max-width: 768px) 100vw, 400px"
             className="object-contain transition duration-700 group-hover:scale-105"
           />
         </div>

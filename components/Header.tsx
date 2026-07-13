@@ -15,6 +15,10 @@ import {
   Percent,
   Hash,
   ArrowRight,
+  Code2,
+  Smartphone,
+  Rocket,
+  BrainCircuit,
   type LucideProps,
 } from "lucide-react";
 import type { ElementType } from "react";
@@ -55,6 +59,35 @@ export const cardStyle = {
   WebkitBackdropFilter: "blur(6px)",
 } as const;
 
+const HIRE_LINKS = [
+  {
+    href: "/hire-nextjs-developer-india",
+    label: "Next.js Developer",
+    description:
+      "Full-stack web apps, SaaS dashboards, and high-performance product frontends.",
+    icon: Code2,
+  },
+  {
+    href: "/hire-react-native-developer-india",
+    label: "React Native Developer",
+    description:
+      "Cross-platform iOS and Android apps shipped from one codebase.",
+    icon: Smartphone,
+  },
+  {
+    href: "/hire-saas-developer-india",
+    label: "SaaS MVP Developer",
+    description: "Zero-to-launch MVPs for non-technical founders.",
+    icon: Rocket,
+  },
+  {
+    href: "/hire-ai-developer-india",
+    label: "AI Developer",
+    description: "LLM products, RAG systems, and n8n automation.",
+    icon: BrainCircuit,
+  },
+];
+
 export default function Header() {
   const [activePanel, setActivePanel] = useState<string | null>(null);
 
@@ -87,7 +120,7 @@ export default function Header() {
       title: "Hire Next.js Developer",
       text: "Hire",
     },
-    { id: "about", href: "/#about", title: "About", text: "About" },
+    { id: "about", href: "/about", title: "About", text: "About" },
     { id: "contact", href: "/#contact", title: "Contact", text: "Contact" },
   ];
 
@@ -233,6 +266,40 @@ export default function Header() {
                 See All
               </span>
             </Link>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "hire",
+      label: "Hire",
+      panel: (
+        <div className="p-4">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            {HIRE_LINKS.map((s) => {
+              const Icon = s.icon;
+              return (
+                <Link
+                  key={s.href}
+                  href={s.href}
+                  className="flex items-start gap-3 rounded-xl p-4 transition-colors duration-150 hover:bg-black/6"
+                  style={cardStyle}
+                  title={s.label}
+                >
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-black text-white">
+                    <Icon size={16} strokeWidth={1.8} />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-caption font-semibold text-black/90">
+                      {s.label}
+                    </p>
+                    <p className="mt-1 text-label leading-relaxed text-black/50 line-clamp-2">
+                      {s.description}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       ),
@@ -399,20 +466,38 @@ export default function Header() {
           >
             Blogs
           </Link>
-          <Link
-            href="/hire-nextjs-developer-india"
-            title="Hire Next.js Developer"
+          <div
+            className="rounded-2xl px-2 py-2"
             style={{
               background: "rgba(255,255,255, 0.90)",
               backdropFilter: "blur(8px)",
               WebkitBackdropFilter: "blur(8px)",
             }}
-            className="px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-2xl transition-colors"
           >
-            Hire
-          </Link>
+            <p className="px-1.5 pb-1.5 pt-1 text-label uppercase tracking-[0.18em] text-black/35">
+              Hire Me For
+            </p>
+            <div className="flex flex-col">
+              {HIRE_LINKS.map((s) => {
+                const Icon = s.icon;
+                return (
+                  <Link
+                    key={s.href}
+                    href={s.href}
+                    title={s.label}
+                    className="flex items-center gap-3 rounded-xl px-2 py-2 text-caption font-medium text-black/75 transition-colors hover:bg-black/4 hover:text-black"
+                  >
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-black text-white">
+                      <Icon size={13} strokeWidth={1.8} />
+                    </span>
+                    {s.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
           <Link
-            href="/#about"
+            href="/about"
             title="About"
             style={{
               background: "rgba(255,255,255, 0.90)",

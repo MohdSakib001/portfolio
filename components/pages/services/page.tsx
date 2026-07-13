@@ -16,6 +16,7 @@ import Container from "@/components/Container";
 import PrimaryButton from "@/components/primaryButton";
 import { getFeaturedBlogs } from "@/data/blogs";
 import { projects } from "@/data/projects";
+import { email } from "@/data/constants";
 import type { ServicePage } from "@/types/services";
 
 type ServiceLandingProps = {
@@ -29,6 +30,13 @@ export default function ServiceLanding({ page }: ServiceLandingProps) {
     .map((id) => projects.find((project) => project.id === id))
     .filter(Boolean) as typeof projects;
   const featuredBlogs = getFeaturedBlogs(3);
+  const inquirySubject = page.inquirySubject ?? "Project inquiry";
+  const primaryMailto = `mailto:${email}?subject=${encodeURIComponent(
+    inquirySubject,
+  )}`;
+  const startMailto = `mailto:${email}?subject=${encodeURIComponent(
+    `${inquirySubject} — let's talk`,
+  )}`;
 
   return (
     <main className="min-h-screen bg-white text-black">
@@ -57,7 +65,7 @@ export default function ServiceLanding({ page }: ServiceLandingProps) {
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <PrimaryButton
-                  href="mailto:mohdsakib.work@gmail.com?subject=Next.js%20project%20inquiry"
+                  href={primaryMailto}
                   title={page.primaryCta}
                   text={page.primaryCta}
                   size="base"
@@ -294,7 +302,7 @@ export default function ServiceLanding({ page }: ServiceLandingProps) {
                 Available For Remote Work
               </p>
               <h2 className="max-w-3xl text-heading font-semibold leading-none tracking-tight">
-                Need a Next.js freelancer who can own the build?
+                Need a senior developer who can own the build?
               </h2>
               <div className="mt-5 flex flex-wrap gap-3 text-caption text-white/55">
                 <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2">
@@ -312,7 +320,7 @@ export default function ServiceLanding({ page }: ServiceLandingProps) {
               </div>
             </div>
             <a
-              href="mailto:mohdsakib.work@gmail.com?subject=Next.js%20freelance%20project"
+              href={startMailto}
               className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-white px-6 py-4 text-label font-semibold uppercase tracking-[0.12em] text-black transition hover:bg-neutral-200"
             >
               Start a conversation
