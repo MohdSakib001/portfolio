@@ -435,3 +435,31 @@ export const tools: Tool[] = [
     tags: ["Security", "Privacy", "Utilities"],
   },
 ];
+
+export const getToolById = (id: string): Tool | undefined =>
+  tools.find((tool) => tool.id === id);
+
+/**
+ * Tools related to `id`, ranked by category first and shared tags as the
+ * tiebreak — a loose tag like "Fun" alone should not outrank a sibling tool
+ * in the same category. Only live tools are returned so we never link to a 404.
+ */
+export const getRelatedTools = (id: string, limit = 3): Tool[] => {
+  const current = getToolById(id);
+  if (!current) return [];
+
+  const currentTags = new Set(current.tags);
+
+  return tools
+    .filter((tool) => tool.id !== id && tool.status === "live")
+    .map((tool) => ({
+      tool,
+      score:
+        (tool.category === current.category ? 4 : 0) +
+        tool.tags.filter((tag) => currentTags.has(tag)).length * 2,
+    }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map(({ tool }) => tool);
+};

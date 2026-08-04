@@ -89,9 +89,6 @@ export default function BlogDetail({ blog, relatedBlogs }: BlogDetailProps) {
           />
 
           <aside className="mt-14 rounded-4xl bg-[#E6E0F8] p-6 md:p-8">
-            <p className="mb-3 text-label font-medium uppercase tracking-[0.2em] text-black/35">
-              Hiring Next.js help?
-            </p>
             <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
               <div>
                 <h2 className="text-title font-semibold leading-tight tracking-tight">

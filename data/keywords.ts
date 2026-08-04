@@ -76,3 +76,20 @@ export const projectsKeyword = projects.flatMap((project) => {
     `${project.name} scalable ${project.category} platform`,
   ];
 });
+
+export const ageCalculatorKeyword = [
+  "age calculator",
+  "how old am I",
+  "age calculator online",
+  "calculate age from date of birth",
+  "exact age calculator",
+  "birthday calculator",
+  "age in days",
+  "how many days old am I",
+  "zodiac sign calculator",
+  "age counter",
+  "date of birth age calculator",
+  "age difference calculator",
+  "chronological age calculator",
+  "free age calculator no signup",
+];

@@ -2,112 +2,18 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { Search, X } from "lucide-react";
 import {
-  Search,
-  X,
-  FileText,
-  Type,
-  AlignLeft,
-  FileCode,
-  Sparkles,
-  PenLine,
-  Download,
-  Maximize2,
-  Eraser,
-  Palette,
-  Smile,
-  FileImage,
-  FileOutput,
-  Video,
-  CalendarDays,
-  Scale,
-  Percent,
-  Shuffle,
-  Receipt,
-  Home,
-  ArrowLeftRight,
-  Timer,
-  Clock,
-  Globe,
-  ClipboardList,
-  Briefcase,
-  BookOpen,
-  Database,
-  Crop,
-  Braces,
-  KeyRound,
-  CalendarClock,
-  Hash,
-  Eye,
-  Table2,
-  Plug,
-  GitBranch,
-  QrCode,
-  Lock,
-  type LucideProps,
-} from "lucide-react";
-import type { ElementType } from "react";
+  FALLBACK_ICON,
+  ICON_MAP,
+  PALETTE,
+} from "@/components/tools/toolIcons";
 import {
   tools,
   CATEGORY_META,
   type Tool,
   type ToolCategory,
 } from "../../data/tools";
-
-const ICON_MAP: Record<string, ElementType<LucideProps>> = {
-  FileText,
-  Type,
-  AlignLeft,
-  FileCode,
-  Sparkles,
-  PenLine,
-  Download,
-  Maximize2,
-  Eraser,
-  Palette,
-  Smile,
-  FileImage,
-  FileOutput,
-  Video,
-  CalendarDays,
-  Scale,
-  Percent,
-  Shuffle,
-  Receipt,
-  Home,
-  ArrowLeftRight,
-  Timer,
-  Clock,
-  Globe,
-  ClipboardList,
-  Briefcase,
-  BookOpen,
-  Database,
-  Crop,
-  Braces,
-  KeyRound,
-  Search,
-  CalendarClock,
-  Hash,
-  Eye,
-  Table2,
-  Plug,
-  GitBranch,
-  QrCode,
-  Lock,
-};
-
-// Colors by index — not by category — so the bento looks varied
-const PALETTE = [
-  { bg: "#F0EBFF", color: "#7c3aed" },
-  { bg: "#EFF6FF", color: "#3b82f6" },
-  { bg: "#ECFDF5", color: "#059669" },
-  { bg: "#FFF7ED", color: "#ea580c" },
-  { bg: "#FFF1F2", color: "#e11d48" },
-  { bg: "#F0FDFA", color: "#0d9488" },
-  { bg: "#FEFCE8", color: "#b45309" },
-  { bg: "#F5F3FF", color: "#8b5cf6" },
-];
 
 const TOOL_COLORS = tools.map((_, i) => PALETTE[i % PALETTE.length]);
 
@@ -138,7 +44,7 @@ function CardContent({
   featured: boolean;
   live: boolean;
 }) {
-  const Icon = ICON_MAP[tool.icon] ?? FileText;
+  const Icon = ICON_MAP[tool.icon] ?? FALLBACK_ICON;
   return (
     <>
       {featured && (

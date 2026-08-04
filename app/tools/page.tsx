@@ -124,6 +124,7 @@ export default function ToolsPage() {
           </Link>
         </div>
       </main>
+
       <Footer />
     </>
   );

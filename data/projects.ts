@@ -2,6 +2,75 @@ import { Project } from "../types/projects";
 
 export const projects: Project[] = [
   {
+    id: "voizo",
+    name: "Voizo",
+    tagline:
+      "Voice-first social platform for making new friends across India",
+    category: "client",
+    hero: {
+      type: "image",
+      src: "/assets/projects/voizo/bento.webp",
+    },
+    gallery: [
+      { type: "image", src: "/assets/projects/voizo/app-discover.webp" },
+      { type: "image", src: "/assets/projects/voizo/app-call.webp" },
+      { type: "image", src: "/assets/projects/voizo/app-games.webp" },
+      { type: "image", src: "/assets/projects/voizo/multiple-languages.webp" },
+      { type: "image", src: "/assets/projects/voizo/safety-1.webp" },
+      { type: "image", src: "/assets/projects/voizo/safety-2.webp" },
+      { type: "image", src: "/assets/projects/voizo/safety-3.webp" },
+      { type: "image", src: "/assets/projects/voizo/safety-4.webp" },
+    ],
+    overview: {
+      problem:
+        "Social apps in India had drifted into feeds and endless scrolling — text-first, passive, and bad at actually turning strangers into friends. Building a voice-first alternative meant solving three hard problems at once: real-time audio and video quality on low-end Android devices over patchy networks, language fragmentation across a country that does not share one language, and a safety bar high enough that people feel comfortable speaking to a stranger live.",
+      solution:
+        "Built a voice-first social product where the primary action is a live call rather than a post. Real-time audio and video runs on Agora's WebRTC infrastructure, with in-call games and virtual gifting layered on top to give conversations something to do beyond small talk. An Express.js and MongoDB backend handles matching, wallets, and the gifting economy, with media assets on S3. Language-aware discovery pairs users across Hindi, English, Punjabi, Tamil, and Marathi, and a verification plus real-time AI moderation pipeline screens behaviour as calls happen.",
+      myRole: "AI & Full-Stack Engineer",
+      timeline: "June 2025 — Present",
+    },
+    metrics: {
+      users: "50K+ downloads",
+      performance: "30% fewer crashes",
+      scale: "iOS & Android · 5 languages",
+    },
+    achievements: [
+      "Shipped the production build and drove the app crash rate down by 30%, stabilising real-time calls across a wide range of low-end Android devices.",
+      "Lifted user retention by 40% by introducing a creator onboarding flow and removing automation from the discovery experience.",
+    ],
+    stack: [
+      "React Native",
+      "Next.js",
+      "Express.js",
+      "MongoDB",
+      "Agora",
+      "WebRTC",
+      "AWS",
+    ],
+    architecture: {
+      frontend: "React Native (bare CLI) & Next.js",
+      backend: "Express.js & MongoDB",
+      realtime: "Agora & WebRTC",
+      infra: "AWS & S3",
+    },
+    features: [
+      "Audio & Video Calls",
+      "In-Call Games",
+      "Virtual Gifting",
+      "Language-Aware Matching",
+      "Real-Time AI Moderation",
+      "Verified Creator Profiles",
+    ],
+    links: {
+      live: "https://www.voizo.app",
+      website: "https://www.voizo.app",
+      playstore:
+        "https://play.google.com/store/apps/details?id=com.speak_a_mind",
+      appstore:
+        "https://apps.apple.com/in/app/voizo-talk-and-make-friends/id6670317708",
+    },
+  },
+  {
     id: "stakeclash",
     name: "StakeClash",
     tagline:
