@@ -1,8 +1,18 @@
-export const TESTIMONIALS = [
+export type TestimonialEntry = {
+  id: string;
+  name: string;
+  company: string;
+  quote: string;
+  /** Headshot in `public/assets/testimonials`. Falls back to an initial. */
+  avatar?: string;
+};
+
+export const TESTIMONIALS: TestimonialEntry[] = [
   {
     id: "adam",
     name: "Adam",
     company: "Stakeclash",
+    avatar: "/assets/testimonials/1.png",
     quote:
       "Working with Sakib on Stakeclash was a game changer. He turned a complex staking interface into something our users actually enjoy — the speed and attention to detail were unlike anything I'd experienced.",
   },

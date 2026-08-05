@@ -1,9 +1,29 @@
-import { HOST } from "@/data/constants";
+import { HOST, TWITTER_USERNAME } from "@/data/constants";
+import { META_DESCRIPTION, NAME, TITLE } from "@/data/profile";
 
+/**
+ * Shared metadata builder.
+ *
+ * `image` defaults to the generated card from `app/opengraph-image.tsx`.
+ *
+ * It has to be set explicitly rather than left to the file convention: a page
+ * that defines `openGraph` at all *replaces* the parent segment's openGraph
+ * block instead of merging with it, so every route outside the root segment
+ * would otherwise ship no `og:image` whatsoever. Pass `image` only when a page
+ * has a genuinely better one of its own (e.g. a blog cover).
+ *
+ * @param {{
+ *   url?: string,
+ *   title?: string,
+ *   description?: string,
+ *   keywords?: string[],
+ *   image?: string,
+ * }} [options]
+ */
 export const createMetaData = ({
   url = `${HOST}`,
-  title = `Mohd Sakib | Senior Full Stack & React Native Developer`,
-  description = `Senior Full Stack Developer specializing in Next.js, Node.js, React Native, and AI systems. 8 live production products. 25K+ users served. Available for senior full-time roles and high-stakes freelance — Meerut, India.`,
+  title = TITLE,
+  description = META_DESCRIPTION,
   keywords = [
     "Mohd Sakib",
     "Mohd Sakib developer",
@@ -24,14 +44,23 @@ export const createMetaData = ({
     "full stack developer portfolio",
     "mobile app development React Native",
   ],
-  image = "https://mohdsakib.vercel.app/assets/custom_icons/logo-full.png",
+  image = `${HOST}/opengraph-image`,
 } = {}) => {
+  const images = [
+    {
+      url: image,
+      width: 1200,
+      height: 630,
+      alt: `${NAME} — Senior Full Stack & React Native Developer`,
+    },
+  ];
+
   return {
-    metadataBase: new URL("https://mohdsakib.vercel.app"),
+    metadataBase: new URL(HOST),
 
     title: {
       default: title,
-      template: "%s | Mohd Sakib",
+      template: `%s | ${NAME}`,
     },
 
     description,
@@ -45,15 +74,8 @@ export const createMetaData = ({
       url,
       title,
       description,
-      siteName: "Mohd Sakib — Portfolio",
-      images: [
-        {
-          url: image,
-          width: 1200,
-          height: 630,
-          alt: "Mohd Sakib — Senior Full Stack & React Native Developer",
-        },
-      ],
+      siteName: `${NAME} — Portfolio`,
+      images,
     },
 
     twitter: {
@@ -61,7 +83,7 @@ export const createMetaData = ({
       title,
       description,
       images: [image],
-      creator: "@mohdsakib001",
+      creator: `@${TWITTER_USERNAME}`,
     },
 
     robots: {
@@ -74,12 +96,6 @@ export const createMetaData = ({
         "max-image-preview": "large",
         "max-snippet": -1,
       },
-    },
-
-    icons: {
-      icon: "/favicon.ico",
-      shortcut: "/favicon.ico",
-      apple: "/apple-touch-icon.png",
     },
   };
 };

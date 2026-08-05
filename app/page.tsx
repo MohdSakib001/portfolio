@@ -2,16 +2,16 @@ import { breadCrumbSchema } from "@/seo-utils/breadCrumbSchema";
 import { siteNavigationElement } from "@/seo-utils/siteNavigationElement";
 import { webPageSchema } from "@/seo-utils/webPageSchema";
 import { createMetaData } from "@/seo-utils/CommonMeta";
-import { personSchema } from "@/seo-utils/personSchema";
 import { faqSchema } from "@/seo-utils/faqSchema";
 import { profilePageSchema } from "@/seo-utils/profilePageSchema";
 import { HOST } from "../data/constants";
+import { LOCATION, METRICS, TITLE } from "../data/profile";
 import { homeKeyword } from "../data/keywords";
 import Home from "@/components/pages/home";
 
 const url = HOST;
-const title = `Mohd Sakib | Senior Full Stack & React Native Developer`;
-const description = `Senior Full Stack Developer with 3+ years building production-grade SaaS, FinTech, EdTech, and AI products. Next.js, Node.js, React Native, TypeScript. 8 live products. 25K+ users served. Available for full-time & senior freelance — Delhi, India.`;
+const title = TITLE;
+const description = `Senior Full Stack Developer building production-grade SaaS, FinTech, EdTech, and AI products. Next.js, Node.js, React Native, TypeScript. ${METRICS.products} live products. ${METRICS.usersShort} users served. Available for full-time & senior freelance — ${LOCATION.label}.`;
 const keywords = homeKeyword;
 
 export const metadata = {
@@ -26,10 +26,6 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{
           __html: webPageSchema(title, description, url),
         }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: personSchema() }}
       />
       <script
         type="application/ld+json"

@@ -1,6 +1,19 @@
 import { ImageResponse } from "next/og";
 
+import { HOST } from "@/data/constants";
+import { METRICS } from "@/data/profile";
+
 export const runtime = "edge";
+
+/** Domain shown on the card, without the protocol. */
+const DISPLAY_HOST = HOST.replace(/^https?:\/\//, "");
+
+const STATS = [
+  { value: METRICS.usersShort, label: "Users Served" },
+  { value: METRICS.processed, label: "GMV Shipped" },
+  { value: METRICS.lighthouse, label: "Lighthouse" },
+  { value: METRICS.products, label: "Production Systems" },
+];
 
 export const size = {
     width: 1200,
@@ -35,7 +48,7 @@ export default function Image() {
                             color: "#000",
                         }}
                     >
-                        mohdsakib.vercel.app
+                        {DISPLAY_HOST}
                     </span>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                         <div
@@ -92,12 +105,7 @@ export default function Image() {
 
                 {/* BOTTOM STATS ROW */}
                 <div style={{ display: "flex", gap: "40px" }}>
-                    {[
-                        { value: "25K+", label: "Users Served" },
-                        { value: "$100K+", label: "GMV Shipped" },
-                        { value: "98", label: "Lighthouse" },
-                        { value: "8", label: "Production Systems" },
-                    ].map((stat) => (
+                    {STATS.map((stat) => (
                         <div key={stat.label} style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                             <span style={{ fontSize: "28px", fontWeight: 600, color: "#000", letterSpacing: "-0.03em" }}>
                                 {stat.value}

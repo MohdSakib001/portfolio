@@ -32,6 +32,7 @@ export default function Home() {
         <Testimonial
           name={TESTIMONIALS[0].name}
           quote={TESTIMONIALS[0].quote}
+          avatar={TESTIMONIALS[0].avatar}
           idx={1}
         />
 
@@ -46,6 +47,7 @@ export default function Home() {
         <Testimonial
           name={TESTIMONIALS[1].name}
           quote={TESTIMONIALS[1].quote}
+          avatar={TESTIMONIALS[1].avatar}
           idx={2}
         />
 
@@ -56,6 +58,7 @@ export default function Home() {
         <Testimonial
           name={TESTIMONIALS[2].name}
           quote={TESTIMONIALS[2].quote}
+          avatar={TESTIMONIALS[2].avatar}
           idx={3}
         />
 

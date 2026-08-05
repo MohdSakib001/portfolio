@@ -99,7 +99,7 @@ export default function Hero() {
         <div className="flex items-center gap-8">
           <PrimaryButton
             title="Case Studies"
-            href="#work"
+            href="/projects"
             text="View Case Studies"
             size="base"
           />

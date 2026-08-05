@@ -2,7 +2,6 @@ import ServiceLanding from "@/components/pages/services/page";
 import { getServicePage } from "@/data/services";
 import { HOST, email } from "@/data/constants";
 import { breadCrumbSchema } from "@/seo-utils/breadCrumbSchema";
-import { personSchema } from "@/seo-utils/personSchema";
 import { siteNavigationElement } from "@/seo-utils/siteNavigationElement";
 import { webPageSchema } from "@/seo-utils/webPageSchema";
 
@@ -99,10 +98,6 @@ export default function ServicePageShell({ slug }: ServicePageShellProps) {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(faqSchema),
         }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: personSchema() }}
       />
       <script
         type="application/ld+json"

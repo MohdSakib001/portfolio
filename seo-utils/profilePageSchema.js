@@ -1,39 +1,21 @@
+import { PERSON_ID } from "@/data/profile";
+
+/**
+ * ProfilePage wrapper for the homepage.
+ *
+ * `mainEntity` is a bare `@id` reference — the Person itself is declared once
+ * in `siteGraph()` from the root layout. Re-declaring its properties here is
+ * what previously produced two conflicting Person nodes on the same page, with
+ * a different `sameAs` list on each.
+ *
+ * The old `dateCreated`/`dateModified` pair was dropped: it hardcoded a fake
+ * 2024-01-01 creation date and stamped "modified" at render time, so the page
+ * claimed to change on every request.
+ */
 export const profilePageSchema = () => {
   return JSON.stringify({
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    dateCreated: "2024-01-01T00:00:00+00:00",
-    dateModified: new Date().toISOString(),
-    mainEntity: {
-      "@type": "Person",
-      "@id": "https://mohdsakib.vercel.app/#person",
-      name: "Mohd Sakib",
-      alternateName: "Mohammad Sakib",
-      identifier: "mohdsakib001",
-      description:
-        "Senior Full Stack Developer and React Native specialist. Architected 8 production-grade products across FinTech, EdTech, LegalTech, Gaming, and AI — serving 25,000+ users and processing $100K+ in transactions.",
-      image: {
-        "@type": "ImageObject",
-        url: "https://mohdsakib.vercel.app/assets/me/1.png",
-        width: 420,
-        height: 560,
-      },
-      jobTitle: "Senior Full Stack Developer",
-      worksFor: {
-        "@type": "Organization",
-        name: "Freelance / Open to Opportunities",
-      },
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Meerut",
-        addressRegion: "Uttar Pradesh",
-        addressCountry: "IN",
-      },
-      sameAs: [
-        "https://github.com/mohdsakib-Krapton",
-        "https://www.linkedin.com/in/mohdsakib001",
-        "https://twitter.com/mohdsakib001",
-      ],
-    },
+    mainEntity: { "@id": PERSON_ID },
   });
 };

@@ -11,9 +11,6 @@ export type BlogPost = {
   secondary_keywords: string[];
   seo_meta_title: string;
   seo_meta_description: string;
-  author_name: string;
-  author_slug: string;
-  author_bio: string;
   inline_image_urls: string[];
   image_ids: string[];
   image_credits: {

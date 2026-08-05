@@ -1,10 +1,8 @@
 import Image from "next/image";
 import {
-  ArrowUpRight,
   CalendarDays,
   Check,
   Clock3,
-  Code2,
   Globe2,
   Layers,
   MessageCircle,
@@ -12,8 +10,10 @@ import {
 } from "lucide-react";
 
 import CtaSection, { type CtaPill } from "@/components/CtaSection";
-import Icon from "@/components/icon";
+import PaperOverlay from "@/components/PaperOverlay";
+import MetricStrip from "@/components/projects/MetricStrip";
 import ProjectGallery from "@/components/projects/ProjectGallery";
+import ProjectLinks from "@/components/projects/ProjectLinks";
 import ProjectSection from "@/components/projects/ProjectSection";
 import { ScreenShell, PhoneShell } from "@/components/projects/frames";
 import { email } from "@/data/constants";
@@ -25,13 +25,6 @@ const AVAILABILITY_PILLS: CtaPill[] = [
   { icon: MessageCircle, label: "Async updates" },
   { icon: Globe2, label: "Remote from India" },
 ];
-
-const METRIC_LABELS: Record<string, string> = {
-  users: "Reach",
-  revenue: "Revenue",
-  performance: "Performance",
-  scale: "Scale",
-};
 
 const ARCHITECTURE_LABELS: Record<string, string> = {
   frontend: "Frontend",
@@ -46,59 +39,6 @@ const ARCHITECTURE_LABELS: Record<string, string> = {
  */
 const SECTION = "px-4 py-12 sm:px-6 md:px-10 lg:mx-auto lg:max-w-6xl lg:px-16";
 
-const PAPER_TEXTURE = {
-  backgroundImage: `url("/assets/paper-texture.avif")`,
-  backgroundSize: "cover",
-} as const;
-
-function PaperOverlay() {
-  return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-45"
-      style={PAPER_TEXTURE}
-    />
-  );
-}
-
-/**
- * Collapses the six possible link fields into one primary button plus the
- * store icons used on the home grid, dropping placeholders and duplicates.
- */
-function resolveProjectLinks(project: Project) {
-  const { live, website, webapp, github, playstore, appstore } = project.links;
-  const clean = (url?: string) => (url && url !== "#" ? url : undefined);
-
-  const site = clean(website) ?? clean(live) ?? clean(webapp);
-  const webappUrl = clean(webapp);
-
-  const stores: { href: string; label: string; img: string }[] = [];
-  const appstoreUrl = clean(appstore);
-  if (appstoreUrl)
-    stores.push({
-      href: appstoreUrl,
-      label: "App Store",
-      img: "/assets/svg/app-store.svg",
-    });
-
-  const playstoreUrl = clean(playstore);
-  if (playstoreUrl)
-    stores.push({
-      href: playstoreUrl,
-      label: "Play Store",
-      img: "/assets/svg/playstore.svg",
-    });
-
-  if (webappUrl && webappUrl !== site)
-    stores.push({
-      href: webappUrl,
-      label: "Web App",
-      img: "/assets/svg/chrome.svg",
-    });
-
-  return { site, stores, github: clean(github) };
-}
-
 export default function ProjectPage({
   project,
   relatedProjects = [],
@@ -107,9 +47,7 @@ export default function ProjectPage({
   relatedProjects?: Project[];
 }) {
   const theme = getProjectTheme(project.id);
-  const { site, stores, github } = resolveProjectLinks(project);
 
-  const metrics = Object.entries(project.metrics).filter(([, v]) => Boolean(v));
   const architecture = Object.entries(project.architecture).filter(([, v]) =>
     Boolean(v),
   );
@@ -168,43 +106,7 @@ export default function ProjectPage({
                   </span>
                 </div>
 
-                {(site || github || stores.length > 0) && (
-                  <div className="mt-8 flex flex-wrap items-center gap-3">
-                    {site && (
-                      <a
-                        href={site}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-label font-semibold uppercase tracking-[0.12em] text-white transition duration-200 hover:bg-neutral-800"
-                      >
-                        Visit Site
-                        <ArrowUpRight size={14} />
-                      </a>
-                    )}
-
-                    {github && (
-                      <a
-                        href={github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full bg-white/70 px-5 py-3 text-label font-semibold uppercase tracking-[0.12em] text-black/70 transition duration-200 hover:bg-white"
-                      >
-                        <Code2 size={14} />
-                        Source
-                      </a>
-                    )}
-
-                    {stores.map((store) => (
-                      <Icon
-                        key={store.href}
-                        href={store.href}
-                        title={store.label}
-                        type="img"
-                        img={store.img}
-                      />
-                    ))}
-                  </div>
-                )}
+                <ProjectLinks project={project} className="mt-8" />
               </div>
 
               {/* Media respects the surface the product actually lives on. */}
@@ -266,25 +168,9 @@ export default function ProjectPage({
         </section>
 
         {/* METRICS */}
-        {metrics.length > 0 && (
-          <section className={`${SECTION} pt-8`}>
-            <div className="flex flex-wrap gap-x-8 gap-y-6 rounded-2xl border border-black/8 bg-white px-7 py-6 shadow-[0_2px_18px_rgba(3,3,2,0.04)] lg:gap-x-0">
-              {metrics.map(([key, value]) => (
-                <div
-                  key={key}
-                  className="min-w-[8rem] flex-1 lg:border-l lg:border-black/8 lg:pl-8 lg:first:border-l-0 lg:first:pl-0"
-                >
-                  <p className="text-label font-medium uppercase tracking-[0.18em] text-black/35">
-                    {METRIC_LABELS[key] ?? key}
-                  </p>
-                  <p className="mt-1.5 text-body font-semibold tracking-tight text-black">
-                    {value}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+        <section className={`${SECTION} pt-8`}>
+          <MetricStrip metrics={project.metrics} />
+        </section>
 
         {/* OVERVIEW */}
         <section className={SECTION}>

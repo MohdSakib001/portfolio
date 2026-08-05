@@ -3,6 +3,14 @@ import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { lazy, Suspense } from "react";
 import { getHeaderBlogs } from "@/data/blogs";
+import { siteGraph } from "@/seo-utils/siteGraph";
+import { HOST, TWITTER_USERNAME } from "@/data/constants";
+import {
+  META_DESCRIPTION,
+  NAME,
+  SOCIAL_DESCRIPTION,
+  TITLE,
+} from "@/data/profile";
 
 const Header = lazy(() => import("@/components/Header"));
 const Footer = lazy(() => import("@/components/Footer"));
@@ -25,13 +33,12 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mohdsakib.vercel.app"),
+  metadataBase: new URL(HOST),
   title: {
-    default: "Mohd Sakib | Senior Full Stack & React Native Developer",
-    template: "%s | Mohd Sakib",
+    default: TITLE,
+    template: `%s | ${NAME}`,
   },
-  description:
-    "Senior Full Stack Developer specializing in Next.js, Node.js, React Native, and AI systems. 8 live production products. 25K+ users served. Available for senior full-time roles and high-stakes freelance — Meerut, India.",
+  description: META_DESCRIPTION,
   keywords: [
     "Mohd Sakib",
     "Senior Full Stack Developer India",
@@ -42,28 +49,26 @@ export const metadata: Metadata = {
     "AI systems developer",
     "Node.js developer India",
   ],
-  authors: [{ name: "Mohd Sakib", url: "https://mohdsakib.vercel.app" }],
-  creator: "Mohd Sakib",
-  publisher: "Mohd Sakib",
+  authors: [{ name: NAME, url: HOST }],
+  creator: NAME,
+  publisher: NAME,
   openGraph: {
-    title: "Mohd Sakib | Senior Full Stack & React Native Developer",
-    description:
-      "8 live production products. 25K+ users. 98 Lighthouse. Next.js · Node.js · React Native · AI Systems.",
+    title: TITLE,
+    description: SOCIAL_DESCRIPTION,
     type: "profile",
     locale: "en_US",
-    siteName: "Mohd Sakib — Portfolio",
-    url: "https://mohdsakib.vercel.app",
+    siteName: `${NAME} — Portfolio`,
+    url: HOST,
   },
   twitter: {
-    title: "Mohd Sakib | Senior Full Stack & React Native Developer",
-    description:
-      "8 live production products. 25K+ users. 98 Lighthouse. Next.js · Node.js · React Native · AI Systems.",
+    title: TITLE,
+    description: SOCIAL_DESCRIPTION,
     card: "summary_large_image",
-    creator: "@mohdsakib001",
-    site: "@mohdsakib001",
+    creator: `@${TWITTER_USERNAME}`,
+    site: `@${TWITTER_USERNAME}`,
   },
   alternates: {
-    canonical: "https://mohdsakib.vercel.app",
+    canonical: HOST,
   },
 };
 
@@ -91,34 +96,14 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <Footer />
         </Suspense>
-        {/* JSON-LD Structured Data for robust SEO crawling */}
+        {/*
+          Canonical Person + WebSite entity graph. Declared once here so it
+          covers every route — including the tool pages, which previously had
+          no Person node at all. Individual pages must not re-declare it.
+        */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              "@id": "https://mohdsakib.vercel.app/#person",
-              name: "Mohd Sakib",
-              url: "https://mohdsakib.vercel.app",
-              image: "https://mohdsakib.vercel.app/assets/me/1.png",
-              jobTitle: "Senior Full Stack Developer",
-              description:
-                "Senior Full Stack Developer and React Native specialist. Architected 8 production-grade products across FinTech, EdTech, LegalTech, Gaming, and AI — serving 25,000+ users and processing $100K+ in transactions. Core stack: Next.js, Node.js, React Native, TypeScript, PostgreSQL, Redis, AWS.",
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: "Meerut",
-                addressRegion: "Uttar Pradesh",
-                addressCountry: "IN",
-              },
-              email: "mohdsakib.work@gmail.com",
-              sameAs: [
-                "https://github.com/mohdsakib001",
-                "https://www.linkedin.com/in/mohdsakib001",
-                "https://twitter.com/mohdsakib001",
-              ],
-            }),
-          }}
+          dangerouslySetInnerHTML={{ __html: siteGraph() }}
         />
       </body>
     </html>

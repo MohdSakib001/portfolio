@@ -1,7 +1,7 @@
 export const faqsData = [
   {
     question: "Is Mohd Sakib available for full-time employment or freelance contracts?",
-    answer: "Yes — I am currently open to senior full-time roles and high-stakes freelance contracts. I'm based in Meerut, India and work remotely across time zones. Reach out at mohdsakib.work@gmail.com to discuss opportunities.",
+    answer: "Yes — I am currently open to senior full-time roles and high-stakes freelance contracts. I'm based in Delhi, India and work remotely across time zones. Reach out at mohdsakib.work@gmail.com to discuss opportunities.",
   },
   {
     question: "What tech stack does Mohd Sakib specialize in?",

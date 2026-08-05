@@ -131,7 +131,8 @@ export default function Header({
     activePanel === "mobile-nav" ||
     activePanel === "mobile-products" ||
     activePanel === "mobile-tools" ||
-    activePanel === "mobile-blogs";
+    activePanel === "mobile-blogs" ||
+    activePanel === "mobile-hire";
 
   const featuredTools = FEATURED.map((id) =>
     tools.find((t) => t.id === id),
@@ -570,33 +571,67 @@ export default function Header({
             </div>
           </div>
           <div
-            className="rounded-2xl px-2 py-2"
+            className="rounded-2xl"
             style={{
               background: "rgba(255,255,255, 0.90)",
               backdropFilter: "blur(8px)",
               WebkitBackdropFilter: "blur(8px)",
             }}
           >
-            <p className="px-1.5 pb-1.5 pt-1 text-label uppercase tracking-[0.18em] text-black/35">
-              Hire Me For
-            </p>
-            <div className="flex flex-col">
-              {HIRE_LINKS.map((s) => {
-                const Icon = s.icon;
-                return (
-                  <Link
-                    key={s.href}
-                    href={s.href}
-                    title={s.label}
-                    className="flex items-center gap-3 rounded-xl px-2 py-2 text-caption font-medium text-black/75 transition-colors hover:bg-black/4 hover:text-black"
-                  >
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-black text-white">
-                      <Icon size={13} strokeWidth={1.8} />
-                    </span>
-                    {s.label}
-                  </Link>
-                );
-              })}
+            <button
+              onClick={() =>
+                setActivePanel((prev) =>
+                  prev === "mobile-hire" ? "mobile-nav" : "mobile-hire",
+                )
+              }
+              className="list-none cursor-pointer flex w-full items-center justify-between text-black px-3 py-2.5 rounded-xl transition-all"
+              name="Mobile Hire Toggle"
+              title="Mobile Hire Toggle"
+            >
+              <p className="text-caption font-medium text-black/75">Hire</p>
+              <svg
+                className={`w-3 h-3 transition-transform duration-200 ${activePanel === "mobile-hire" ? "rotate-180" : ""}`}
+                viewBox="0 0 10 6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              >
+                <path d="M1 1l4 4 4-4" />
+              </svg>
+            </button>
+
+            <div
+              className={`grid transition-[grid-template-rows] duration-300 ease-out overflow-hidden ${activePanel === "mobile-hire" ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+            >
+              <div className="overflow-hidden">
+                <div className="px-2 pb-3 pt-1 flex flex-col gap-2">
+                  {HIRE_LINKS.map((s) => {
+                    const Icon = s.icon;
+                    return (
+                      <Link
+                        key={s.href}
+                        href={s.href}
+                        title={s.label}
+                        className="flex items-center gap-3 p-3 rounded-xl"
+                        style={cardStyle}
+                      >
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-black text-white">
+                          <Icon size={15} strokeWidth={1.8} />
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-caption font-semibold text-black/90">
+                            {s.label}
+                          </p>
+                          <p className="text-label text-black/50 mt-0.5 truncate">
+                            {s.description}
+                          </p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </div>
           <Link

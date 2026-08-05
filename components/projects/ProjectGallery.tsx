@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 
+import PaperOverlay from "@/components/PaperOverlay";
 import { ScreenShell, PhoneShell } from "./frames";
 
 type GalleryItem = { type: "image" | "video"; src: string };
@@ -16,6 +17,9 @@ type ProjectGalleryProps = {
   /** Pastel panel the track sits on — the project's own colour. */
   bg: string;
   title?: string;
+  description?: string;
+  /** Rendered beside the arrows, e.g. a link through to the case study. */
+  action?: ReactNode;
 };
 
 /**
@@ -38,6 +42,8 @@ export default function ProjectGallery({
   variant,
   bg,
   title = "What it looks like.",
+  description,
+  action,
 }: ProjectGalleryProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
@@ -80,31 +86,44 @@ export default function ProjectGallery({
 
   return (
     <>
-      <div className="mb-8 flex items-end justify-between gap-6">
-        <h2 className="text-heading font-semibold leading-none tracking-tight">
-          {title}
-        </h2>
+      <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 className="text-heading font-semibold leading-none tracking-tight">
+            {title}
+          </h2>
+          {description && (
+            <p className="mt-3 max-w-xl text-caption leading-relaxed text-black/40">
+              {description}
+            </p>
+          )}
+        </div>
 
-        {scrollable && (
-          <div className="flex shrink-0 items-center gap-2">
-            <button
-              type="button"
-              onClick={() => step(-1)}
-              disabled={atStart}
-              aria-label={`Previous ${projectName} screen`}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition duration-200 enabled:hover:bg-neutral-800 disabled:bg-black/8 disabled:text-black/25 sm:h-11 sm:w-11"
-            >
-              <ChevronLeft size={17} />
-            </button>
-            <button
-              type="button"
-              onClick={() => step(1)}
-              disabled={atEnd}
-              aria-label={`Next ${projectName} screen`}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition duration-200 enabled:hover:bg-neutral-800 disabled:bg-black/8 disabled:text-black/25 sm:h-11 sm:w-11"
-            >
-              <ChevronRight size={17} />
-            </button>
+        {(action || scrollable) && (
+          <div className="flex shrink-0 items-center gap-3">
+            {action}
+
+            {scrollable && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => step(-1)}
+                  disabled={atStart}
+                  aria-label={`Previous ${projectName} screen`}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition duration-200 enabled:hover:bg-neutral-800 disabled:bg-black/8 disabled:text-black/25 sm:h-11 sm:w-11"
+                >
+                  <ChevronLeft size={17} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => step(1)}
+                  disabled={atEnd}
+                  aria-label={`Next ${projectName} screen`}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition duration-200 enabled:hover:bg-neutral-800 disabled:bg-black/8 disabled:text-black/25 sm:h-11 sm:w-11"
+                >
+                  <ChevronRight size={17} />
+                </button>
+              </>
+            )}
           </div>
         )}
       </div>
@@ -113,14 +132,7 @@ export default function ProjectGallery({
         className="relative overflow-hidden rounded-4xl"
         style={{ backgroundColor: bg }}
       >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-45"
-          style={{
-            backgroundImage: `url("/assets/paper-texture.avif")`,
-            backgroundSize: "cover",
-          }}
-        />
+        <PaperOverlay />
 
         <div
           ref={trackRef}

@@ -2,7 +2,6 @@ import { breadCrumbSchema } from "@/seo-utils/breadCrumbSchema";
 import { siteNavigationElement } from "@/seo-utils/siteNavigationElement";
 import { webPageSchema } from "@/seo-utils/webPageSchema";
 import { createMetaData } from "@/seo-utils/CommonMeta";
-import { personSchema } from "@/seo-utils/personSchema";
 import { faqSchema } from "@/seo-utils/faqSchema";
 import { profilePageSchema } from "@/seo-utils/profilePageSchema";
 import { HOST } from "@/data/constants";
@@ -28,10 +27,6 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{
           __html: webPageSchema(title, description, url),
         }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: personSchema() }}
       />
       <script
         type="application/ld+json"

@@ -7,9 +7,9 @@ import {
   getRelatedBlogs,
 } from "@/data/blogs";
 import { HOST } from "@/data/constants";
+import { PERSON_ID } from "@/data/profile";
 import { createMetaData } from "@/seo-utils/CommonMeta";
 import { breadCrumbSchema } from "@/seo-utils/breadCrumbSchema";
-import { personSchema } from "@/seo-utils/personSchema";
 import { siteNavigationElement } from "@/seo-utils/siteNavigationElement";
 import { webPageSchema } from "@/seo-utils/webPageSchema";
 
@@ -64,15 +64,10 @@ export default async function BlogDetailPage({ params }: Props) {
     image: blog.cover_image_url,
     datePublished: blog.createdAt,
     dateModified: blog.generatedAt || blog.createdAt,
-    author: {
-      "@type": "Person",
-      name: blog.author_name || "Mohd Sakib",
-    },
-    publisher: {
-      "@type": "Person",
-      name: "Mohd Sakib",
-      url: HOST,
-    },
+    // Reference the site-wide Person declared in siteGraph() rather than
+    // restating it — every post then reinforces one entity.
+    author: { "@id": PERSON_ID },
+    publisher: { "@id": PERSON_ID },
     mainEntityOfPage: url,
     keywords: [blog.focus_keyword, ...blog.tags].filter(Boolean).join(", "),
   };
@@ -90,10 +85,6 @@ export default async function BlogDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(blogPostingSchema),
         }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: personSchema() }}
       />
       <script
         type="application/ld+json"

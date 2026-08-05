@@ -2,13 +2,12 @@ import AboutPage from "@/components/pages/about/page";
 import { HOST } from "@/data/constants";
 import { createMetaData } from "@/seo-utils/CommonMeta";
 import { breadCrumbSchema } from "@/seo-utils/breadCrumbSchema";
-import { personSchema } from "@/seo-utils/personSchema";
 import { profilePageSchema } from "@/seo-utils/profilePageSchema";
 
 const url = `${HOST}/about`;
 const title = "About Mohd Sakib | Senior Full Stack & React Native Developer";
 const description =
-  "Mohd Sakib is a senior full-stack and React Native developer from Meerut, India. 8 production products, 25K+ users served, $100K+ processed — building web, mobile, and AI products for US, UK, and global teams.";
+  "Mohd Sakib is a senior full-stack and React Native developer from Delhi, India. 8 production products, 25K+ users served, $100K+ processed — building web, mobile, and AI products for US, UK, and global teams.";
 
 export const metadata = createMetaData({
   title,
@@ -31,10 +30,6 @@ export default function Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: profilePageSchema() }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: personSchema() }}
       />
       <script
         type="application/ld+json"

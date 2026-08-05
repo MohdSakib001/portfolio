@@ -4,6 +4,7 @@ import { ArrowLeft, CalendarDays, Clock } from "lucide-react";
 
 import BlogSection from "@/components/blogs/BlogSection";
 import { formatBlogDate, getReadingTime } from "@/data/blogs";
+import { AUTHOR_BIO, NAME } from "@/data/profile";
 import type { BlogPost } from "@/types/blogs";
 
 type BlogDetailProps = {
@@ -109,16 +110,14 @@ export default function BlogDetail({ blog, relatedBlogs }: BlogDetailProps) {
             </div>
           </aside>
 
-          {blog.author_bio && (
-            <aside className="mt-14 rounded-2xl border border-black/6 bg-[#DAF0DE] p-6">
-              <p className="mb-2 text-label font-medium uppercase tracking-[0.2em] text-black/35">
-                Written by {blog.author_name}
-              </p>
-              <p className="text-caption leading-relaxed text-black/55">
-                {blog.author_bio}
-              </p>
-            </aside>
-          )}
+          <aside className="mt-14 rounded-2xl border border-black/6 bg-[#DAF0DE] p-6">
+            <p className="mb-2 text-label font-medium uppercase tracking-[0.2em] text-black/35">
+              Written by {NAME}
+            </p>
+            <p className="text-caption leading-relaxed text-black/55">
+              {AUTHOR_BIO}
+            </p>
+          </aside>
         </section>
       </article>
 

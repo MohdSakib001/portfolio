@@ -1,280 +1,111 @@
+import Link from "next/link";
+import { ArrowRight, Boxes, Layers, Smartphone, Zap } from "lucide-react";
+
+import Container from "@/components/Container";
+import CtaSection, { type CtaPill } from "@/components/CtaSection";
+import PaperOverlay from "@/components/PaperOverlay";
+import ProjectGallery from "@/components/projects/ProjectGallery";
+import { resolveProjectLinks } from "@/components/projects/ProjectLinks";
+import { email } from "@/data/constants";
 import { projects } from "@/data/projects";
-import Image from "next/image";
+import { getProjectTheme } from "@/data/projectTheme";
+
+const AVAILABILITY_PILLS: CtaPill[] = [
+  { icon: Zap, label: "Shipped end to end" },
+  { icon: Layers, label: "Mobile, web & AI" },
+  { icon: Boxes, label: "Available for work" },
+];
+
+const liveCount = projects.filter((project) => {
+  const { site, stores } = resolveProjectLinks(project);
+  return Boolean(site) || stores.length > 0;
+}).length;
+
+const mobileCount = projects.filter(
+  (project) => getProjectTheme(project.id).platform === "mobile",
+).length;
+
+const techCount = new Set(projects.flatMap((project) => project.stack)).size;
+
+const HERO_STATS = [
+  { icon: Boxes, value: projects.length, label: "Projects" },
+  { icon: Zap, value: liveCount, label: "Live" },
+  { icon: Smartphone, value: mobileCount, label: "Mobile Apps" },
+  { icon: Layers, value: techCount, label: "Technologies" },
+];
 
 export default function ProjectsArchive() {
   return (
-    <main className="min-h-screen bg-[#050505] text-white selection:bg-[#00ff9d] selection:text-black font-sans">
-      {/* Header */}
-      <section className="pt-40 pb-20 px-8 md:px-16 max-w-360 mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
-          <h1 className="text-display md:text-8xl lg:text-[10rem] font-black uppercase tracking-tighter leading-[0.85] bg-clip-text text-transparent bg-linear-to-b from-white to-white/40">
-            Project
-            <br />
-            Archive.
-          </h1>
-          <p className="text-heading md:text-xl text-neutral-400 max-w-sm font-light leading-relaxed mb-4 md:mb-8">
-            A comprehensive breakdown of the mobile apps, complex platforms, and
-            scalable infrastructure I've architected.
-          </p>
+    <main className="min-h-screen bg-white text-black">
+      {/* Hero — same panel language as the blog archive. */}
+      <section className="px-4 pb-8 pt-40 sm:px-6 md:px-10 lg:mx-auto lg:max-w-6xl lg:px-16">
+        <div className="relative overflow-hidden rounded-4xl bg-[#E6E0F8] p-8 md:p-12">
+          <PaperOverlay />
+
+          <div className="relative">
+            <h1 className="mx-auto max-w-3xl text-center text-display font-semibold leading-none tracking-tight">
+              Everything I&apos;ve shipped.
+            </h1>
+
+            <div className="mt-10 grid grid-cols-2 gap-3 md:mt-12 lg:grid-cols-4">
+              {HERO_STATS.map(({ icon: Icon, value, label }) => (
+                <div
+                  key={label}
+                  className="rounded-2xl bg-white/60 p-5 shadow-[0_0_0_1px_rgba(3,3,2,0.06),0_4px_24px_rgba(3,3,2,0.06)] backdrop-blur"
+                >
+                  <Icon size={18} className="mb-4 text-black/45" />
+                  <p className="text-3xl font-semibold tracking-tight">
+                    {value}
+                  </p>
+                  <p className="mt-1 text-label uppercase tracking-[0.16em] text-black/40">
+                    {label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Projects Iterator */}
-      <div className="flex flex-col gap-40 pb-40">
-        {projects.map((project, idx) => (
-          <article
-            key={project.id}
-            id={project.id}
-            className="scroll-mt-32 pt-16 px-8 md:px-16 max-w-360 mx-auto w-full relative"
-          >
-            {/* Divider Line */}
-            <div className="absolute top-0 left-8 right-8 md:left-16 md:right-16 h-px bg-neutral-800" />
+      {/* One showcase per project, each on its own colour. */}
+      {projects.map((project) => {
+        const theme = getProjectTheme(project.id);
 
-            <div className="flex flex-col lg:flex-row gap-20">
-              {/* Left Col - Info */}
-              <div className="w-full lg:w-[45%] space-y-16">
-                <div>
-                  <p className="text-xs font-mono tracking-widest text-neutral-500 mb-6 flex items-center gap-4">
-                    <span className="text-[#00ff9d]">
-                      {(idx + 1).toString().padStart(2, "0")}
-                    </span>
-                    <span className="w-8 h-px bg-neutral-800" />
-                    <span className="uppercase">{project.category}</span>
-                  </p>
-                  <h2 className="text-5xl md:text-7xl font-bold tracking-tight mb-8">
-                    {project.name}
-                  </h2>
-                  <p className="text-xl md:text-2xl text-neutral-300 font-light leading-relaxed">
-                    {project.tagline}
-                  </p>
-                </div>
+        return (
+          <div key={project.id} id={project.id} className="scroll-mt-32">
+            <Container>
+              <ProjectGallery
+                items={project.gallery}
+                projectName={project.name}
+                variant={theme.platform}
+                bg={theme.bg}
+                title={project.name}
+                description={project.tagline}
+                action={
+                  <Link
+                    href={`/projects/${project.id}`}
+                    className="inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-label font-semibold uppercase tracking-[0.12em] text-white transition duration-200 hover:bg-neutral-800"
+                  >
+                    Case Study
+                    <ArrowRight size={14} />
+                  </Link>
+                }
+              />
+            </Container>
+          </div>
+        );
+      })}
 
-                {/* Architecture & Stack Section */}
-                <div className="space-y-12">
-                  {/* Overview Cards */}
-                  <div className="group relative bg-[#0a0a0a] p-8 md:p-10 rounded-4xl border border-neutral-900 overflow-hidden">
-                    <div className="absolute inset-0 bg-linear-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                    <div className="space-y-10 relative z-10">
-                      <div>
-                        <h3 className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-3">
-                          The Problem
-                        </h3>
-                        <p className="text-neutral-300 leading-relaxed text-lg">
-                          {project.overview.problem}
-                        </p>
-                      </div>
-                      <div>
-                        <h3 className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-3">
-                          The Solution
-                        </h3>
-                        <p className="text-neutral-300 leading-relaxed text-lg">
-                          {project.overview.solution}
-                        </p>
-                      </div>
-                      <div className="grid grid-cols-2 gap-8 pt-8 border-t border-neutral-900">
-                        <div>
-                          <h3 className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-2">
-                            Role
-                          </h3>
-                          <p className="text-base font-medium">
-                            {project.overview.myRole}
-                          </p>
-                        </div>
-                        <div>
-                          <h3 className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-2">
-                            Timeline
-                          </h3>
-                          <p className="text-base font-medium">
-                            {project.overview.timeline}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Metrics Grid */}
-                  <div className="grid grid-cols-2 gap-4">
-                    {Object.entries(project.metrics).map(([key, val]) => (
-                      <div
-                        key={key}
-                        className="p-6 md:p-8 bg-[#0a0a0a] rounded-4xl border border-neutral-900 flex flex-col justify-center"
-                      >
-                        <p className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-2">
-                          {key}
-                        </p>
-                        <p className="text-2xl md:text-3xl font-medium tracking-tight text-[#00ff9d]">
-                          {val as string}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Tech Stack */}
-                  <div className="pt-8 border-t border-neutral-900">
-                    <h3 className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-6">
-                      Tech Stack & Infrastructure
-                    </h3>
-                    <div className="flex flex-wrap gap-3">
-                      {project.stack.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-4 py-2 bg-neutral-900 text-neutral-300 border border-neutral-800 rounded-full text-xs font-mono tracking-wide"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                      <span className="px-4 py-2 bg-neutral-900 text-neutral-300 border border-neutral-800 rounded-full text-xs font-mono tracking-wide">
-                        Infra: {project.architecture.infra}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Links */}
-                  <div className="flex flex-wrap items-center gap-6 pt-6">
-                    {project.links &&
-                      project.links.appstore &&
-                      project.links.appstore !== "#" && (
-                        <a
-                          href={project.links.appstore}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="hover:scale-105 transition active:scale-95"
-                        >
-                          <Image
-                            width={140}
-                            height={44}
-                            src="/assets/appstore.webp"
-                            alt="Download on the App Store"
-                            className="h-14 w-auto object-contain drop-shadow-md"
-                          />
-                        </a>
-                      )}
-
-                    {project.links &&
-                      project.links.playstore &&
-                      project.links.playstore !== "#" && (
-                        <a
-                          href={project.links.playstore}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="hover:scale-105 transition active:scale-95"
-                        >
-                          <Image
-                            width={140}
-                            height={44}
-                            src="/assets/playstore.webp"
-                            alt="Get it on Google Play"
-                            className="h-14 w-auto object-contain drop-shadow-md"
-                          />
-                        </a>
-                      )}
-
-                    {project.links &&
-                      project.links.webapp &&
-                      project.links.webapp !== "#" && (
-                        <a
-                          href={project.links.webapp}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-8 py-4 bg-white text-black rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-3"
-                        >
-                          <span>Web App</span>
-                          <span className="text-xl leading-none">↗</span>
-                        </a>
-                      )}
-
-                    {project.links &&
-                      project.links.website &&
-                      project.links.website !== "#" && (
-                        <a
-                          href={project.links.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-8 py-4 bg-white text-black rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-3"
-                        >
-                          <span>Visit Website</span>
-                          <span className="text-xl leading-none">↗</span>
-                        </a>
-                      )}
-
-                    {project.links &&
-                      project.links.live &&
-                      project.links.live !== "#" &&
-                      !project.links.webapp &&
-                      !project.links.website && (
-                        <a
-                          href={project.links.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-8 py-4 bg-white text-black rounded-full text-sm font-bold uppercase tracking-widest hover:scale-105 transition shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-3"
-                        >
-                          <span>Live Project</span>
-                          <span className="text-xl leading-none">↗</span>
-                        </a>
-                      )}
-
-                    {project.links &&
-                      project.links.github &&
-                      project.links.github !== "#" && (
-                        <a
-                          href={project.links.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-8 py-4 bg-neutral-900 text-white border border-neutral-800 rounded-full text-sm font-semibold uppercase tracking-widest hover:bg-neutral-800 hover:scale-105 transition active:scale-95 flex items-center gap-3"
-                        >
-                          <span>Source Code</span>
-                          <span className="text-xl leading-none">↗</span>
-                        </a>
-                      )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Col - Dynamic Masonry Gallery */}
-              <div className="w-full lg:w-[55%]">
-                {/* Sticky container wrapper so the gallery scrolls naturally until finished */}
-                <div className="sticky top-12 pb-12">
-                  <div className="columns-1 sm:columns-2 gap-4 space-y-4">
-                    {project.gallery.map((media, i) => (
-                      <div
-                        key={i}
-                        className="break-inside-avoid relative rounded-4xl overflow-hidden bg-neutral-900 border border-neutral-800 group"
-                      >
-                        {media.type === "image" ? (
-                          <Image
-                            src={media.src}
-                            alt={`${project.name} preview ${i + 1}`}
-                            loading="lazy"
-                            width={600}
-                            height={800}
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            className="w-full h-auto object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition duration-700 ease-out"
-                          />
-                        ) : (
-                          <video
-                            src={media.src}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            className="w-full h-auto opacity-90 group-hover:opacity-100 group-hover:scale-105 transition duration-700 ease-out"
-                          />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-
-      {/* Footer */}
-      <footer className="py-12 border-t border-neutral-900 text-center text-neutral-500 text-sm tracking-widest uppercase font-mono">
-        <p>© {new Date().getFullYear()} Mohd Sakib.</p>
-      </footer>
+      <CtaSection
+        eyebrow="Next Build"
+        title="Want a product like these shipped end to end?"
+        description="I design, build, and ship full-stack products — mobile apps, AI systems, and the infrastructure behind them."
+        pills={AVAILABILITY_PILLS}
+        href={`mailto:${email}?subject=${encodeURIComponent(
+          "Project inquiry",
+        )}`}
+        cta="Start a conversation"
+      />
     </main>
   );
 }

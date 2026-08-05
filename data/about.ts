@@ -16,7 +16,7 @@ export const aboutContent = {
   eyebrow: "About Mohd Sakib",
   title: "I turn ambitious product ideas into shipped, scalable software.",
   subtitle:
-    "Senior full-stack and React Native developer from Meerut, India. I build production web apps, mobile apps, and AI systems for founders and product teams in the US, UK, and beyond — with senior execution and none of the agency drag.",
+    "Senior full-stack and React Native developer from Delhi, India. I build production web apps, mobile apps, and AI systems for founders and product teams in the US, UK, and beyond — with senior execution and none of the agency drag.",
   story: [
     "I started as a developer who just wanted to ship things that people actually use. That instinct never left. Over the last few years I've architected and shipped eight production-grade products across FinTech, EdTech, LegalTech, gaming, and AI — serving 25,000+ users and processing over $100K in transactions.",
     "My core work is full-stack product engineering: Next.js and React on the frontend, Node.js and Python on the backend, React Native for mobile, and increasingly LLM and RAG systems where AI makes a product genuinely better. I care about the boring parts too — performance, clean architecture, and code a future team can build on.",
