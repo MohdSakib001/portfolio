@@ -13,6 +13,8 @@ import {
 
 import BlogSection from "@/components/blogs/BlogSection";
 import Container from "@/components/Container";
+import CtaSection, { type CtaPill } from "@/components/CtaSection";
+import FaqSection from "@/components/FaqSection";
 import PrimaryButton from "@/components/primaryButton";
 import { getFeaturedBlogs } from "@/data/blogs";
 import { projects } from "@/data/projects";
@@ -24,6 +26,12 @@ type ServiceLandingProps = {
 };
 
 const selectedIcons = [Layers3, Sparkles, BriefcaseBusiness, Globe2];
+
+const AVAILABILITY_PILLS: CtaPill[] = [
+  { icon: Clock3, label: "US/UK overlap calls" },
+  { icon: MessageCircle, label: "Async updates" },
+  { icon: Globe2, label: "Remote from India" },
+];
 
 export default function ServiceLanding({ page }: ServiceLandingProps) {
   const featuredProjects = page.projectIds
@@ -262,73 +270,15 @@ export default function ServiceLanding({ page }: ServiceLandingProps) {
         </div>
       </Container>
 
-      <Container className="pt-10">
-        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
-          <div>
-            <p className="mb-3 text-label font-medium uppercase tracking-[0.25em] text-black/30">
-              FAQ
-            </p>
-            <h2 className="text-heading font-semibold leading-none tracking-tight">
-              Questions clients usually ask.
-            </h2>
-          </div>
-          <div className="grid gap-3">
-            {page.faqs.map((faq) => (
-              <details
-                key={faq.question}
-                className="group rounded-2xl border border-black/6 bg-white p-5 shadow-[0_0_0_1px_rgba(3,3,2,0.04),0_4px_24px_rgba(3,3,2,0.05)]"
-              >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold tracking-tight">
-                  {faq.question}
-                  <ArrowRight
-                    size={16}
-                    className="shrink-0 transition group-open:rotate-90"
-                  />
-                </summary>
-                <p className="mt-4 text-caption leading-relaxed text-black/55">
-                  {faq.answer}
-                </p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </Container>
+      <FaqSection faqs={page.faqs} />
 
-      <section className="px-4 py-10 sm:px-6 md:px-10 lg:mx-auto lg:max-w-6xl lg:px-16">
-        <div className="relative overflow-hidden rounded-4xl bg-black p-8 text-white md:p-12">
-          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div>
-              <p className="mb-3 text-label font-medium uppercase tracking-[0.25em] text-white/35">
-                Available For Remote Work
-              </p>
-              <h2 className="max-w-3xl text-heading font-semibold leading-none tracking-tight">
-                Need a senior developer who can own the build?
-              </h2>
-              <div className="mt-5 flex flex-wrap gap-3 text-caption text-white/55">
-                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2">
-                  <Clock3 size={15} />
-                  US/UK overlap calls
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2">
-                  <MessageCircle size={15} />
-                  Async updates
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2">
-                  <Globe2 size={15} />
-                  Remote from India
-                </span>
-              </div>
-            </div>
-            <a
-              href={startMailto}
-              className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-white px-6 py-4 text-label font-semibold uppercase tracking-[0.12em] text-black transition hover:bg-neutral-200"
-            >
-              Start a conversation
-              <ArrowRight size={14} />
-            </a>
-          </div>
-        </div>
-      </section>
+      <CtaSection
+        eyebrow="Available For Remote Work"
+        title="Need a senior developer who can own the build?"
+        pills={AVAILABILITY_PILLS}
+        href={startMailto}
+        cta="Start a conversation"
+      />
 
       <BlogSection
         blogs={featuredBlogs}

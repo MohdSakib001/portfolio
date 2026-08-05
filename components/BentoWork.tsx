@@ -7,21 +7,18 @@ import BlurContainer from "./BlurContainer";
 import AnimatedImage from "./AnimatedImage";
 import Container from "./Container";
 import FloatingButton from "./common/floatingButton";
+import { getProjectTheme } from "@/data/projectTheme";
 
 type StatType = "revenue" | "users" | "scale" | "clients";
-type Platform = "mobile" | "web";
 type Stat = { label: string; value: string; type: StatType };
 
 const products: {
   id: string;
   name: string;
   category: string;
-  platform: Platform;
   live: boolean;
   stats: Stat[];
   image?: string;
-  bg: string;
-  accent: string;
   stores: { ios?: string; android?: string; web?: string };
   col: string;
   row: string;
@@ -29,17 +26,133 @@ const products: {
   featuredComponent?: React.ReactNode;
 }[] = [
   {
+    id: "voizo",
+    name: "Voizo",
+    category: "Social · Real-Time Audio",
+    live: true,
+    stats: [
+      { label: "Downloads", value: "50K+", type: "users" },
+      { label: "Languages", value: "5 Languages", type: "scale" },
+    ],
+    stores: {
+      ios: "https://apps.apple.com/in/app/voizo-talk-and-make-friends/id6670317708",
+      android: "https://play.google.com/store/apps/details?id=com.speak_a_mind",
+      web: "https://www.voizo.app",
+    },
+    col: "lg:col-span-1",
+    row: "lg:row-span-2",
+    priority: true,
+    featuredComponent: (
+      <div className="relative w-full h-full flex items-end justify-center m-6">
+        <div className="absolute bottom-[-70%] sm:bottom-[-55%] left-1/2 z-10 -translate-x-[90%] -rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
+          <Image
+            src="/assets/projects/voizo/3.webp"
+            alt="Voizo"
+            width={240}
+            height={500}
+            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
+            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
+          />
+        </div>
+
+        <div className="absolute bottom-[-60%] sm:bottom-[-50%] md:bottom-[-55%] left-1/2 z-20 -translate-x-[10%] rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
+          <Image
+            src="/assets/projects/voizo/1.webp"
+            alt="Voizo"
+            width={240}
+            height={500}
+            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
+            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
+          />
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: "artificialmufti",
+    name: "Artificial Mufti",
+    category: "AI · Islamic Tech",
+    live: true,
+    stats: [
+      { label: "Userbase", value: "500+ MAU", type: "users" },
+      { label: "Userbase", value: "100+ Downloads", type: "users" },
+    ],
+    // image: "/assets/projects/artificialmufti/1.png",
+    stores: { ios: "#", android: "#", web: "https://www.artificialmufti.com" },
+    col: "lg:col-span-1",
+    row: "lg:row-span-2",
+    priority: true,
+    featuredComponent: (
+      <div className="relative w-full h-full flex items-end justify-center m-6">
+        <div className="absolute bottom-[-70%] sm:bottom-[-55%] left-1/2 z-10 -translate-x-[90%] -rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
+          <Image
+            src="/assets/projects/artificialmufti/2.png"
+            alt="Artificial Mufti"
+            width={240}
+            height={500}
+            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
+            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
+          />
+        </div>
+
+        <div className="absolute bottom-[-60%] sm:bottom-[-50%] md:bottom-[-55%] left-1/2 z-20 -translate-x-[10%] rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
+          <Image
+            src="/assets/projects/artificialmufti/1.png"
+            alt="Artificial Mufti"
+            width={240}
+            height={500}
+            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
+            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
+          />
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: "pademi",
+    name: "Pademi",
+    category: "EdTech",
+    live: true,
+    stats: [{ label: "Students", value: "25K+", type: "users" }],
+    stores: { ios: "#", web: "https://pademi.io" },
+    col: "lg:col-span-1",
+    row: "lg:row-span-2",
+    priority: true,
+    featuredComponent: (
+      <div className="relative w-full h-full flex items-end justify-center m-6">
+        <div className="absolute bottom-[-70%] sm:bottom-[-55%] left-1/2 z-10 -translate-x-[90%] -rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
+          <Image
+            src="/assets/projects/pademi/pademi2.webp"
+            alt="Pademi"
+            width={240}
+            height={500}
+            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
+            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
+          />
+        </div>
+
+        <div className="absolute bottom-[-60%] sm:bottom-[-50%] md:bottom-[-55%] left-1/2 z-20 -translate-x-[10%] rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
+          <Image
+            src="/assets/projects/pademi/pademi1.webp"
+            alt="Pademi"
+            width={240}
+            height={500}
+            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
+            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
+          />
+        </div>
+      </div>
+    ),
+  },
+  {
     id: "stakeclash",
     name: "StakeClash",
     category: "Gaming · FinTech",
-    platform: "mobile",
     live: true,
     stats: [
       { label: "Revenue", value: "$12K MRR", type: "revenue" },
       { label: "Userbase", value: "1K+ MAU", type: "users" },
     ],
-    bg: "#E6E0F8",
-    accent: "#7C6FD4",
     stores: { web: "https://app.stakeclash.com" },
     col: "lg:col-span-2",
     row: "lg:row-span-2",
@@ -101,130 +214,19 @@ const products: {
     ),
   },
   {
-    id: "artificialmufti",
-    name: "Artificial Mufti",
-    category: "AI · Islamic Tech",
-    platform: "mobile",
-    live: true,
-    stats: [
-      { label: "Userbase", value: "500+ MAU", type: "users" },
-      { label: "Userbase", value: "100+ Downloads", type: "users" },
-    ],
-    // image: "/assets/projects/artificialmufti/1.png",
-    bg: "#F4EDDA",
-    accent: "#B8860B",
-    stores: { ios: "#", android: "#", web: "https://www.artificialmufti.com" },
-    col: "lg:col-span-1",
-    row: "lg:row-span-2",
-    priority: true,
-    featuredComponent: (
-      <div className="relative w-full h-full flex items-end justify-center m-6">
-        <div className="absolute bottom-[-70%] sm:bottom-[-55%] left-1/2 z-10 -translate-x-[90%] -rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
-          <Image
-            src="/assets/projects/artificialmufti/2.png"
-            alt="Artificial Mufti"
-            width={240}
-            height={500}
-            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
-            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
-          />
-        </div>
-
-        <div className="absolute bottom-[-60%] sm:bottom-[-50%] md:bottom-[-55%] left-1/2 z-20 -translate-x-[10%] rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
-          <Image
-            src="/assets/projects/artificialmufti/1.png"
-            alt="Artificial Mufti"
-            width={240}
-            height={500}
-            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
-            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
-          />
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: "pademi",
-    name: "Pademi",
-    category: "EdTech",
-    platform: "mobile",
-    live: true,
-    stats: [{ label: "Students", value: "25K+", type: "users" }],
-    bg: "#DAF0DE",
-    accent: "#2E8B47",
-    stores: { ios: "#", web: "https://pademi.io" },
-    col: "lg:col-span-1",
-    row: "",
-    priority: false,
-    featuredComponent: (
-      <div className="relative w-full h-full flex items-end justify-center m-6">
-        <div className="absolute bottom-[-70%] sm:bottom-[-55%] left-1/2 z-10 -translate-x-[90%] -rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
-          <Image
-            src="/assets/projects/pademi/pademi2.png"
-            alt="Pademi"
-            width={240}
-            height={500}
-            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
-            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
-          />
-        </div>
-
-        <div className="absolute bottom-[-60%] sm:bottom-[-50%] md:bottom-[-55%] left-1/2 z-20 -translate-x-[10%] rotate-12 transition-all duration-300 ease-out hover:bottom-[-40%]">
-          <Image
-            src="/assets/projects/pademi/pademi1.png"
-            alt="Pademi"
-            width={240}
-            height={500}
-            sizes="(max-width: 640px) 160px, (max-width: 1024px) 180px, 200px"
-            className="w-40 sm:w-45 lg:w-50 h-auto rounded-xl"
-          />
-        </div>
-      </div>
-    ),
-  },
-  {
     id: "sendora",
     name: "Sendora",
     category: "FinTech",
-    platform: "mobile",
     live: true,
     stats: [{ label: "Processed", value: "$50K+", type: "revenue" }],
     image: "/assets/projects/sendora/sendora1.webp",
-    bg: "#DCE8F6",
-    accent: "#2563EB",
     stores: { web: "https://www.sendora.com" },
     col: "lg:col-span-1",
-    row: "",
+    row: "lg:row-span-2",
     priority: false,
     featuredComponent: (
       <Image
         src={"/assets/projects/sendora/sendora1.webp"}
-        alt={"CoLaw LegalTech"}
-        fill
-        className="object-contain object-center rounded-xl"
-        priority={false}
-        quality={90}
-        sizes={"(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
-      />
-    ),
-  },
-  {
-    id: "colaw",
-    name: "CoLaw",
-    category: "LegalTech",
-    platform: "web",
-    live: true,
-    stats: [{ label: "Clients", value: "200+ Firms", type: "clients" }],
-    image: "/assets/projects/colaw/colaw1.webp",
-    bg: "#E8E4DA",
-    accent: "#7D6E55",
-    stores: { web: "https://www.colaw.com" },
-    col: "lg:col-span-1",
-    row: "",
-    priority: false,
-    featuredComponent: (
-      <Image
-        src={"/assets/projects/colaw/colaw1.webp"}
         alt={"CoLaw LegalTech"}
         fill
         className="object-contain object-center rounded-xl"
@@ -254,7 +256,7 @@ export default function BentoWork() {
           <div
             key={p.id}
             className={`group relative overflow-hidden rounded-2xl flex flex-col min-h-75 sm:min-h-80 lg:min-h-full ${p.col} ${p.row} `}
-            style={{ backgroundColor: p.bg }}
+            style={{ backgroundColor: getProjectTheme(p.id).bg }}
           >
             <div
               aria-hidden="true"

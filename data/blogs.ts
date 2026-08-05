@@ -14,6 +14,27 @@ export function getFeaturedBlogs(limit = 3) {
   return blogs.slice(0, limit);
 }
 
+/**
+ * Slim blog shape for the nav dropdown. Call this from a server component and
+ * pass the result into the (client) Header — importing `blogs` directly into a
+ * client component would ship all of generatedBlogs.json (~1.5MB) to the browser.
+ */
+export type HeaderBlog = Pick<
+  BlogPost,
+  "slug" | "title" | "category" | "cover_image_url"
+>;
+
+export function getHeaderBlogs(limit = 5): HeaderBlog[] {
+  return blogs
+    .slice(0, limit)
+    .map(({ slug, title, category, cover_image_url }) => ({
+      slug,
+      title,
+      category,
+      cover_image_url,
+    }));
+}
+
 export function getRelatedBlogs(blog: BlogPost, limit = 3) {
   const tagSet = new Set(blog.tags.map((tag) => tag.toLowerCase()));
 

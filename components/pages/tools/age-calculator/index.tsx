@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 import Container from "@/components/Container";
-import Faq from "@/components/Faq";
+import FaqSection from "@/components/FaqSection";
 import GridSection from "@/components/GridSection";
 import ToolSection from "@/components/tools/ToolSection";
 import { getRelatedTools } from "@/data/tools";
@@ -113,11 +113,7 @@ export default function AgeCalculatorPage() {
         description="More free calculators and utilities that run entirely in your browser."
       />
 
-      <Faq
-        faqs={FAQS}
-        title="Age Calculator FAQ."
-        defaultOpenIndex={0}
-      />
+      <FaqSection faqs={FAQS} title="Age Calculator FAQ." defaultOpenIndex={0} />
     </main>
   );
 }

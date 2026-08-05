@@ -13,7 +13,7 @@ import {
   CATEGORY_META,
   type Tool,
   type ToolCategory,
-} from "../../data/tools";
+} from "@/data/tools";
 
 const TOOL_COLORS = tools.map((_, i) => PALETTE[i % PALETTE.length]);
 

@@ -5,8 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Magnetic from "./Magnetic";
-import Image from "next/image";
-import { MOBILE_NUMBER } from "@/data/constants";
+import { GITHUB_USERNAME, LINKEDIN_USERNAME, MOBILE_NUMBER, TWITTER_USERNAME } from "@/data/constants";
 import Link from "next/link";
 
 if (typeof window !== "undefined") {
@@ -126,7 +125,7 @@ export default function Footer() {
               ),
             },
             {
-              href: "https://www.linkedin.com/in/mohdsakib001",
+              href: `https://www.linkedin.com/in/${LINKEDIN_USERNAME}`,
               title: "LINKEDIN",
               desc: "Let's connect",
               bg: "#0A66C2",
@@ -141,7 +140,7 @@ export default function Footer() {
               ),
             },
             {
-              href: "https://github.com/mohdsakib-Krapton",
+              href: `https://github.com/${GITHUB_USERNAME}`,
               title: "GITHUB",
               desc: "See my work",
               bg: "#171515",
@@ -154,8 +153,8 @@ export default function Footer() {
               ),
             },
             {
-              href: "https://twitter.com/mohdsakib001",
-              title: "@MOHDSAKIB001",
+              href: `https://twitter.com/${TWITTER_USERNAME}`,
+              title: `@${TWITTER_USERNAME}`,
               desc: "Follow along",
               bg: "#E8E8E6",
               theme: "light",

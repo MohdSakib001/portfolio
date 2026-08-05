@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { lazy, Suspense } from "react";
+import { getHeaderBlogs } from "@/data/blogs";
 
 const Header = lazy(() => import("@/components/Header"));
 const Footer = lazy(() => import("@/components/Footer"));
@@ -84,7 +85,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <Suspense fallback={null}>
-          <Header />
+          <Header featuredBlogs={getHeaderBlogs(5)} />
         </Suspense>
         {children}
         <Suspense fallback={null}>
@@ -112,7 +113,7 @@ export default function RootLayout({
               },
               email: "mohdsakib.work@gmail.com",
               sameAs: [
-                "https://github.com/mohdsakib-Krapton",
+                "https://github.com/mohdsakib001",
                 "https://www.linkedin.com/in/mohdsakib001",
                 "https://twitter.com/mohdsakib001",
               ],

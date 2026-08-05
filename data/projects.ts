@@ -9,17 +9,12 @@ export const projects: Project[] = [
     category: "client",
     hero: {
       type: "image",
-      src: "/assets/projects/voizo/bento.webp",
+      src: "/assets/projects/voizo/1.webp",
     },
     gallery: [
-      { type: "image", src: "/assets/projects/voizo/app-discover.webp" },
-      { type: "image", src: "/assets/projects/voizo/app-call.webp" },
-      { type: "image", src: "/assets/projects/voizo/app-games.webp" },
-      { type: "image", src: "/assets/projects/voizo/multiple-languages.webp" },
-      { type: "image", src: "/assets/projects/voizo/safety-1.webp" },
-      { type: "image", src: "/assets/projects/voizo/safety-2.webp" },
-      { type: "image", src: "/assets/projects/voizo/safety-3.webp" },
-      { type: "image", src: "/assets/projects/voizo/safety-4.webp" },
+      { type: "image", src: "/assets/projects/voizo/1.webp" },
+      { type: "image", src: "/assets/projects/voizo/2.webp" },
+      { type: "image", src: "/assets/projects/voizo/3.webp" },
     ],
     overview: {
       problem:
@@ -198,19 +193,19 @@ export const projects: Project[] = [
     category: "client",
     hero: {
       type: "image",
-      src: "/assets/projects/pademi/pademi10.png",
+      src: "/assets/projects/pademi/pademi10.webp",
     },
     gallery: [
-      { type: "image", src: "/assets/projects/pademi/pademi1.png" },
-      { type: "image", src: "/assets/projects/pademi/pademi2.png" },
-      { type: "image", src: "/assets/projects/pademi/pademi3.png" },
-      { type: "image", src: "/assets/projects/pademi/pademi4.png" },
+      { type: "image", src: "/assets/projects/pademi/pademi1.webp" },
+      { type: "image", src: "/assets/projects/pademi/pademi2.webp" },
+      { type: "image", src: "/assets/projects/pademi/pademi3.webp" },
+      { type: "image", src: "/assets/projects/pademi/pademi4.webp" },
       { type: "image", src: "/assets/projects/pademi/pademi5.webp" },
       { type: "image", src: "/assets/projects/pademi/pademi6.webp" },
       { type: "image", src: "/assets/projects/pademi/pademi7.webp" },
       { type: "image", src: "/assets/projects/pademi/pademi8.webp" },
       { type: "image", src: "/assets/projects/pademi/pademi9.webp" },
-      { type: "image", src: "/assets/projects/pademi/pademi10.png" },
+      { type: "image", src: "/assets/projects/pademi/pademi10.webp" },
     ],
     overview: {
       problem:

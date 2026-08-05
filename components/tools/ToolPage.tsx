@@ -1,7 +1,8 @@
 import type { ElementType, ReactNode } from "react";
 
 import Container from "@/components/Container";
-import Faq, { type FaqItem } from "@/components/Faq";
+import type { FaqItem } from "@/components/Faq";
+import FaqSection from "@/components/FaqSection";
 import GridSection from "@/components/GridSection";
 import ToolSection from "@/components/tools/ToolSection";
 import { getRelatedTools } from "@/data/tools";
@@ -103,7 +104,7 @@ export default function ToolPage({
         description="More free browser-based utilities, connected by category and use case."
       />
 
-      <Faq faqs={faqs} title={faqTitle} defaultOpenIndex={0} />
+      <FaqSection faqs={faqs} title={faqTitle} defaultOpenIndex={0} />
     </main>
   );
 }

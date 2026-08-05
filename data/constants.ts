@@ -5,3 +5,4 @@ export const MOBILE_NUMBER = "918800132527";
 export const LEETCODE_USERNAME = "MOHDSAKIB001";
 export const GITHUB_USERNAME = "mohdsakib001"; // mohdsakib-Krapton
 export const LINKEDIN_USERNAME = "mohdsakib001";
+export const TWITTER_USERNAME = "mohdsakib001";

@@ -456,3 +456,32 @@ export const toolKeywords: Record<string, string[]> = {
     "paragraph counter",
   ],
 };
+
+/** Keywords for the `/tools` index itself, which has no entry in `tools`. */
+export const toolsIndexKeywords: string[] = [
+  "free online tools",
+  "browser tools",
+  "web utilities",
+  "free developer tools",
+  "online tools no login",
+  "free tools no ads",
+  "client side tools",
+  "privacy friendly online tools",
+  "word counter",
+  "JSON formatter",
+  "QR code generator",
+  "image compressor",
+  "regex tester",
+  "password generator",
+  "Pomodoro timer",
+  "base64 encoder",
+  "invoice generator",
+  "resume builder",
+  "markdown preview",
+  "color picker",
+  "unit converter",
+  "cron builder",
+  "n8n workflow validator",
+  "JWT decoder",
+  "free productivity tools",
+];

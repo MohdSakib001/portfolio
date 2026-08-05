@@ -1,15 +1,26 @@
 "use client";
-import { useState, useRef, useEffect, useCallback } from "react";
 
-type RecordMode = "screen" | "window" | "tab";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Circle,
+  Download,
+  MonitorOff,
+  Pause,
+  Play,
+  RotateCcw,
+  Square,
+} from "lucide-react";
+
 type Quality = "720p" | "1080p" | "auto";
 type AppState = "idle" | "selecting" | "recording" | "paused" | "stopped";
 
 const QUALITY_MAP: Record<Quality, { width: number; height: number }> = {
-  "720p":  { width: 1280, height: 720 },
+  "720p": { width: 1280, height: 720 },
   "1080p": { width: 1920, height: 1080 },
-  "auto":  { width: 1920, height: 1080 },
+  auto: { width: 1920, height: 1080 },
 };
+
+const QUALITIES: Quality[] = ["720p", "1080p", "auto"];
 
 function formatTime(seconds: number): string {
   const h = Math.floor(seconds / 3600);
@@ -24,9 +35,11 @@ function formatBytes(bytes: number): string {
   return `${(bytes / 1048576).toFixed(1)} MB`;
 }
 
+const LABEL_CLASS =
+  "text-label font-semibold uppercase tracking-[0.16em] text-black/40";
+
 export default function ScreenRecorder() {
   const [appState, setAppState] = useState<AppState>("idle");
-  const [recordMode] = useState<RecordMode>("screen");
   const [quality, setQuality] = useState<Quality>("1080p");
   const [includeMic, setIncludeMic] = useState(false);
   const [includeSystem, setIncludeSystem] = useState(false);
@@ -38,7 +51,6 @@ export default function ScreenRecorder() {
   const [isSupported, setIsSupported] = useState(true);
 
   const liveVideoRef = useRef<HTMLVideoElement>(null);
-  const playbackVideoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
@@ -46,20 +58,17 @@ export default function ScreenRecorder() {
   const startTimeRef = useRef<number>(0);
   const pausedAtRef = useRef<number>(0);
 
+  /**
+   * `onstop` fires from a closure captured when the recorder was created, so
+   * reading `elapsed` there always returned the value at start (zero). These
+   * refs give the callbacks and the unmount cleanup the current values.
+   */
+  const elapsedRef = useRef(0);
+  const playbackUrlRef = useRef<string | null>(null);
+
   useEffect(() => {
-    if (typeof navigator === "undefined" || !navigator.mediaDevices?.getDisplayMedia) {
-      setIsSupported(false);
-    }
-    return () => {
-      stopTimer();
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(t => t.stop());
-      }
-      if (playbackUrl) {
-        URL.revokeObjectURL(playbackUrl);
-      }
-    };
-  }, []);
+    elapsedRef.current = elapsed;
+  }, [elapsed]);
 
   const stopTimer = useCallback(() => {
     if (timerRef.current) {
@@ -68,13 +77,26 @@ export default function ScreenRecorder() {
     }
   }, []);
 
-  const startTimer = useCallback(() => {
-    stopTimer();
-    startTimeRef.current = Date.now() - elapsed * 1000;
+  const runTimer = useCallback((offsetSeconds: number) => {
+    startTimeRef.current = Date.now() - offsetSeconds * 1000;
     timerRef.current = setInterval(() => {
       setElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
     }, 500);
-  }, [elapsed, stopTimer]);
+  }, []);
+
+  useEffect(() => {
+    if (
+      typeof navigator === "undefined" ||
+      !navigator.mediaDevices?.getDisplayMedia
+    ) {
+      setIsSupported(false);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      if (playbackUrlRef.current) URL.revokeObjectURL(playbackUrlRef.current);
+    };
+  }, []);
 
   const handleStart = useCallback(async () => {
     setError(null);
@@ -86,33 +108,33 @@ export default function ScreenRecorder() {
         ? { width: { ideal: dim.width }, height: { ideal: dim.height } }
         : {};
 
-      const displayConstraints: DisplayMediaStreamOptions = {
-        video: Object.keys(videoConstraints).length > 0 ? videoConstraints : true,
+      const displayStream = await navigator.mediaDevices.getDisplayMedia({
+        video:
+          Object.keys(videoConstraints).length > 0 ? videoConstraints : true,
         audio: includeSystem,
-      };
-
-      const displayStream = await navigator.mediaDevices.getDisplayMedia(displayConstraints);
+      });
 
       let finalStream = displayStream;
 
       if (includeMic) {
         try {
-          const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          const micStream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          });
           const audioContext = new AudioContext();
           const destination = audioContext.createMediaStreamDestination();
 
           if (displayStream.getAudioTracks().length > 0) {
-            const systemSource = audioContext.createMediaStreamSource(displayStream);
-            systemSource.connect(destination);
+            audioContext
+              .createMediaStreamSource(displayStream)
+              .connect(destination);
           }
-          const micSource = audioContext.createMediaStreamSource(micStream);
-          micSource.connect(destination);
+          audioContext.createMediaStreamSource(micStream).connect(destination);
 
-          const tracks = [
+          finalStream = new MediaStream([
             ...displayStream.getVideoTracks(),
             ...destination.stream.getAudioTracks(),
-          ];
-          finalStream = new MediaStream(tracks);
+          ]);
         } catch {
           finalStream = displayStream;
         }
@@ -134,26 +156,24 @@ export default function ScreenRecorder() {
       mediaRecorderRef.current = recorder;
       chunksRef.current = [];
 
-      recorder.ondataavailable = (e) => {
-        if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
+      recorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) chunksRef.current.push(event.data);
       };
 
       recorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: "video/webm" });
         const url = URL.createObjectURL(blob);
+        if (playbackUrlRef.current) URL.revokeObjectURL(playbackUrlRef.current);
+        playbackUrlRef.current = url;
         setBlobSize(blob.size);
         setPlaybackUrl(url);
-        setDuration(elapsed);
+        setDuration(elapsedRef.current);
         setAppState("stopped");
         stopTimer();
 
-        if (streamRef.current) {
-          streamRef.current.getTracks().forEach(t => t.stop());
-          streamRef.current = null;
-        }
-        if (liveVideoRef.current) {
-          liveVideoRef.current.srcObject = null;
-        }
+        streamRef.current?.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
+        if (liveVideoRef.current) liveVideoRef.current.srcObject = null;
       };
 
       finalStream.getVideoTracks()[0]?.addEventListener("ended", () => {
@@ -164,12 +184,9 @@ export default function ScreenRecorder() {
 
       recorder.start(1000);
       setElapsed(0);
+      elapsedRef.current = 0;
       setAppState("recording");
-      startTimeRef.current = Date.now();
-      timerRef.current = setInterval(() => {
-        setElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
-      }, 500);
-
+      runTimer(0);
     } catch (err: unknown) {
       const e = err as DOMException;
       if (e?.name === "NotAllowedError" || e?.name === "AbortError") {
@@ -179,12 +196,12 @@ export default function ScreenRecorder() {
         setAppState("idle");
       }
     }
-  }, [quality, includeMic, includeSystem, elapsed, stopTimer]);
+  }, [quality, includeMic, includeSystem, stopTimer, runTimer]);
 
   const handleStop = useCallback(() => {
     stopTimer();
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
-      mediaRecorderRef.current.stop();
+    if (mediaRecorderRef.current?.state !== "inactive") {
+      mediaRecorderRef.current?.stop();
     }
   }, [stopTimer]);
 
@@ -197,26 +214,20 @@ export default function ScreenRecorder() {
       setAppState("paused");
     } else if (appState === "paused") {
       mediaRecorderRef.current.resume();
-      startTimeRef.current = Date.now() - pausedAtRef.current * 1000;
-      timerRef.current = setInterval(() => {
-        setElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
-      }, 500);
+      runTimer(pausedAtRef.current);
       setAppState("recording");
     }
-  }, [appState, elapsed, stopTimer]);
+  }, [appState, elapsed, stopTimer, runTimer]);
 
   const handleReset = useCallback(() => {
     stopTimer();
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
-      mediaRecorderRef.current.stop();
+    if (mediaRecorderRef.current?.state !== "inactive") {
+      mediaRecorderRef.current?.stop();
     }
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(t => t.stop());
-      streamRef.current = null;
-    }
-    if (playbackUrl) {
-      URL.revokeObjectURL(playbackUrl);
-    }
+    streamRef.current?.getTracks().forEach((track) => track.stop());
+    streamRef.current = null;
+    if (playbackUrlRef.current) URL.revokeObjectURL(playbackUrlRef.current);
+    playbackUrlRef.current = null;
     chunksRef.current = [];
     setPlaybackUrl(null);
     setBlobSize(0);
@@ -224,7 +235,7 @@ export default function ScreenRecorder() {
     setElapsed(0);
     setError(null);
     setAppState("idle");
-  }, [stopTimer, playbackUrl]);
+  }, [stopTimer]);
 
   const handleDownload = useCallback(() => {
     if (!playbackUrl) return;
@@ -236,12 +247,16 @@ export default function ScreenRecorder() {
 
   if (!isSupported) {
     return (
-      <div className="rounded-[20px] p-8 text-center" style={{ background: "#141414", border: "1px solid rgba(239,68,68,0.2)" }}>
-        <div style={{ fontSize: "40px", marginBottom: "16px" }}>🚫</div>
-        <p className="font-semibold mb-2" style={{ fontSize: "16px", color: "#fafafa" }}>Screen recording not supported</p>
-        <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", lineHeight: 1.7 }}>
-          Your browser does not support the Screen Capture API.<br />
-          Use Chrome 72+, Edge 79+, or Firefox 66+.
+      <div className="rounded-4xl bg-white p-10 text-center shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_4px_24px_rgba(0,0,0,0.04)]">
+        <span className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-600">
+          <MonitorOff size={22} />
+        </span>
+        <p className="text-body font-medium text-black">
+          Screen recording is not supported here
+        </p>
+        <p className="mt-2 text-caption leading-relaxed text-black/40">
+          This browser does not expose the Screen Capture API. Use Chrome 72+,
+          Edge 79+, or Firefox 66+.
         </p>
       </div>
     );
@@ -250,75 +265,90 @@ export default function ScreenRecorder() {
   if (appState === "idle") {
     return (
       <div className="space-y-3">
-        <div className="rounded-[24px] flex flex-col items-center py-14 px-6" style={{ background: "#141414", border: "1px solid rgba(255,255,255,0.06)" }}>
-          <div
-            className="flex items-center justify-center rounded-full cursor-pointer transition-all"
+        <div className="rounded-4xl bg-white px-6 py-14 text-center shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_4px_24px_rgba(0,0,0,0.04)]">
+          <button
+            type="button"
             onClick={handleStart}
-            style={{
-              width: 96, height: 96,
-              background: "#ef4444",
-              boxShadow: "0 0 0 0 rgba(239,68,68,0.4), 0 8px 40px rgba(239,68,68,0.35)",
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 0 0 12px rgba(239,68,68,0.15), 0 8px 40px rgba(239,68,68,0.5)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 0 0 0 rgba(239,68,68,0.4), 0 8px 40px rgba(239,68,68,0.35)"; }}
+            title="Start recording"
+            className="group mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-red-500 shadow-[0_8px_32px_rgba(239,68,68,0.28)] transition duration-200 hover:bg-red-600 hover:shadow-[0_0_0_10px_rgba(239,68,68,0.12),0_8px_32px_rgba(239,68,68,0.35)]"
           >
-            <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#fff" }} />
-          </div>
-          <p className="mt-6 font-semibold" style={{ fontSize: "15px", color: "#fafafa" }}>Click to start recording</p>
-          <p className="mt-1" style={{ fontSize: "12px", color: "rgba(255,255,255,0.3)" }}>Browser will ask you to choose a screen, window, or tab</p>
+            <span className="h-8 w-8 rounded-full bg-white" />
+          </button>
+          <p className="mt-7 text-body font-medium text-black">
+            Click to start recording
+          </p>
+          <p className="mt-2 text-caption text-black/40">
+            Your browser will ask which screen, window, or tab to capture.
+          </p>
         </div>
 
         {error && (
-          <div className="rounded-[14px] px-5 py-4" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
-            <p style={{ fontSize: "13px", color: "#ef4444" }}>{error}</p>
-          </div>
+          <p
+            role="alert"
+            className="rounded-2xl bg-red-50 px-5 py-4 text-caption text-red-700"
+          >
+            {error}
+          </p>
         )}
 
-        <div className="rounded-[20px] p-5 space-y-5" style={{ background: "#141414", border: "1px solid rgba(255,255,255,0.06)" }}>
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.14em] font-semibold mb-3" style={{ color: "rgba(255,255,255,0.3)" }}>Audio</p>
-            <div className="flex flex-col gap-2.5">
-              {[
-                { label: "System Audio", value: includeSystem, onChange: setIncludeSystem },
-                { label: "Microphone",   value: includeMic,    onChange: setIncludeMic },
-              ].map(({ label, value, onChange }) => (
-                <label key={label} className="flex items-center justify-between cursor-pointer">
-                  <span style={{ fontSize: "13px", color: value ? "#fafafa" : "rgba(255,255,255,0.45)" }}>{label}</span>
-                  <div
-                    onClick={() => onChange(v => !v)}
-                    className="rounded-full transition-all"
-                    style={{
-                      width: 40, height: 22,
-                      background: value ? "#ef4444" : "rgba(255,255,255,0.1)",
-                      position: "relative",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <div style={{
-                      position: "absolute", top: 3, left: value ? 21 : 3,
-                      width: 16, height: 16, borderRadius: "50%",
-                      background: "#fff",
-                      transition: "left 0.18s ease",
-                    }} />
-                  </div>
-                </label>
-              ))}
-            </div>
+        <div className="rounded-4xl bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_4px_24px_rgba(0,0,0,0.04)] sm:p-8">
+          <p className={LABEL_CLASS}>Audio</p>
+          <div className="mt-4 space-y-2">
+            {[
+              {
+                label: "System audio",
+                value: includeSystem,
+                onChange: setIncludeSystem,
+              },
+              {
+                label: "Microphone",
+                value: includeMic,
+                onChange: setIncludeMic,
+              },
+            ].map(({ label, value, onChange }) => (
+              <button
+                key={label}
+                type="button"
+                role="switch"
+                aria-checked={value}
+                onClick={() => onChange((v) => !v)}
+                className="flex w-full items-center justify-between rounded-2xl border border-black/10 bg-[#fcfbfa] px-5 py-4 transition duration-150 hover:border-black/25"
+              >
+                <span
+                  className={`text-body ${value ? "text-black" : "text-black/45"}`}
+                >
+                  {label}
+                </span>
+                <span
+                  aria-hidden
+                  className={`relative h-6 w-11 shrink-0 rounded-full transition duration-200 ${
+                    value ? "bg-black" : "bg-black/15"
+                  }`}
+                >
+                  <span
+                    className={`absolute top-1 h-4 w-4 rounded-full bg-white transition-all duration-200 ${
+                      value ? "left-6" : "left-1"
+                    }`}
+                  />
+                </span>
+              </button>
+            ))}
           </div>
 
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "16px" }}>
-            <p className="text-[10px] uppercase tracking-[0.14em] font-semibold mb-3" style={{ color: "rgba(255,255,255,0.3)" }}>Video Quality</p>
-            <div className="flex gap-2">
-              {(["720p", "1080p", "auto"] as Quality[]).map(q => (
+          <div className="mt-6 border-t border-black/8 pt-6">
+            <p className={LABEL_CLASS}>Video quality</p>
+            <div className="mt-4 flex gap-2">
+              {QUALITIES.map((q) => (
                 <button
                   key={q}
+                  type="button"
                   onClick={() => setQuality(q)}
-                  className="px-4 py-2 rounded-[10px] text-[12px] font-semibold transition-all"
-                  style={{
-                    background: quality === q ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.05)",
-                    color: quality === q ? "#ef4444" : "rgba(255,255,255,0.4)",
-                    border: `1px solid ${quality === q ? "rgba(239,68,68,0.3)" : "rgba(255,255,255,0.07)"}`,
-                  }}
+                  aria-pressed={quality === q}
+                  className={`flex-1 rounded-2xl py-3 text-label font-semibold uppercase tracking-[0.12em] transition duration-150 ${
+                    quality === q
+                      ? "bg-black text-white"
+                      : "bg-black/[0.04] text-black/45 hover:bg-black/[0.08] hover:text-black"
+                  }`}
                 >
                   {q}
                 </button>
@@ -327,114 +357,88 @@ export default function ScreenRecorder() {
           </div>
         </div>
 
-        <div className="rounded-[14px] px-5 py-3.5 flex items-center gap-3"
-          style={{ background: "rgba(34,197,94,0.06)", border: "1px solid rgba(34,197,94,0.12)" }}>
-          <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#22c55e", flexShrink: 0 }} />
-          <p style={{ fontSize: "11.5px", color: "rgba(34,197,94,0.8)", lineHeight: 1.6 }}>
-            Ready to record — Works in Chrome 72+, Edge 79+, Firefox 66+. No extension needed.
-          </p>
-        </div>
+        <p className="px-1 text-caption text-black/35">
+          The capture never leaves your machine — no extension, no upload, no
+          server.
+        </p>
       </div>
     );
   }
 
-  if (appState === "recording" || appState === "paused" || appState === "selecting") {
+  if (
+    appState === "recording" ||
+    appState === "paused" ||
+    appState === "selecting"
+  ) {
     return (
       <div className="space-y-3">
-        <div className="rounded-[24px] overflow-hidden" style={{ background: "#0a0a0a", border: "1px solid rgba(239,68,68,0.2)" }}>
-          <div style={{ position: "relative", background: "#050505", aspectRatio: "16/9", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div className="overflow-hidden rounded-4xl bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_4px_24px_rgba(0,0,0,0.04)]">
+          <div className="relative aspect-video bg-[#0d0d0d]">
             <video
               ref={liveVideoRef}
               autoPlay
               muted
               playsInline
-              style={{
-                width: "100%", height: "100%",
-                objectFit: "contain",
-                display: "block",
-              }}
+              className="h-full w-full object-contain"
             />
+
             {appState === "selecting" && (
-              <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.7)" }}>
-                <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.5)" }}>Waiting for screen selection…</p>
+              <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+                <p className="text-caption text-white/60">
+                  Waiting for screen selection…
+                </p>
               </div>
             )}
+
             {appState === "paused" && (
-              <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.55)" }}>
-                <div className="rounded-[16px] px-6 py-4 text-center" style={{ background: "rgba(0,0,0,0.8)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                  <p className="font-bold" style={{ fontSize: "15px", color: "#fafafa" }}>Paused</p>
-                </div>
+              <div className="absolute inset-0 flex items-center justify-center bg-black/55">
+                <p className="rounded-full bg-white/90 px-5 py-2.5 text-label font-semibold uppercase tracking-[0.16em] text-black">
+                  Paused
+                </p>
               </div>
             )}
 
-            <div style={{ position: "absolute", top: 14, right: 14, display: "flex", alignItems: "center", gap: 8 }}>
-              {(appState === "recording" || appState === "paused") && (
-                <div
-                  className="flex items-center gap-2 rounded-[10px] px-3 py-1.5"
-                  style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(8px)" }}
-                >
-                  <div style={{
-                    width: 8, height: 8, borderRadius: "50%",
-                    background: appState === "paused" ? "rgba(239,68,68,0.4)" : "#ef4444",
-                    animation: appState === "recording" ? "pulse-rec 1.2s ease-in-out infinite" : "none",
-                  }} />
-                  <span className="font-bold tabular-nums" style={{ fontSize: "12px", color: "#fafafa", letterSpacing: "0.04em" }}>
-                    {appState === "paused" ? "PAUSED" : "REC"} {formatTime(elapsed)}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            <div style={{
-              position: "absolute", bottom: 0, left: 0, right: 0, height: "30%",
-              background: "linear-gradient(to top, rgba(0,0,0,0.5), transparent)",
-              pointerEvents: "none",
-            }} />
-          </div>
-
-          <div className="flex items-center justify-center gap-3 p-4">
             {(appState === "recording" || appState === "paused") && (
-              <>
-                <button
-                  onClick={handlePauseResume}
-                  className="rounded-[12px] px-5 py-2.5 font-semibold transition-all"
-                  style={{
-                    background: "rgba(255,255,255,0.07)",
-                    color: "rgba(255,255,255,0.7)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    fontSize: "13px",
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.12)"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.07)"; }}
-                >
-                  {appState === "paused" ? "▶ Resume" : "⏸ Pause"}
-                </button>
-                <button
-                  onClick={handleStop}
-                  className="rounded-[12px] px-6 py-2.5 font-semibold transition-all"
-                  style={{
-                    background: "#ef4444",
-                    color: "#fff",
-                    border: "none",
-                    fontSize: "13px",
-                    boxShadow: "0 4px 16px rgba(239,68,68,0.3)",
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.88"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
-                >
-                  ⏹ Stop Recording
-                </button>
-              </>
+              <div className="absolute right-4 top-4 flex items-center gap-2 rounded-full bg-black/70 px-3.5 py-2 backdrop-blur">
+                <span
+                  aria-hidden
+                  className={`h-2 w-2 rounded-full bg-red-500 ${
+                    appState === "recording" ? "animate-pulse" : "opacity-40"
+                  }`}
+                />
+                <span className="font-mono text-caption font-semibold text-white tabular-nums">
+                  {appState === "paused" ? "PAUSED" : "REC"}{" "}
+                  {formatTime(elapsed)}
+                </span>
+              </div>
             )}
           </div>
-        </div>
 
-        <style>{`
-          @keyframes pulse-rec {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.25; }
-          }
-        `}</style>
+          {(appState === "recording" || appState === "paused") && (
+            <div className="flex flex-wrap items-center justify-center gap-2 p-5">
+              <button
+                type="button"
+                onClick={handlePauseResume}
+                className="inline-flex items-center gap-2 rounded-full bg-black/[0.04] px-5 py-3 text-label font-semibold uppercase tracking-[0.12em] text-black/50 transition duration-150 hover:bg-black/[0.08] hover:text-black"
+              >
+                {appState === "paused" ? (
+                  <Play size={13} />
+                ) : (
+                  <Pause size={13} />
+                )}
+                {appState === "paused" ? "Resume" : "Pause"}
+              </button>
+              <button
+                type="button"
+                onClick={handleStop}
+                className="inline-flex items-center gap-2 rounded-full bg-red-500 px-6 py-3 text-label font-semibold uppercase tracking-[0.12em] text-white transition duration-150 hover:bg-red-600"
+              >
+                <Square size={12} />
+                Stop recording
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -442,63 +446,60 @@ export default function ScreenRecorder() {
   if (appState === "stopped" && playbackUrl) {
     return (
       <div className="space-y-3">
-        <div className="rounded-[24px] overflow-hidden" style={{ background: "#0a0a0a", border: "1px solid rgba(34,197,94,0.2)" }}>
-          <div style={{ position: "relative", background: "#050505" }}>
-            <video
-              ref={playbackVideoRef}
-              src={playbackUrl}
-              controls
-              playsInline
-              style={{ width: "100%", display: "block", maxHeight: "480px", objectFit: "contain" }}
-            />
-          </div>
+        <div className="overflow-hidden rounded-4xl bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_4px_24px_rgba(0,0,0,0.04)]">
+          <video
+            src={playbackUrl}
+            controls
+            playsInline
+            className="block max-h-[480px] w-full bg-[#0d0d0d] object-contain"
+          />
 
-          <div className="p-5 space-y-4">
-            <div className="flex items-center gap-3 flex-wrap">
-              <div className="rounded-[10px] px-3 py-2" style={{ background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.15)" }}>
-                <p className="text-[9px] uppercase tracking-[0.12em] font-semibold mb-0.5" style={{ color: "rgba(34,197,94,0.6)" }}>Duration</p>
-                <p className="font-bold tabular-nums" style={{ fontSize: "15px", color: "#22c55e" }}>{formatTime(duration)}</p>
-              </div>
-              <div className="rounded-[10px] px-3 py-2" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
-                <p className="text-[9px] uppercase tracking-[0.12em] font-semibold mb-0.5" style={{ color: "rgba(255,255,255,0.3)" }}>File Size</p>
-                <p className="font-bold tabular-nums" style={{ fontSize: "15px", color: "#fafafa" }}>{formatBytes(blobSize)}</p>
-              </div>
-              <div className="rounded-[10px] px-3 py-2" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
-                <p className="text-[9px] uppercase tracking-[0.12em] font-semibold mb-0.5" style={{ color: "rgba(255,255,255,0.3)" }}>Format</p>
-                <p className="font-bold" style={{ fontSize: "15px", color: "#fafafa" }}>WebM</p>
-              </div>
+          <div className="space-y-4 p-5 sm:p-6">
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { label: "Duration", value: formatTime(duration) },
+                { label: "File size", value: formatBytes(blobSize) },
+                { label: "Format", value: "WebM" },
+              ].map(({ label, value }) => (
+                <div
+                  key={label}
+                  className="rounded-2xl bg-[#fcfbfa] px-4 py-4 shadow-[0_0_0_1px_rgba(0,0,0,0.05)]"
+                >
+                  <p className="font-mono text-lg font-semibold leading-none tracking-tight text-black tabular-nums">
+                    {value}
+                  </p>
+                  <p className="mt-2 text-label font-semibold uppercase tracking-[0.14em] text-black/40">
+                    {label}
+                  </p>
+                </div>
+              ))}
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2">
               <button
+                type="button"
                 onClick={handleDownload}
-                className="flex-1 rounded-[12px] py-3 font-semibold transition-all"
-                style={{ background: "#ef4444", color: "#fff", fontSize: "13px", border: "none", boxShadow: "0 4px 16px rgba(239,68,68,0.3)" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.88"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-black py-3.5 text-label font-semibold uppercase tracking-[0.15em] text-white transition duration-200 hover:bg-neutral-800"
               >
+                <Download size={14} />
                 Download WebM
               </button>
               <button
+                type="button"
                 onClick={handleReset}
-                className="rounded-[12px] px-5 py-3 font-semibold transition-all"
-                style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.6)", fontSize: "13px", border: "1px solid rgba(255,255,255,0.08)" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.1)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)"; }}
+                className="inline-flex items-center gap-2 rounded-full bg-black/[0.04] px-5 py-3.5 text-label font-semibold uppercase tracking-[0.12em] text-black/50 transition duration-150 hover:bg-black/[0.08] hover:text-black"
               >
-                Record Again
+                <RotateCcw size={13} />
+                Record again
               </button>
             </div>
           </div>
         </div>
 
-        <div className="rounded-[14px] px-5 py-3.5 flex items-center gap-3"
-          style={{ background: "rgba(34,197,94,0.06)", border: "1px solid rgba(34,197,94,0.12)" }}>
-          <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#22c55e", flexShrink: 0 }} />
-          <p style={{ fontSize: "11.5px", color: "rgba(34,197,94,0.8)", lineHeight: 1.6 }}>
-            Recording saved in memory. Download before leaving the page — it will be lost on refresh.
-          </p>
-        </div>
+        <p className="flex items-center gap-2 px-1 text-caption text-black/35">
+          <Circle size={9} className="fill-amber-500 text-amber-500" aria-hidden />
+          Held in memory only — download it before you leave or refresh the page.
+        </p>
       </div>
     );
   }

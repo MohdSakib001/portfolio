@@ -40,6 +40,17 @@ export default async function ProjectDetailPage({ params }: Props) {
   const title = `${project.name} — ${project.tagline} | Mohd Sakib`;
   const description = `${project.overview.problem} Built by Mohd Sakib using ${project.stack.join(", ")}.`;
 
+  // Prefer projects sharing a stack entry, then fall back to fill three slots.
+  const others = projects.filter((p) => p.id !== project.id);
+  const byOverlap = others
+    .map((p) => ({
+      project: p,
+      overlap: p.stack.filter((tech) => project.stack.includes(tech)).length,
+    }))
+    .sort((a, b) => b.overlap - a.overlap)
+    .map((entry) => entry.project);
+  const relatedProjects = byOverlap.slice(0, 3);
+
   return (
     <>
       <script
@@ -68,7 +79,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           __html: breadCrumbSchema(title, HOST, url),
         }}
       />
-      <ProjectPage project={project} />
+      <ProjectPage project={project} relatedProjects={relatedProjects} />
     </>
   );
 }

@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import type { ElementType } from "react";
 import { projects } from "../data/projects";
+import type { HeaderBlog } from "../data/blogs";
 import { tools, CATEGORY_META } from "../data/tools";
 import PrimaryButton from "./primaryButton";
 import MyLink from "./Link";
@@ -88,13 +89,49 @@ const HIRE_LINKS = [
   },
 ];
 
-export default function Header() {
+// Single card definition shared by the desktop panel and the mobile accordion.
+function BlogCard({ blog }: { blog: HeaderBlog }) {
+  return (
+    <Link
+      href={`/blogs/${blog.slug}`}
+      className="flex flex-row gap-x-3 items-center rounded-xl overflow-hidden p-3"
+      style={cardStyle}
+      title={blog.title}
+    >
+      <div className="relative w-16 h-16 shrink-0 overflow-hidden rounded-lg">
+        <Image
+          src={blog.cover_image_url}
+          alt={blog.title}
+          fill
+          className="object-cover object-center"
+          sizes="64px"
+          title={blog.title}
+        />
+      </div>
+      <div className="min-w-0">
+        <p className="text-label uppercase tracking-[0.18em] text-black/35 truncate">
+          {blog.category}
+        </p>
+        <p className="mt-1 text-caption font-semibold text-black tracking-[0.03em] leading-snug line-clamp-2">
+          {blog.title}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
+export default function Header({
+  featuredBlogs = [],
+}: {
+  featuredBlogs?: HeaderBlog[];
+}) {
   const [activePanel, setActivePanel] = useState<string | null>(null);
 
   const isMobileMenuOpen =
     activePanel === "mobile-nav" ||
     activePanel === "mobile-products" ||
-    activePanel === "mobile-tools";
+    activePanel === "mobile-tools" ||
+    activePanel === "mobile-blogs";
 
   const featuredTools = FEATURED.map((id) =>
     tools.find((t) => t.id === id),
@@ -258,6 +295,34 @@ export default function Header() {
               className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-black/4 transition-colors duration-150"
               style={cardStyle}
               title="See All Tools"
+            >
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 bg-black/6">
+                <ArrowRight size={13} className="text-black/50" />
+              </span>
+              <span className="text-caption font-semibold text-black/50">
+                See All
+              </span>
+            </Link>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "blogs",
+      label: "Blogs",
+      panel: (
+        <div className="p-4 max-h-[80vh] overflow-y-scroll">
+          <div className="grid grid-cols-3 gap-3">
+            {featuredBlogs.map((blog) => (
+              <BlogCard key={blog.slug} blog={blog} />
+            ))}
+
+            {/* See All */}
+            <Link
+              href="/blogs"
+              className="flex items-center gap-2.5 rounded-xl p-3 hover:bg-black/4 transition-colors duration-150"
+              style={cardStyle}
+              title="See All Blogs"
             >
               <span className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 bg-black/6">
                 <ArrowRight size={13} className="text-black/50" />
@@ -454,18 +519,56 @@ export default function Header() {
             </div>
           </div>
 
-          <Link
-            href="/blogs"
-            title="Blogs"
+          <div
+            className="rounded-2xl"
             style={{
               background: "rgba(255,255,255, 0.90)",
               backdropFilter: "blur(8px)",
               WebkitBackdropFilter: "blur(8px)",
             }}
-            className="px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-2xl transition-colors"
           >
-            Blogs
-          </Link>
+            <button
+              onClick={() =>
+                setActivePanel((prev) =>
+                  prev === "mobile-blogs" ? "mobile-nav" : "mobile-blogs",
+                )
+              }
+              className="list-none cursor-pointer flex w-full items-center justify-between text-black px-3 py-2.5 rounded-xl transition-all"
+              name="Mobile Blogs Toggle"
+              title="Mobile Blogs Toggle"
+            >
+              <p className="text-caption font-medium text-black/75">Blogs</p>
+              <svg
+                className={`w-3 h-3 transition-transform duration-200 ${activePanel === "mobile-blogs" ? "rotate-180" : ""}`}
+                viewBox="0 0 10 6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              >
+                <path d="M1 1l4 4 4-4" />
+              </svg>
+            </button>
+
+            <div
+              className={`grid transition-[grid-template-rows] duration-300 ease-out overflow-hidden ${activePanel === "mobile-blogs" ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+            >
+              <div className="overflow-hidden">
+                <div className="px-2 pb-3 pt-1 flex flex-col gap-2">
+                  {featuredBlogs.slice(0, 4).map((blog) => (
+                    <BlogCard key={blog.slug} blog={blog} />
+                  ))}
+                  <Link
+                    href="/blogs"
+                    title="All Blogs"
+                    className="px-3 pt-1 pb-0.5 text-label uppercase tracking-wider text-black/35"
+                  >
+                    All blogs →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
           <div
             className="rounded-2xl px-2 py-2"
             style={{

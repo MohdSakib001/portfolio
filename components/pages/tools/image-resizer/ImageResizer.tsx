@@ -1,5 +1,14 @@
 "use client";
-import { useState, useRef, useCallback, useEffect } from "react";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Download,
+  ImageIcon,
+  Link2,
+  Link2Off,
+  Upload,
+  X,
+} from "lucide-react";
 
 type Format = "jpeg" | "png" | "webp";
 
@@ -28,38 +37,18 @@ const PRESETS = [
   { label: "Facebook cover", w: 820, h: 312 },
 ];
 
+const FORMATS: Format[] = ["jpeg", "png", "webp"];
+
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-const ACCENT = "#c084fc";
-const PANEL = "#1e1a2b";
-const BG = "#181520";
-
-const labelStyle: React.CSSProperties = {
-  fontSize: "10px",
-  fontWeight: 600,
-  letterSpacing: "0.13em",
-  textTransform: "uppercase",
-  color: "rgba(226,232,240,0.45)",
-  display: "block",
-  marginBottom: "8px",
-};
-
-const inputBase: React.CSSProperties = {
-  width: "100%",
-  background: BG,
-  border: "1.5px solid rgba(192,132,252,0.2)",
-  borderRadius: "10px",
-  padding: "10px 14px",
-  fontSize: "14px",
-  color: "#e2e8f0",
-  outline: "none",
-  fontFamily: "inherit",
-  transition: "border-color 0.2s",
-};
+const LABEL_CLASS =
+  "block text-label font-semibold uppercase tracking-[0.16em] text-black/40";
+const FIELD_CLASS =
+  "w-full rounded-2xl border border-black/10 bg-[#fcfbfa] px-4 py-3 text-body text-black outline-none transition duration-150 hover:border-black/25 focus:border-black/70 focus:bg-white placeholder:text-black/25";
 
 export default function ImageResizer() {
   const [image, setImage] = useState<ImageInfo | null>(null);
@@ -72,13 +61,21 @@ export default function ImageResizer() {
   const [quality, setQuality] = useState(92);
   const [result, setResult] = useState<ResizeResult | null>(null);
   const [resizing, setResizing] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const aspectRef = useRef<number>(1);
 
+  /**
+   * Refs rather than state in the deps: an unmount-only cleanup closes over the
+   * first render's values, so reading state there would revoke nothing.
+   */
+  const imageUrlRef = useRef<string | null>(null);
+  const resultUrlRef = useRef<string | null>(null);
+
   useEffect(() => {
     return () => {
-      if (image) URL.revokeObjectURL(image.url);
-      if (result) URL.revokeObjectURL(result.url);
+      if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
+      if (resultUrlRef.current) URL.revokeObjectURL(resultUrlRef.current);
     };
   }, []);
 
@@ -87,9 +84,16 @@ export default function ImageResizer() {
     const url = URL.createObjectURL(file);
     const img = new window.Image();
     img.onload = () => {
-      if (image) URL.revokeObjectURL(image.url);
+      if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
+      imageUrlRef.current = url;
       aspectRef.current = img.naturalWidth / img.naturalHeight;
-      setImage({ file, url, width: img.naturalWidth, height: img.naturalHeight, size: file.size });
+      setImage({
+        file,
+        url,
+        width: img.naturalWidth,
+        height: img.naturalHeight,
+        size: file.size,
+      });
       setWidthVal(String(img.naturalWidth));
       setHeightVal(String(img.naturalHeight));
       setScalePercent("100");
@@ -98,44 +102,44 @@ export default function ImageResizer() {
     img.src = url;
   }
 
-  function handleDrop(e: React.DragEvent) {
-    e.preventDefault();
+  function handleDrop(event: React.DragEvent) {
+    event.preventDefault();
     setDragging(false);
-    const file = e.dataTransfer.files[0];
+    const file = event.dataTransfer.files[0];
     if (file) loadFile(file);
   }
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
     if (file) loadFile(file);
   }
 
-  function handleWidthChange(val: string) {
-    setWidthVal(val);
+  function handleWidthChange(value: string) {
+    setWidthVal(value);
     setScalePercent("");
-    if (lockRatio && image && val !== "") {
-      const w = parseInt(val, 10);
+    if (lockRatio && image && value !== "") {
+      const w = parseInt(value, 10);
       if (!isNaN(w) && w > 0) {
         setHeightVal(String(Math.round(w / aspectRef.current)));
       }
     }
   }
 
-  function handleHeightChange(val: string) {
-    setHeightVal(val);
+  function handleHeightChange(value: string) {
+    setHeightVal(value);
     setScalePercent("");
-    if (lockRatio && image && val !== "") {
-      const h = parseInt(val, 10);
+    if (lockRatio && image && value !== "") {
+      const h = parseInt(value, 10);
       if (!isNaN(h) && h > 0) {
         setWidthVal(String(Math.round(h * aspectRef.current)));
       }
     }
   }
 
-  function handleScaleChange(val: string) {
-    setScalePercent(val);
-    if (image && val !== "") {
-      const pct = parseFloat(val);
+  function handleScaleChange(value: string) {
+    setScalePercent(value);
+    if (image && value !== "") {
+      const pct = parseFloat(value);
       if (!isNaN(pct) && pct > 0) {
         setWidthVal(String(Math.round((image.width * pct) / 100)));
         setHeightVal(String(Math.round((image.height * pct) / 100)));
@@ -147,6 +151,19 @@ export default function ImageResizer() {
     setWidthVal(String(w));
     setHeightVal(String(h));
     setScalePercent("");
+  }
+
+  function clearImage() {
+    if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
+    if (resultUrlRef.current) URL.revokeObjectURL(resultUrlRef.current);
+    imageUrlRef.current = null;
+    resultUrlRef.current = null;
+    setImage(null);
+    setResult(null);
+    setScalePercent("");
+    setWidthVal("");
+    setHeightVal("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
   const handleResize = useCallback(() => {
@@ -162,22 +179,29 @@ export default function ImageResizer() {
       canvas.width = tw;
       canvas.height = th;
       const ctx = canvas.getContext("2d");
-      if (!ctx) { setResizing(false); return; }
+      if (!ctx) {
+        setResizing(false);
+        return;
+      }
       ctx.drawImage(img, 0, 0, tw, th);
       canvas.toBlob(
         (blob) => {
-          if (!blob) { setResizing(false); return; }
-          if (result) URL.revokeObjectURL(result.url);
+          if (!blob) {
+            setResizing(false);
+            return;
+          }
+          if (resultUrlRef.current) URL.revokeObjectURL(resultUrlRef.current);
           const url = URL.createObjectURL(blob);
+          resultUrlRef.current = url;
           setResult({ url, width: tw, height: th, size: blob.size, blob });
           setResizing(false);
         },
         `image/${format}`,
-        format === "jpeg" ? quality / 100 : undefined
+        format === "jpeg" ? quality / 100 : undefined,
       );
     };
     img.src = image.url;
-  }, [image, widthVal, heightVal, format, quality, result]);
+  }, [image, widthVal, heightVal, format, quality]);
 
   function handleDownload() {
     if (!result || !image) return;
@@ -190,12 +214,11 @@ export default function ImageResizer() {
   }
 
   const sizePct =
-    result && image
-      ? Math.round((1 - result.size / image.size) * 100)
-      : null;
+    result && image ? Math.round((1 - result.size / image.size) * 100) : null;
+  const canResize = Boolean(widthVal && heightVal) && !resizing;
 
   return (
-    <div style={{ fontFamily: "inherit" }}>
+    <div className="space-y-3">
       <input
         ref={fileInputRef}
         type="file"
@@ -205,384 +228,266 @@ export default function ImageResizer() {
       />
 
       {!image ? (
-        <div
+        <button
+          type="button"
           onClick={() => fileInputRef.current?.click()}
-          onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+          onDragOver={(event) => {
+            event.preventDefault();
+            setDragging(true);
+          }}
           onDragLeave={() => setDragging(false)}
           onDrop={handleDrop}
-          style={{
-            border: `2px dashed ${dragging ? ACCENT : "rgba(192,132,252,0.3)"}`,
-            borderRadius: "16px",
-            background: dragging ? "rgba(192,132,252,0.05)" : PANEL,
-            padding: "60px 24px",
-            textAlign: "center",
-            cursor: "pointer",
-            transition: "all 0.2s",
-          }}
+          className={`w-full rounded-4xl border-2 border-dashed px-8 py-20 text-center transition duration-150 ${
+            dragging
+              ? "border-black/40 bg-[#F5F3FF]"
+              : "border-black/12 bg-white hover:border-black/30"
+          }`}
         >
-          <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.7 }}>🖼️</div>
-          <p style={{ color: "#e2e8f0", fontSize: "15px", fontWeight: 600, marginBottom: "8px" }}>
+          <span className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-black/[0.04] text-black/40">
+            <Upload size={22} />
+          </span>
+          <span className="block text-body font-medium text-black">
             Drop an image here
-          </p>
-          <p style={{ color: "rgba(226,232,240,0.4)", fontSize: "13px" }}>
+          </span>
+          <span className="mt-2 block text-caption text-black/40">
             or click to browse — JPEG, PNG, WebP, GIF, BMP
-          </p>
-        </div>
+          </span>
+        </button>
       ) : (
-        <div>
-          <div
-            style={{
-              background: PANEL,
-              borderRadius: "16px",
-              padding: "20px",
-              marginBottom: "12px",
-              boxShadow: `0 0 0 1px rgba(192,132,252,0.12)`,
-              display: "flex",
-              alignItems: "center",
-              gap: "16px",
-            }}
-          >
+        <>
+          {/* Source file */}
+          <div className="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={image.url}
-              alt="original preview"
-              style={{
-                width: "72px",
-                height: "72px",
-                objectFit: "cover",
-                borderRadius: "10px",
-                border: "1px solid rgba(192,132,252,0.2)",
-                flexShrink: 0,
-              }}
+              alt="Original preview"
+              className="h-16 w-16 shrink-0 rounded-xl border border-black/8 object-cover"
             />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ color: "#e2e8f0", fontSize: "13px", fontWeight: 600, marginBottom: "4px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-body font-medium text-black">
                 {image.file.name}
               </p>
-              <p style={{ color: "rgba(226,232,240,0.45)", fontSize: "12px", marginBottom: "2px" }}>
-                {image.width} × {image.height} px
-              </p>
-              <p style={{ color: "rgba(226,232,240,0.35)", fontSize: "11px" }}>
-                {formatBytes(image.size)}
+              <p className="mt-1 font-mono text-caption text-black/40 tabular-nums">
+                {image.width} × {image.height} px · {formatBytes(image.size)}
               </p>
             </div>
             <button
-              onClick={() => { if (image) URL.revokeObjectURL(image.url); setImage(null); setResult(null); setScalePercent(""); setWidthVal(""); setHeightVal(""); }}
-              style={{ color: "rgba(226,232,240,0.3)", background: "none", border: "none", cursor: "pointer", fontSize: "18px", padding: "4px", lineHeight: 1, flexShrink: 0 }}
+              type="button"
+              onClick={clearImage}
+              title="Remove image"
+              className="shrink-0 rounded-full bg-black/[0.04] p-2 text-black/40 transition duration-150 hover:bg-black/[0.08] hover:text-black"
             >
-              ✕
+              <X size={14} />
             </button>
           </div>
 
-          <div
-            style={{
-              background: PANEL,
-              borderRadius: "16px",
-              padding: "24px",
-              boxShadow: `0 0 0 1px rgba(192,132,252,0.12)`,
-              marginBottom: "12px",
-            }}
-          >
-            <p style={{ ...labelStyle, marginBottom: "12px" }}>Social media presets</p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-              {PRESETS.map((p) => (
+          {/* Presets */}
+          <div className="rounded-4xl bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_4px_24px_rgba(0,0,0,0.04)] sm:p-8">
+            <p className={LABEL_CLASS}>Social media presets</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {PRESETS.map((preset) => (
                 <button
-                  key={p.label}
-                  onClick={() => applyPreset(p.w, p.h)}
-                  style={{
-                    background: "rgba(192,132,252,0.08)",
-                    border: "1px solid rgba(192,132,252,0.18)",
-                    borderRadius: "8px",
-                    color: "#e2e8f0",
-                    fontSize: "11px",
-                    padding: "6px 12px",
-                    cursor: "pointer",
-                    transition: "all 0.15s",
-                    fontFamily: "inherit",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(192,132,252,0.16)";
-                    e.currentTarget.style.borderColor = "rgba(192,132,252,0.35)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(192,132,252,0.08)";
-                    e.currentTarget.style.borderColor = "rgba(192,132,252,0.18)";
-                  }}
+                  key={preset.label}
+                  type="button"
+                  onClick={() => applyPreset(preset.w, preset.h)}
+                  className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-[#fcfbfa] px-4 py-2 text-caption transition duration-150 hover:border-black/30 hover:bg-white"
                 >
-                  <span style={{ color: ACCENT, fontWeight: 600 }}>{p.w}×{p.h}</span>
-                  <span style={{ color: "rgba(226,232,240,0.45)", marginLeft: "5px" }}>{p.label}</span>
+                  <span className="font-mono font-semibold text-black tabular-nums">
+                    {preset.w}×{preset.h}
+                  </span>
+                  <span className="text-black/45">{preset.label}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          <div
-            style={{
-              background: PANEL,
-              borderRadius: "16px",
-              padding: "24px",
-              boxShadow: `0 0 0 1px rgba(192,132,252,0.12)`,
-              marginBottom: "12px",
-            }}
-          >
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
+          {/* Dimensions */}
+          <div className="rounded-4xl bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_4px_24px_rgba(0,0,0,0.04)] sm:p-8">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label style={labelStyle}>Width (px)</label>
+                <label className={LABEL_CLASS} htmlFor="resize-width">
+                  Width (px)
+                </label>
                 <input
+                  id="resize-width"
                   type="number"
+                  min="1"
                   value={widthVal}
-                  min="1"
-                  onChange={(e) => handleWidthChange(e.target.value)}
-                  style={inputBase}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = ACCENT)}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(192,132,252,0.2)")}
+                  onChange={(event) => handleWidthChange(event.target.value)}
+                  className={`mt-3 ${FIELD_CLASS}`}
                 />
               </div>
               <div>
-                <label style={labelStyle}>Height (px)</label>
+                <label className={LABEL_CLASS} htmlFor="resize-height">
+                  Height (px)
+                </label>
                 <input
+                  id="resize-height"
                   type="number"
+                  min="1"
                   value={heightVal}
-                  min="1"
-                  onChange={(e) => handleHeightChange(e.target.value)}
-                  style={inputBase}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = ACCENT)}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(192,132,252,0.2)")}
+                  onChange={(event) => handleHeightChange(event.target.value)}
+                  className={`mt-3 ${FIELD_CLASS}`}
                 />
               </div>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-              <button
-                onClick={() => setLockRatio(!lockRatio)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  background: lockRatio ? "rgba(192,132,252,0.12)" : "rgba(255,255,255,0.04)",
-                  border: `1.5px solid ${lockRatio ? "rgba(192,132,252,0.35)" : "rgba(255,255,255,0.08)"}`,
-                  borderRadius: "10px",
-                  padding: "8px 14px",
-                  cursor: "pointer",
-                  color: lockRatio ? ACCENT : "rgba(226,232,240,0.4)",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  fontFamily: "inherit",
-                  transition: "all 0.2s",
-                  userSelect: "none",
-                }}
-              >
-                <span style={{ fontSize: "14px" }}>{lockRatio ? "🔒" : "🔓"}</span>
-                Lock aspect ratio
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setLockRatio(!lockRatio)}
+              aria-pressed={lockRatio}
+              className={`mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-label font-semibold uppercase tracking-[0.12em] transition duration-150 ${
+                lockRatio
+                  ? "bg-black text-white"
+                  : "bg-black/[0.04] text-black/45 hover:bg-black/[0.08] hover:text-black"
+              }`}
+            >
+              {lockRatio ? <Link2 size={13} /> : <Link2Off size={13} />}
+              {lockRatio ? "Ratio locked" : "Ratio unlocked"}
+            </button>
 
-            <div style={{ marginBottom: "0" }}>
-              <label style={labelStyle}>Scale by %</label>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <input
-                  type="number"
-                  value={scalePercent}
-                  min="1"
-                  max="1000"
-                  placeholder="e.g. 50"
-                  onChange={(e) => handleScaleChange(e.target.value)}
-                  style={{ ...inputBase, flex: 1 }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = ACCENT)}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(192,132,252,0.2)")}
-                />
-                <span style={{ color: "rgba(226,232,240,0.4)", fontSize: "14px", flexShrink: 0 }}>%</span>
-              </div>
+            <div className="mt-6">
+              <label className={LABEL_CLASS} htmlFor="resize-scale">
+                Scale by %
+              </label>
+              <input
+                id="resize-scale"
+                type="number"
+                min="1"
+                max="1000"
+                placeholder="e.g. 50"
+                value={scalePercent}
+                onChange={(event) => handleScaleChange(event.target.value)}
+                className={`mt-3 ${FIELD_CLASS}`}
+              />
             </div>
           </div>
 
-          <div
-            style={{
-              background: PANEL,
-              borderRadius: "16px",
-              padding: "24px",
-              boxShadow: `0 0 0 1px rgba(192,132,252,0.12)`,
-              marginBottom: "12px",
-            }}
-          >
-            <div style={{ marginBottom: "16px" }}>
-              <label style={labelStyle}>Output format</label>
-              <div style={{ display: "flex", gap: "8px" }}>
-                {(["jpeg", "png", "webp"] as Format[]).map((f) => (
-                  <label
-                    key={f}
-                    style={{
-                      flex: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "7px",
-                      padding: "9px 12px",
-                      borderRadius: "10px",
-                      cursor: "pointer",
-                      background: format === f ? "rgba(192,132,252,0.14)" : "rgba(255,255,255,0.04)",
-                      border: `1.5px solid ${format === f ? "rgba(192,132,252,0.4)" : "rgba(255,255,255,0.07)"}`,
-                      color: format === f ? ACCENT : "rgba(226,232,240,0.45)",
-                      fontSize: "12px",
-                      fontWeight: 600,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.05em",
-                      transition: "all 0.2s",
-                      userSelect: "none",
-                    }}
-                  >
-                    <input
-                      type="radio"
-                      name="format"
-                      value={f}
-                      checked={format === f}
-                      onChange={() => setFormat(f)}
-                      style={{ display: "none" }}
-                    />
-                    {f}
-                  </label>
-                ))}
-              </div>
+          {/* Output */}
+          <div className="rounded-4xl bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_4px_24px_rgba(0,0,0,0.04)] sm:p-8">
+            <p className={LABEL_CLASS}>Output format</p>
+            <div className="mt-4 flex gap-2">
+              {FORMATS.map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => setFormat(f)}
+                  aria-pressed={format === f}
+                  className={`flex-1 rounded-2xl py-3 text-label font-semibold uppercase tracking-[0.12em] transition duration-150 ${
+                    format === f
+                      ? "bg-black text-white"
+                      : "bg-black/[0.04] text-black/45 hover:bg-black/[0.08] hover:text-black"
+                  }`}
+                >
+                  {f}
+                </button>
+              ))}
             </div>
 
             {format === "jpeg" && (
-              <div>
-                <label style={labelStyle}>
-                  JPEG quality — <span style={{ color: ACCENT, fontVariantNumeric: "tabular-nums" }}>{quality}</span>
-                </label>
+              <div className="mt-6">
+                <div className="flex items-baseline justify-between gap-4">
+                  <label className={LABEL_CLASS} htmlFor="resize-quality">
+                    JPEG quality
+                  </label>
+                  <span className="font-mono text-body font-semibold text-black tabular-nums">
+                    {quality}
+                  </span>
+                </div>
                 <input
+                  id="resize-quality"
                   type="range"
                   min="1"
                   max="100"
                   value={quality}
-                  onChange={(e) => setQuality(Number(e.target.value))}
-                  style={{
-                    width: "100%",
-                    accentColor: ACCENT,
-                    cursor: "pointer",
-                  }}
+                  onChange={(event) => setQuality(Number(event.target.value))}
+                  className="mt-3 w-full cursor-pointer accent-black"
                 />
-                <div style={{ display: "flex", justifyContent: "space-between", marginTop: "4px" }}>
-                  <span style={{ fontSize: "10px", color: "rgba(226,232,240,0.3)" }}>1 — smallest</span>
-                  <span style={{ fontSize: "10px", color: "rgba(226,232,240,0.3)" }}>100 — lossless</span>
+                <div className="mt-2 flex justify-between text-caption text-black/30">
+                  <span>1 — smallest</span>
+                  <span>100 — lossless</span>
                 </div>
               </div>
             )}
           </div>
 
           <button
+            type="button"
             onClick={handleResize}
-            disabled={resizing || !widthVal || !heightVal}
-            style={{
-              width: "100%",
-              padding: "14px",
-              borderRadius: "12px",
-              background: resizing || !widthVal || !heightVal
-                ? "rgba(192,132,252,0.25)"
-                : `linear-gradient(135deg, #a855f7, ${ACCENT})`,
-              border: "none",
-              color: resizing || !widthVal || !heightVal ? "rgba(226,232,240,0.35)" : "#fff",
-              fontSize: "14px",
-              fontWeight: 700,
-              letterSpacing: "0.05em",
-              cursor: resizing || !widthVal || !heightVal ? "not-allowed" : "pointer",
-              fontFamily: "inherit",
-              transition: "all 0.2s",
-              marginBottom: "16px",
-            }}
+            disabled={!canResize}
+            className="w-full rounded-full bg-black py-4 text-label font-semibold uppercase tracking-[0.15em] text-white transition duration-200 hover:bg-neutral-800 disabled:pointer-events-none disabled:opacity-30"
           >
-            {resizing ? "Resizing…" : "Resize Image"}
+            {resizing ? "Resizing…" : "Resize image"}
           </button>
 
-          {result && image && (
-            <div
-              style={{
-                background: PANEL,
-                borderRadius: "16px",
-                padding: "24px",
-                boxShadow: `0 0 0 1px rgba(74,222,128,0.15)`,
-              }}
-            >
-              <p style={{ ...labelStyle, color: "#4ade80", marginBottom: "16px" }}>
-                Result
-              </p>
+          {result && (
+            <div className="relative overflow-hidden rounded-4xl bg-[#E6E0F8] p-8 md:p-10">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 opacity-45 mix-blend-overlay"
+                style={{
+                  backgroundImage: `url("/assets/paper-texture.avif")`,
+                  backgroundSize: "cover",
+                }}
+              />
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "20px" }}>
-                <div style={{ textAlign: "center" }}>
-                  <p style={{ fontSize: "10px", color: "rgba(226,232,240,0.35)", marginBottom: "8px", letterSpacing: "0.1em", textTransform: "uppercase" }}>Original</p>
-                  <img
-                    src={image.url}
-                    alt="original"
-                    style={{ width: "100%", aspectRatio: "1", objectFit: "contain", borderRadius: "10px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(192,132,252,0.12)" }}
-                  />
-                  <p style={{ fontSize: "12px", color: "rgba(226,232,240,0.5)", marginTop: "6px" }}>
-                    {image.width} × {image.height}
+              <div className="relative flex flex-wrap items-center justify-between gap-4">
+                <p className="text-label font-semibold uppercase tracking-[0.25em] text-black/40">
+                  Result
+                </p>
+                {sizePct !== null && (
+                  <p className="rounded-full bg-white/70 px-4 py-2 font-mono text-caption text-black/60 tabular-nums">
+                    {sizePct > 0
+                      ? `${sizePct}% smaller`
+                      : sizePct === 0
+                        ? "Same file size"
+                        : `${Math.abs(sizePct)}% larger`}
                   </p>
-                  <p style={{ fontSize: "11px", color: "rgba(226,232,240,0.35)" }}>{formatBytes(image.size)}</p>
-                </div>
-                <div style={{ textAlign: "center" }}>
-                  <p style={{ fontSize: "10px", color: "rgba(226,232,240,0.35)", marginBottom: "8px", letterSpacing: "0.1em", textTransform: "uppercase" }}>Resized</p>
-                  <img
-                    src={result.url}
-                    alt="resized"
-                    style={{ width: "100%", aspectRatio: "1", objectFit: "contain", borderRadius: "10px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(74,222,128,0.2)" }}
-                  />
-                  <p style={{ fontSize: "12px", color: "#e2e8f0", marginTop: "6px", fontWeight: 600 }}>
-                    {result.width} × {result.height}
-                  </p>
-                  <p style={{ fontSize: "11px", color: "rgba(226,232,240,0.35)" }}>{formatBytes(result.size)}</p>
-                </div>
+                )}
               </div>
 
-              {sizePct !== null && (
-                <div
-                  style={{
-                    background: sizePct > 0 ? "rgba(74,222,128,0.08)" : "rgba(192,132,252,0.08)",
-                    border: `1px solid ${sizePct > 0 ? "rgba(74,222,128,0.2)" : "rgba(192,132,252,0.2)"}`,
-                    borderRadius: "10px",
-                    padding: "10px 16px",
-                    textAlign: "center",
-                    marginBottom: "16px",
-                    fontSize: "13px",
-                    color: sizePct > 0 ? "#4ade80" : ACCENT,
-                    fontWeight: 600,
-                  }}
-                >
-                  {sizePct > 0
-                    ? `${sizePct}% smaller than original`
-                    : sizePct === 0
-                    ? "Same file size as original"
-                    : `${Math.abs(sizePct)}% larger than original`}
-                </div>
-              )}
+              <div className="relative mt-6 grid grid-cols-2 gap-4">
+                {[
+                  { title: "Original", src: image.url, w: image.width, h: image.height, size: image.size },
+                  { title: "Resized", src: result.url, w: result.width, h: result.height, size: result.size },
+                ].map((pane) => (
+                  <div key={pane.title} className="text-center">
+                    <p className="mb-3 text-label font-semibold uppercase tracking-[0.16em] text-black/40">
+                      {pane.title}
+                    </p>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={pane.src}
+                      alt={`${pane.title} image`}
+                      className="aspect-square w-full rounded-2xl bg-white/60 object-contain p-2"
+                    />
+                    <p className="mt-3 font-mono text-caption text-black/60 tabular-nums">
+                      {pane.w} × {pane.h}
+                    </p>
+                    <p className="font-mono text-caption text-black/40 tabular-nums">
+                      {formatBytes(pane.size)}
+                    </p>
+                  </div>
+                ))}
+              </div>
 
               <button
+                type="button"
                 onClick={handleDownload}
-                style={{
-                  width: "100%",
-                  padding: "13px",
-                  borderRadius: "12px",
-                  background: "rgba(74,222,128,0.12)",
-                  border: "1.5px solid rgba(74,222,128,0.3)",
-                  color: "#4ade80",
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  fontFamily: "inherit",
-                  transition: "all 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(74,222,128,0.18)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "rgba(74,222,128,0.12)";
-                }}
+                className="relative mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-black py-4 text-label font-semibold uppercase tracking-[0.15em] text-white transition duration-200 hover:bg-neutral-800"
               >
+                <Download size={14} />
                 Download resized image
               </button>
             </div>
           )}
-        </div>
+        </>
       )}
+
+      <p className="flex items-center gap-2 px-1 text-caption text-black/35">
+        <ImageIcon size={13} aria-hidden />
+        Resizing happens on a canvas in this tab — the file is never uploaded.
+      </p>
     </div>
   );
 }
