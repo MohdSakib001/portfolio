@@ -4,21 +4,20 @@ import {
   ArrowRight,
   BriefcaseBusiness,
   CheckCircle2,
-  Clock3,
   Globe2,
   Layers3,
-  MessageCircle,
   Sparkles,
 } from "lucide-react";
 
 import BlogSection from "@/components/blogs/BlogSection";
 import Container from "@/components/Container";
-import CtaSection, { type CtaPill } from "@/components/CtaSection";
+import CtaSection from "@/components/CtaSection";
 import FaqSection from "@/components/FaqSection";
 import PrimaryButton from "@/components/primaryButton";
 import { getFeaturedBlogs } from "@/data/blogs";
 import { projects } from "@/data/projects";
 import { email } from "@/data/constants";
+import { AVAILABILITY_PILLS } from "@/data/cta";
 import type { ServicePage } from "@/types/services";
 
 type ServiceLandingProps = {
@@ -26,12 +25,6 @@ type ServiceLandingProps = {
 };
 
 const selectedIcons = [Layers3, Sparkles, BriefcaseBusiness, Globe2];
-
-const AVAILABILITY_PILLS: CtaPill[] = [
-  { icon: Clock3, label: "US/UK overlap calls" },
-  { icon: MessageCircle, label: "Async updates" },
-  { icon: Globe2, label: "Remote from India" },
-];
 
 export default function ServiceLanding({ page }: ServiceLandingProps) {
   const featuredProjects = page.projectIds

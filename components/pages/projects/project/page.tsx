@@ -1,15 +1,7 @@
 import Image from "next/image";
-import {
-  CalendarDays,
-  Check,
-  Clock3,
-  Globe2,
-  Layers,
-  MessageCircle,
-  UserRound,
-} from "lucide-react";
+import { CalendarDays, Check, Layers, UserRound } from "lucide-react";
 
-import CtaSection, { type CtaPill } from "@/components/CtaSection";
+import CtaSection from "@/components/CtaSection";
 import PaperOverlay from "@/components/PaperOverlay";
 import MetricStrip from "@/components/projects/MetricStrip";
 import ProjectGallery from "@/components/projects/ProjectGallery";
@@ -17,14 +9,9 @@ import ProjectLinks from "@/components/projects/ProjectLinks";
 import ProjectSection from "@/components/projects/ProjectSection";
 import { ScreenShell, PhoneShell } from "@/components/projects/frames";
 import { email } from "@/data/constants";
+import { AVAILABILITY_PILLS } from "@/data/cta";
 import { getProjectTheme } from "@/data/projectTheme";
 import type { Project } from "@/types/projects";
-
-const AVAILABILITY_PILLS: CtaPill[] = [
-  { icon: Clock3, label: "US/UK overlap calls" },
-  { icon: MessageCircle, label: "Async updates" },
-  { icon: Globe2, label: "Remote from India" },
-];
 
 const ARCHITECTURE_LABELS: Record<string, string> = {
   frontend: "Frontend",

@@ -2,19 +2,14 @@ import Link from "next/link";
 import { ArrowRight, Boxes, Layers, Smartphone, Zap } from "lucide-react";
 
 import Container from "@/components/Container";
-import CtaSection, { type CtaPill } from "@/components/CtaSection";
+import CtaSection from "@/components/CtaSection";
 import PaperOverlay from "@/components/PaperOverlay";
 import ProjectGallery from "@/components/projects/ProjectGallery";
 import { resolveProjectLinks } from "@/components/projects/ProjectLinks";
 import { email } from "@/data/constants";
+import { PORTFOLIO_PILLS } from "@/data/cta";
 import { projects } from "@/data/projects";
 import { getProjectTheme } from "@/data/projectTheme";
-
-const AVAILABILITY_PILLS: CtaPill[] = [
-  { icon: Zap, label: "Shipped end to end" },
-  { icon: Layers, label: "Mobile, web & AI" },
-  { icon: Boxes, label: "Available for work" },
-];
 
 const liveCount = projects.filter((project) => {
   const { site, stores } = resolveProjectLinks(project);
@@ -100,7 +95,7 @@ export default function ProjectsArchive() {
         eyebrow="Next Build"
         title="Want a product like these shipped end to end?"
         description="I design, build, and ship full-stack products — mobile apps, AI systems, and the infrastructure behind them."
-        pills={AVAILABILITY_PILLS}
+        pills={PORTFOLIO_PILLS}
         href={`mailto:${email}?subject=${encodeURIComponent(
           "Project inquiry",
         )}`}

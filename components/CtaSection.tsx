@@ -46,7 +46,7 @@ export default function CtaSection({
               </p>
             )}
             {pills && pills.length > 0 && (
-              <div className="mt-5 flex flex-wrap gap-3 text-caption text-white/55">
+              <div className="mt-5 hidden flex-wrap gap-3 text-caption text-white/55 lg:flex">
                 {pills.map(({ icon: Icon, label }) => (
                   <span
                     key={label}
