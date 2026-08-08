@@ -99,11 +99,11 @@ export default function ProjectGallery({
         </div>
 
         {(action || scrollable) && (
-          <div className="flex shrink-0 items-center gap-3">
+          <div className="flex shrink-0 items-center gap-3 justify-between">
             {action}
 
             {scrollable && (
-              <>
+              <div className="flex items-center gap-3">
                 <button
                   type="button"
                   onClick={() => step(-1)}
@@ -122,7 +122,7 @@ export default function ProjectGallery({
                 >
                   <ChevronRight size={17} />
                 </button>
-              </>
+              </div>
             )}
           </div>
         )}
