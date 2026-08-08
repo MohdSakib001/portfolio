@@ -27,6 +27,7 @@ import type { HeaderBlog } from "../data/blogs";
 import { tools, CATEGORY_META } from "../data/tools";
 import PrimaryButton from "./primaryButton";
 import MyLink from "./Link";
+import LiquidGlass from "./LiquidGlass";
 
 const TOOL_ICONS: Record<string, ElementType<LucideProps>> = {
   FileText,
@@ -58,6 +59,18 @@ export const cardStyle = {
   background: "rgba(255,255,255, 0.45)",
   backdropFilter: "blur(6px)",
   WebkitBackdropFilter: "blur(6px)",
+} as const;
+
+/*
+  Surface for the mobile accordion groups. These sit *inside* the header's
+  liquid-glass shell, and stacking a second SVG-filtered backdrop inside a
+  filtered one is expensive for no visible gain — the group already sees the
+  refracted backdrop behind it. Plain glass stays here on purpose.
+*/
+const groupSurface = {
+  background: "rgba(255,255,255, 0.90)",
+  backdropFilter: "blur(8px)",
+  WebkitBackdropFilter: "blur(8px)",
 } as const;
 
 const HIRE_LINKS = [
@@ -377,11 +390,7 @@ export default function Header({
         <div className="md:hidden p-4 flex flex-col gap-0.5 gap-y-4 max-h-[70vh] overflow-y-scroll">
           <div
             className="rounded-2xl"
-            style={{
-              background: "rgba(255,255,255, 0.90)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-            }}
+            style={groupSurface}
           >
             <button
               onClick={() =>
@@ -447,11 +456,7 @@ export default function Header({
 
           <div
             className="rounded-2xl"
-            style={{
-              background: "rgba(255,255,255, 0.90)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-            }}
+            style={groupSurface}
           >
             <button
               onClick={() =>
@@ -522,11 +527,7 @@ export default function Header({
 
           <div
             className="rounded-2xl"
-            style={{
-              background: "rgba(255,255,255, 0.90)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-            }}
+            style={groupSurface}
           >
             <button
               onClick={() =>
@@ -572,11 +573,7 @@ export default function Header({
           </div>
           <div
             className="rounded-2xl"
-            style={{
-              background: "rgba(255,255,255, 0.90)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-            }}
+            style={groupSurface}
           >
             <button
               onClick={() =>
@@ -637,11 +634,7 @@ export default function Header({
           <Link
             href="/about"
             title="About"
-            style={{
-              background: "rgba(255,255,255, 0.90)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-            }}
+            style={groupSurface}
             className="px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-2xl transition-colors"
           >
             About
@@ -649,11 +642,7 @@ export default function Header({
           <Link
             href="/#contact"
             title="Contact"
-            style={{
-              background: "rgba(255,255,255, 0.90)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-            }}
+            style={groupSurface}
             className="px-3 py-2.5 text-caption font-medium text-black/75 hover:text-black hover:bg-black/4 rounded-2xl transition-colors"
           >
             Contact
@@ -665,16 +654,18 @@ export default function Header({
 
   return (
     <header className="fixed top-3 left-3 right-3 z-50 max-w-4xl mx-auto">
-      <div
-        className={`overflow-hidden ${activePanel ? "rounded-[25px]" : "rounded-[40px]"}`}
-        style={{
-          background: "rgba(255,255,255, 0.60)",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-          border: "1px solid rgba(255,255,255,0.72)",
-          boxShadow:
-            "inset 0 1px 0 rgba(255,255,255,0.95), 0 4px 24px rgba(0,0,0,0.08)",
-        }}
+      <LiquidGlass
+        className="overflow-hidden"
+        radius={activePanel ? 25 : 40}
+        bezel={activePanel ? 16 : 12}
+        thickness={activePanel ? 20 : 22}
+        saturation={1.7}
+        specularAngle={-60}
+        specularSharpness={6}
+        specularSaturation={6}
+        refraction={1}
+        shadow="0 8px 30px rgba(0,0,0,0.18)"
+        fallbackBlur={10}
         onMouseLeave={() => setActivePanel(null)}
       >
         <div className="flex items-center justify-between px-4 py-2">
@@ -745,7 +736,7 @@ export default function Header({
             );
           })}
         </div>
-      </div>
+      </LiquidGlass>
     </header>
   );
 }

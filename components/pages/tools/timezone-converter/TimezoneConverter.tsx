@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect, useRef, useMemo } from "react";
 
+import { getDayDiff, isNightHour } from "@/lib/timezone";
+
 interface TZEntry {
   id: string;
   city: string;
@@ -96,32 +98,17 @@ function getFormattedTime(tz: string, date: Date): { time: string; dateStr: stri
   }
 }
 
-function getDayDiff(sourceTz: string, targetTz: string, date: Date): number {
-  try {
-    const getDayNum = (tz: string) => {
-      const d = new Intl.DateTimeFormat("en", {
-        timeZone: tz,
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      }).formatToParts(date);
-      return parseInt(d.find(p => p.type === "day")!.value, 10);
-    };
-    const sourceDay = getDayNum(sourceTz);
-    const targetDay = getDayNum(targetTz);
-    const diff = targetDay - sourceDay;
-    if (diff === 0) return 0;
-    if (diff > 1) return -1;
-    if (diff < -1) return 1;
-    return diff;
-  } catch {
-    return 0;
-  }
-}
-
-function isNightHour(hour: number): boolean {
-  return hour >= 22 || hour < 6;
-}
+/*
+ * `getDayDiff` and `isNightHour` now come from `@/lib/timezone`, shared with the
+ * generated pair pages.
+ *
+ * The local `getDayDiff` subtracted day-of-month numbers and guessed at month
+ * rollovers (`diff > 1 ? -1 : …`); the shared one compares full yyyy-mm-dd keys,
+ * which gets month and year boundaries right. The offset and time formatters
+ * above are deliberately left in place — the shared helpers render "UTC+5:30"
+ * where this widget renders "GMT+5:30", and changing that is a visual change
+ * this refactor has no business making.
+ */
 
 function toLocalDatetimeValue(d: Date): string {
   const pad = (n: number) => String(n).padStart(2, "0");
