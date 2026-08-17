@@ -245,6 +245,64 @@ export const projects: Project[] = [
     },
   },
   {
+    id: "ballmaze",
+    name: "Ball Color Maze",
+    tagline:
+      "A 200-level colour-fill maze puzzler rendered on a single Flutter canvas",
+    category: "experiment",
+    hero: {
+      type: "image",
+      src: "/assets/projects/ballmaze/1.webp",
+    },
+    gallery: [
+      { type: "image", src: "/assets/projects/ballmaze/1.webp" },
+      { type: "image", src: "/assets/projects/ballmaze/4.webp" },
+      { type: "image", src: "/assets/projects/ballmaze/2.webp" },
+      { type: "image", src: "/assets/projects/ballmaze/3.webp" },
+    ],
+    overview: {
+      problem:
+        "A colour-fill maze puzzler lives or dies on its level list, and the failure mode is unforgiving: a board that cannot be solved does not read as a hard level, it reads as a broken game. Authoring hundreds of them by eye means trusting a guess about both solvability and difficulty, and the guess degrades as boards grow — a maze that looks tight can have three trivial routes through it while one that looks open has none. Rendering added a second constraint. Flutter's widget tree is built for interfaces that settle, not for a board that redraws every frame while a ball paints a trail behind it, and pulling in a full game engine to solve that would have cost more than the game itself.",
+      solution:
+        "Every level is proved before it ships. A solver searches each board's state space, and a maze only enters the level list once that search returns a path — the same run yields the minimum number of moves, which becomes the level's published par and the input to the difficulty curve, so the ramp across 200+ levels is measured rather than guessed. Rendering runs with no engine underneath: the maze geometry, the painted trail, and the ball are drawn as canvas primitives inside a single CustomPainter on one repainting layer driven by an AnimationController, keeping the widget tree static while the board animates. Progress, unlocked ball and maze skins, and the coin balance all live on-device, with Google Play Games Services handling achievements and Play Billing the in-app purchases.",
+      myRole: "Solo Developer & Game Designer",
+      timeline: "3 months · Launched Aug 2026",
+    },
+    metrics: {
+      scale: "200+ solver-verified levels",
+      performance: "60fps single-canvas renderer",
+      users: "Android · phones & tablets",
+    },
+    achievements: [
+      "Replaced eyeballed level design with a solver in the authoring pipeline — every maze is proved solvable before it ships, and the solver's minimum-move result is published as the level's par, so the difficulty curve is ordered by a measured number instead of a designer's hunch.",
+      "Shipped the entire game on Flutter's own canvas with no game engine and no physics library — one CustomPainter and one AnimationController carry the whole render loop at 60fps, keeping the dependency surface small enough for a single developer to own end to end.",
+    ],
+    stack: [
+      "Flutter",
+      "Dart",
+      "CustomPainter",
+      "Google Play Games",
+      "Play Billing",
+    ],
+    architecture: {
+      frontend: "Flutter & Dart — custom canvas renderer",
+      backend: "None — level data and progress stored on-device",
+      infra: "Google Play · Play Games Services & Play Billing",
+    },
+    features: [
+      "Colour-Matching Maze Puzzles",
+      "200+ Solver-Verified Levels",
+      "Par Move Count Per Level",
+      "Unlockable Ball & Maze Skins",
+      "Play Games Achievements",
+      "Fully Offline Play",
+    ],
+    links: {
+      playstore:
+        "https://play.google.com/store/apps/details?id=com.mohdsakib.ball_maze",
+    },
+  },
+  {
     id: "techs",
     name: "Techs",
     tagline: "Comprehensive IT Infrastructure & Operations Dashboard",

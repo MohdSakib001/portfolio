@@ -17,6 +17,7 @@ const THEMES: Record<string, ProjectTheme> = {
   stakeclash: { bg: "#E6E0F8", accent: "#7C6FD4", platform: "web" },
   artificialmufti: { bg: "#F4EDDA", accent: "#B8860B", platform: "mobile" },
   pademi: { bg: "#DAF0DE", accent: "#2E8B47", platform: "mobile" },
+  ballmaze: { bg: "#F7E0EC", accent: "#D12E77", platform: "mobile" },
   techs: { bg: "#E2E3F6", accent: "#5B5FC7", platform: "web" },
   sendora: { bg: "#DCE8F6", accent: "#2563EB", platform: "web" },
   colaw: { bg: "#E8E4DA", accent: "#7D6E55", platform: "web" },

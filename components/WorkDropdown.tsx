@@ -9,6 +9,7 @@ import { projects } from "../data/projects";
 const CATEGORY_LABEL: Record<string, string> = {
   client: "Client Work",
   startup: "Startup",
+  experiment: "Side Project",
 };
 
 export default function WorkDropdown() {
